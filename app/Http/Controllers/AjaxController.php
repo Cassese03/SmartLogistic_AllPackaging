@@ -483,7 +483,7 @@ class AjaxController extends Controller
             ?>
             <script type="text/javascript">
 
-                $('#modal_quantita').val(<?php echo intval($articolo->UMFatt) ?>);
+                $('#modal_quantita').val(<?php echo $qta ?>);
                 $('#modal_Cd_AR').val('<?php echo $articolo->Cd_AR ?>');
 
                 <?php /*if($articolo->CostoDb){ ?>
@@ -858,13 +858,13 @@ class AjaxController extends Controller
         if (sizeof($listino) > 0)
             $listino = $fornitore[0]->Cd_LS_1;
         else
-            $listino = 'BANCO';
+            $listino = null;
         $insert_testata_ordine['Cd_LS_1'] = $listino;
         $insert_testata_ordine['Cd_CF'] = $cd_cf;
         $insert_testata_ordine['Cd_Do'] = $cd_do;
         $insert_testata_ordine['NumeroDoc'] = $numero;
         /*if($cd_do == 'DDT')
-            $insert_testata_ordine['Modificabile'] = 0 ;*/
+            $insert_testata_ordine['Modificabile'] = 0 ;
         if ($cd_do == 'DDT') {
             $insert_testata_ordine['Cd_DoSped'] = '02';
             $insert_testata_ordine['Cd_DoPorto'] = '01';
@@ -876,6 +876,7 @@ class AjaxController extends Controller
         }
         if ($fornitore[0]->Cd_CGConto_Banca)
             $insert_testata_ordine['Cd_CGConto_Banca'] = $fornitore[0]->Cd_CGConto_Banca;
+        */
         $data = str_replace('-', '', $data);
         $insert_testata_ordine['DataDoc'] = $data;
         $Id_DoTes = DB::table('DOTes')->insertGetId($insert_testata_ordine);
@@ -890,15 +891,15 @@ class AjaxController extends Controller
         if (sizeof($fornitore) > 0)
             $listino = $fornitore[0]->Cd_LS_1;
         else
-            $listino = 'BANCO';
+            $listino = null;
         if (sizeof($fornitore) > 0)
             if ($fornitore[0]->Cd_PG != null)
                 $insert_testata_ordine['Cd_PG'] = $fornitore[0]->Cd_PG;
         $insert_testata_ordine['Cd_LS_1'] = $listino;
         $insert_testata_ordine['Cd_CF'] = $cd_cf;
         $insert_testata_ordine['Cd_Do'] = $cd_do;
-        if ($fornitore[0]->Cd_CGConto_Banca)
-            $insert_testata_ordine['Cd_CGConto_Banca'] = $fornitore[0]->Cd_CGConto_Banca;
+        /*if ($fornitore[0]->Cd_CGConto_Banca)
+            $insert_testata_ordine['Cd_CGConto_Banca'] = $fornitore[0]->Cd_CGConto_Banca;*/
         $insert_testata_ordine['NumeroDoc'] = $numero;
         /*if ($cd_do == 'DDT')
             $insert_testata_ordine['Modificabile'] = 0;*/
@@ -910,18 +911,18 @@ class AjaxController extends Controller
         }
         if ($data_rif != '0')
             $insert_testata_ordine['DataDocRif'] = $data_rif;
-        if ($cd_do == 'DDT') {
-            $insert_testata_ordine['Cd_DoSped'] = '02';
-            $insert_testata_ordine['Cd_DoPorto'] = '01';
-            $insert_testata_ordine['Cd_DoTrasporto'] = '001';
-            $insert_testata_ordine['Cd_DoAspBene'] = 'AV';
-            date_default_timezone_set('Europe/Rome');
-            $ora = date('Y-m-d', strtotime('now'));
-            $ora = str_replace('-', '', $ora);
-            $insert_testata_ordine['TrasportoDataOra'] = $ora;
-            if ($dest != 0)
-                $insert_testata_ordine['Cd_CFDest'] = $dest;
-        }
+        /* if ($cd_do == 'DDT') {
+              $insert_testata_ordine['Cd_DoSped'] = '02';
+              $insert_testata_ordine['Cd_DoPorto'] = '01';
+              $insert_testata_ordine['Cd_DoTrasporto'] = '001';
+              $insert_testata_ordine['Cd_DoAspBene'] = 'AV';
+              date_default_timezone_set('Europe/Rome');
+              $ora = date('Y-m-d', strtotime('now'));
+              $ora = str_replace('-', '', $ora);
+              $insert_testata_ordine['TrasportoDataOra'] = $ora;
+              if ($dest != 0)
+                  $insert_testata_ordine['Cd_CFDest'] = $dest;
+          }*/
         $Id_DoTes = DB::table('DOTes')->insertGetId($insert_testata_ordine);
         echo $Id_DoTes;
     }
@@ -954,28 +955,46 @@ class AjaxController extends Controller
     public
     function cerca_articolo_smart_automatico($q, $cd_cf)
     {
-        $q = str_replace("slash", "/", $q);
-        $q = str_replace("punto", ";", $q);
-        $qta = 'ND';
-        $q = explode(';', $q);
-        if (sizeof($q) > 1)
-            $data_scadenza = $q[1];
-        else
-            $data_scadenza = 0;
-        if (sizeof($q) > 2)
-            $lotto = $q[2];
-        else
-            $lotto = 0;
 
-        $q = $q[0];
-        if ($lotto != 0)
-            $articoli = DB::select('SELECT AR.[Id_AR],AR.[Cd_AR],AR.[Descrizione],ARLotto.[Cd_ARLotto] FROM AR LEFT JOIN ARLotto ON AR.Cd_AR = ARLotto.Cd_AR LEFT JOIN ARAlias ON ARAlias.Cd_AR = AR.Cd_AR where ARLotto.Cd_ARLotto = \'' . $lotto . '\' and AR.Obsoleto = 0 AND (AR.Cd_AR Like \'' . $q . '%\' or  AR.Descrizione Like \'%' . $q . '%\' or AR.CD_AR IN (SELECT CD_AR from ARAlias where Alias LIKE \'%' . $q . '%\')) Order By AR.Id_AR DESC');
-        else
-            $articoli = DB::select('SELECT AR.[Id_AR],AR.[Cd_AR],AR.[Descrizione],0 as Cd_ARLotto FROM AR LEFT JOIN ARAlias ON ARAlias.Cd_AR = AR.Cd_AR where AR.Obsoleto = 0 AND (AR.Cd_AR Like \'' . $q . '%\' or  AR.Descrizione Like \'%' . $q . '%\' or AR.CD_AR IN (SELECT CD_AR from ARAlias where Alias LIKE \'%' . $q . '%\')) Order By AR.Id_AR DESC');
+        $qta = '';
+        if (substr($q, 0, '2') == '01') {
+            $pos = '';
+            $pos = strpos($q, '*****');
+            if ($pos == '')
+                $q = substr($q, 0, '10') . '*****' . substr($q, '10');
+            $decoder = new Decoder($delimiter = '');
+            $barcode = $decoder->decode($q);
+            $where = ' where 1=1 ';
+            foreach ($barcode->toArray()['identifiers'] as $field) {
+
+                if ($field['code'] == '01') {
+                    $contenuto = trim($field['content'], '*,');
+                    $where .= ' and Cd_AR = \'' . $contenuto . '\'';
+
+                }
+                if ($field['code'] == '10') {
+                    $where .= ' and Cd_ARLotto = \'' . $field['content'] . '\'';
+                    $lotto_scelto = $field['content'];
+
+                }
+                if ($field['code'] == '310') {
+                    $decimali = floatval(substr($field['raw_content'], -2));
+                    $qta = floatval(substr($field['raw_content'], 0, 4)) + $decimali / 100;
+                    //$where .= ' and Qta Like \'%' . $qta . '%\'';
+
+                }
+
+            }
+        } else {
+            $where = ' where 1=1 ';
+            $where .= ' and  Cd_ARLotto Like \'%' . $q . '%\'';
+        }
+        $articoli = DB::select('SELECT * FROM ARLotto  ' . $where);
+
         if (sizeof($articoli) > 0) {
             $articolo = $articoli[0];
             ?>
-            '<?php echo $cd_cf ?>','<?php echo $q; ?>','<?php if ($articolo->Cd_ARLotto != '') echo $articolo->Cd_ARLotto; else echo '0'; ?>','<?php if ($qta != '') echo $qta; else echo '0'; ?>'
+            '<?php echo $cd_cf ?>','<?php echo $articolo->Cd_AR; ?>','<?php if ($articolo->Cd_ARLotto != '') echo $articolo->Cd_ARLotto; else echo '0'; ?>','<?php if ($qta != '') echo $qta; else echo '0'; ?>'
             <?php
         }
     }
@@ -1029,63 +1048,64 @@ class AjaxController extends Controller
     public
     function controllo_articolo_smart($q, $id_dotes)
     {
-        /*
-                $decoder = new Decoder($delimiter = '');
-                $barcode = $decoder->decode($q);
-                $where = ' where 1=1 ';
-                foreach ($barcode->toArray()['identifiers'] as $field) {
+        if (substr($q, 0, '2') == '01') {
+            $pos = '';
+            $pos = strpos($q, '*****');
+            if ($pos == '')
+                $q = substr($q, 0, '10') . '*****' . substr($q, '10');
+            $decoder = new Decoder($delimiter = '');
+            $barcode = $decoder->decode($q);
+            $where = ' where 1=1 ';
+            foreach ($barcode->toArray()['identifiers'] as $field) {
 
-                    if ($field['code'] == '01') {
-                        $contenuto = trim($field['content'],'*,');
-                        $where .= ' and Cd_AR Like \'%' . $contenuto . '%\'';
+                if ($field['code'] == '01') {
+                    $contenuto = trim($field['content'], '*,');
+                    $where .= ' and Cd_AR = \'' . $contenuto . '\'';
 
-                    }
-                    if ($field['code'] == '10') {
-                        $where .= ' and Cd_ARLotto Like \'%' . $field['content'] . '%\'';
+                }
+                if ($field['code'] == '10') {
+                    $where .= ' and Cd_ARLotto = \'' . $field['content'] . '\'';
+                    $lotto_scelto = $field['content'];
 
-                    }
-                    if ($field['code'] == '310') {
-                        $decimali = floatval(substr($field['raw_content'],-2));
-                        $qta = floatval(substr($field['raw_content'],0,4))+$decimali/100;
-                        $where .= ' and Qta Like \'%' . $qta . '%\'';
+                }
+                if ($field['code'] == '310') {
+                    $decimali = floatval(substr($field['raw_content'], -2));
+                    $quantita = floatval(substr($field['raw_content'], 0, 4)) + $decimali / 100;
+                    //$where .= ' and Qta Like \'%' . $qta . '%\'';
 
-                    }
+                }
 
-                }*/
+            }
 
-        $q = str_replace("slash", "/", $q);
-        $q = str_replace("punto", ";", $q);
-        $q = explode(';', $q);
-        if (sizeof($q) > 1)
-            $scadenza = ($q[1] != '0') ? $q[1] : 0;
-        else
-            $scadenza = 0;
-        if (sizeof($q) > 2)
-            $lotto_scelto = ($q[2] != '0') ? $q[2] : 0;
-        else
-            $lotto_scelto = 0;
-        $q = $q[0];
-        $c = $q;
-        $quantita = 1;
-
-        $q = DB::SELECT('SELECT *,(SELECT UMFatt from ARARMisura where Cd_AR = ARAlias.Cd_AR and Cd_ARMisura = ARAlias.Cd_ARMisura) as UMFatt FROM ARALias WHERE Alias = \'' . $q . '\' ');
-
-        if (sizeof($q) != 0)
-            $quantita = $q[0]->UMFatt;
-        if (sizeof($q) != 0)
-            $q = $q[0]->Cd_AR;
-        else
-            $q = $c;
-        //if ($lotto == 0)
-        $articoli = DB::select('SELECT * FROM DoRig WHERE /*Cd_ARLotto is null and*/ Cd_AR = \'' . $q . '\' and Id_DoTes in (\'' . $id_dotes . '\') Order By QtaEvadibile DESC');
-        /*        else
-                    $articoli = DB::select('SELECT * FROM DoRig WHERE Cd_ARLotto = \'' . $lotto . '\' and Cd_AR = \'' . $q . '\' and Id_DoTes in (\'' . $id_dotes . '\') Order By QtaEvadibile DESC');*/
-
+            $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\')   Order By Cd_AR DESC');
+            if (sizeof($articoli) != '0') {
+                if ($articoli[0]->QtaEvadibile <= 0) {
+                    echo 'Gia Evaso';
+                    exit();
+                }
+            }
+        } else {
+            $cerca = DB::SELECT('SELECT * FROM DORIG WHERE CD_ARLotto = \'' . $q . '\'');
+            $where = ' where 1=1 ';
+            $where .= ' and Cd_AR Like \'%' . $cerca[0]->Cd_AR . '%\'';
+            $where .= ' and  Cd_ARLotto Like \'%' . $q . '%\'';
+            $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\')   Order By Cd_AR DESC');
+            if ($articoli != '') {
+                if ($articoli[0]->QtaEvadibile <= 0) {
+                    echo 'Gia Evaso';
+                    exit();
+                } else {
+                    $quantita = $articoli[0]->QtaEvadibile;
+                    $lotto_scelto = $articoli[0]->Cd_ARLotto;
+                }
+            }
+        }
+        $articoli = DB::select('SELECT * FROM DoRig /*WHERE Cd_ARLotto is null and Cd_AR = \'' . $q . '\'*/ ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\') Order By QtaEvadibile DESC');
         if (sizeof($articoli) > 0)
             $articoli = $articoli[0];
         else
             return '';
-        $lotto = DB::select('SELECT * FROM ARLotto WHERE Cd_AR = \'' . $articoli->Cd_AR . '\' and Cd_ARLotto in (select Cd_ARLotto from MGMov group by Cd_ARLotto having SUM(QuantitaSign) >= 0)');
+        $lotto = DB::select('SELECT * FROM ARLotto WHERE Cd_AR = \'' . $articoli->Cd_AR . '\'');
 
         ?>
         <script type="text/javascript">
@@ -1102,16 +1122,6 @@ class AjaxController extends Controller
             $('#modal_list_controllo_lotto').html('<option value="Nessun Lotto">Nessun Lotto</option>')
             <?php foreach($lotto as $l){?>
             $('#modal_list_controllo_lotto').append('<option value="<?php echo $l->Cd_ARLotto;?>"><?php echo $l->Cd_ARLotto ?></option>')
-            <?php } ?>
-
-            $('#modal_controllo_data_scadenza').html
-            <?php if($scadenza != 0){ ?>
-            ('<option value="<?php echo date('d/m/Y', strtotime($scadenza)) ?>" lotto="<?php echo $articoli->Cd_ARLotto ?>" selected><?php echo date('d/m/Y', strtotime($scadenza));  ?></option>')
-            <?php }else{ ?>
-            ('<option lotto="Nessun Lotto" >Nessuna Scadenza</option>')
-            <?php }?>
-            <?php foreach($lotto as $l){?>
-            $('#modal_controllo_data_scadenza').append('<option value="<?php echo date('d/m/Y', strtotime($l->DataScadenza));?>" lotto="<?php echo $l->Cd_ARLotto;?>"><?php echo date('d/m/Y', strtotime($l->DataScadenza)) ?></option>')
             <?php } ?>
 
             //$('#modal_controllo_lotto').val('<?php echo $articoli->Cd_ARLotto ?>');
@@ -1266,14 +1276,62 @@ class AjaxController extends Controller
                 echo 'Nessun Articolo Trovato';
         }
         if ($tipo == 'EAN') {
-            $articoli = DB::select('SELECT [Id_AR],[Cd_AR],[Descrizione] FROM AR where (Cd_AR Like \'' . $q . '%\' or  Descrizione Like \'%' . $q . '%\' or CD_AR IN (SELECT CD_AR from ARAlias where Alias LIKE \'%' . $q . '%\'))  Order By Id_AR DESC');
+            if (substr($q, 0, '2') == '01') {
+                $pos = '';
+                $pos = strpos($q, '*****');
+                if ($pos == '')
+                    $q = substr($q, 0, '10') . '*****' . substr($q, '10');
+                $decoder = new Decoder($delimiter = '');
+                $barcode = $decoder->decode($q);
+                $where = ' where 1=1 ';
+                foreach ($barcode->toArray()['identifiers'] as $field) {
+
+                    if ($field['code'] == '01') {
+                        $contenuto = trim($field['content'], '*,');
+                        $where .= ' and Cd_AR = \'' . $contenuto . '\'';
+
+                    }
+                    if ($field['code'] == '10') {
+                        $where .= ' and Cd_ARLotto = \'' . $field['content'] . '\'';
+                        $lotto_scelto = $field['content'];
+
+                    }
+                    if ($field['code'] == '310') {
+                        $decimali = floatval(substr($field['raw_content'], -2));
+                        $qta = floatval(substr($field['raw_content'], 0, 4)) + $decimali / 100;
+                        //$where .= ' and Qta Like \'%' . $qta . '%\'';
+
+                    }
+
+                }
+            }
+            $articoli = DB::select('SELECT * FROM ARLotto ' . $where);
             if (sizeof($articoli) > 0) {
                 foreach ($articoli as $articolo) { ?>
 
                     <li class="list-group-item">
                         <a href="#" onclick="" class="media">
                             <div class="media-body"
-                                 onclick="cerca_articolo_inventario_codice('<?php echo $articolo->Cd_AR ?>','NESSUNLOTTO')">
+                                 onclick="cerca_articolo_inventario_codice('<?php echo $articolo->Cd_AR ?>',<?php echo $lotto_scelto; ?>)">
+                                <h5><?php echo $articolo->Descrizione ?></h5>
+                                <p>Codice: <?php echo $articolo->Cd_AR ?></p>
+                            </div>
+                        </a>
+                    </li>
+
+                <?php }
+            } else
+                echo 'Nessun Articolo Trovato';
+        }
+        if ($tipo == 'LOTTO') {
+            $articoli = DB::select('SELECT AR.[Id_AR],AR.[Cd_AR],AR.[Descrizione] FROM ARLotto LEFT JOIN AR on AR.Cd_AR = ARLotto.Cd_AR where ARLotto.Cd_ARLotto = \'' . $q . '\'');
+            if (sizeof($articoli) > 0) {
+                foreach ($articoli as $articolo) { ?>
+
+                    <li class="list-group-item">
+                        <a href="#" onclick="" class="media">
+                            <div class="media-body"
+                                 onclick="cerca_articolo_inventario_codice('<?php echo $articolo->Cd_AR ?>','<?php echo $q; ?>')">
                                 <h5><?php echo $articolo->Descrizione ?></h5>
                                 <p>Codice: <?php echo $articolo->Cd_AR ?></p>
                             </div>

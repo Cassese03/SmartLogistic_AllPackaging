@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
     <link rel="apple-touch-icon" href="/img/icona_arca.png">
     <link rel="icon" href="/img/icona_arca.png">
     <link rel="stylesheet" href="/vendor/bootstrap-4.1.3/css/bootstrap.min.css">
@@ -14,9 +15,7 @@
 </head>
 
 <body class="color-theme-blue push-content-right theme-light">
-<div class="loader justify-content-center ">
-    <div class="maxui-roller align-self-center"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-</div>
+
 <div class="wrapper">
 
     <!-- page main start -->
@@ -24,15 +23,17 @@
         <form class="searchcontrol">
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <button type="button" class="input-group-text close-search"><i class="material-icons">keyboard_backspace</i></button>
+                    <button type="button" class="input-group-text close-search"><i class="material-icons">keyboard_backspace</i>
+                    </button>
                 </div>
-                <input type="text" id="cerca" class="form-control border-0" placeholder="Cerca Fornitore..." aria-label="Username"  autocomplete="off">
+                <input type="text" id="cerca" class="form-control border-0" placeholder="Cerca Fornitore..."
+                       aria-label="Username" autocomplete="off">
             </div>
         </form>
         <header class="row m-0 fixed-header">
             <div class="left">
-                <a style="padding-left:20px;" href=<?php if ($cd_do == 'BC') echo "/magazzino/carico02/BC"; else echo "/magazzino/carico2/$cd_do"; ?>><i
-                            class="material-icons">arrow_back_ios</i></a>
+                <a style="padding-left:20px;" href=<?php echo "/magazzino/carico02/$cd_do"; ?>><i
+                        class="material-icons">arrow_back_ios</i></a>
             </div>
             <div class="col center">
                 <a href="#" class="logo">
@@ -49,14 +50,15 @@
 
                 <div class="background bg-125"><img src="/img/background.png" alt=""></div>
                 <div class="w-100">
-                    <h1 class="text-center text-white title-background">Lista Documenti (<?php echo $cd_do ?>)<br><small><?php echo $fornitore->Descrizione ?></small></h1>
+                    <h1 class="text-center text-white title-background">Lista Documenti (<?php echo $cd_do ?>
+                        )<br><small><?php echo $fornitore->Descrizione ?></small></h1>
                 </div>
 
                 <div class="row mx-0" style="margin-bottom:10px;">
                     <div class="col-12">
                         <a href="#" class="btn btn-success btn-sm" style="width:100%" onclick="apri_modal_documento();">+
                             Crea Nuovo Documento</a>
-                        <?php if ($cd_do != 'DTR'){ ?>
+                        <?php if ($cd_do != 'OAF'){ ?>
                         <a href="#" class="btn btn-success btn-sm" style="width:100%;background-color: red"
                            onclick="$('#modal_evasione').modal('show');"> Evadi Documento</a>
                         <?php } ?>
@@ -68,7 +70,7 @@
                     <?php foreach ($documenti as $do){ ?>
 
                     <li class="list-group-item">
-                        <a href="/magazzino/carico04/<?php echo $fornitore->Id_CF ?>/<?php echo $do->Id_DoTes ?>"
+                        <a href="/magazzino/<?php echo ($cd_do == 'OAF ')? 'carico4':'carico04'; ?>/<?php echo $fornitore->Id_CF ?>/<?php echo $do->Id_DoTes ?>"
                            class="media">
                             <div class="media-body">
                                 <h5><?php echo $cd_do ?> N.<?php echo $do->NumeroDoc ?>
@@ -130,7 +132,8 @@
                            id="Dest" value="" autocomplete="off">
                     <datalist id="destinazione">
                             <?php foreach ($destinazioni as $d){ ?>
-                        <option value="<?php echo $d->Cd_CFDest?>"><?php echo $d->Cd_CFDest . ' - ' . $d->Descrizione . ' - ' . $d->Indirizzo ?></option>
+                        <option
+                            value="<?php echo $d->Cd_CFDest?>"><?php echo $d->Cd_CFDest . ' - ' . $d->Descrizione . ' - ' . $d->Indirizzo ?></option>
                         <?php } ?>
                     </datalist>
                     <?php } ?>
@@ -158,12 +161,14 @@
                 </div>
 
                 <div class="modal-body">
-                    <h3><?php echo (substr($fornitore->Cd_CF, 0, 1) == 'F') ? 'Fornitore' : 'Cliente' ?> : <?php echo $fornitore->Cd_CF ?></h3>
+                    <h3><?php echo (substr($fornitore->Cd_CF, 0, 1) == 'F') ? 'Fornitore' : 'Cliente' ?>
+                        : <?php echo $fornitore->Cd_CF ?></h3>
                     <?php foreach ($doc_evadi as $d){ ?>
                     <div>
                         <input type="checkbox" id="check" style="height: 30px;width: 30px;text-align:right;float:right"
                                class="form-control" onclick="redirect_plus('<?php echo $d->Id_DoTes?>')">
-                        <label style="text-align:left;float:left">Codice Documento (<?php echo str_replace(' ','',$d->Cd_Do); ?>)</label>
+                        <label style="text-align:left;float:left">Codice Documento
+                            (<?php echo str_replace(' ', '', $d->Cd_Do); ?>)</label>
                     </div>
                     <input class="form-control" type="number" placeholder="Inserisci Numero Documento" id="NumeroDoc"
                            value="<?php echo $d->Id_DoTes ?>" readonly>
@@ -282,7 +287,7 @@
                 url: "<?php echo URL::asset('ajax/crea_documento_rif') ?>/<?php echo $fornitore->Cd_CF ?>/<?php echo $cd_do ?>/" + numero + "/" + data + "/" + numero_rif + "/" + data_rif + "/" + destinazione
             }).done(function (result) {
                 $('#modal_alertDocumento').modal('show');
-                top.location.href = "/magazzino/carico04/<?php echo $fornitore->Id_CF ?>/"+result;
+                top.location.href = "/magazzino/carico04/<?php echo $fornitore->Id_CF ?>/" + result;
 
             });
 

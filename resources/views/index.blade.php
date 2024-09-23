@@ -86,7 +86,7 @@
                                         <p>Crea il tuo RCF</p>
                                     </div>
                                 </a>
-                            </li>--}}
+                            </li>
                             <li class="list-group-item">
                                 <a href="<?php echo URL::asset('qrcode') ?>" class="media">
                                     <div class="media-body">
@@ -94,7 +94,7 @@
                                         <p>Crea i QRCode</p>
                                     </div>
                                 </a>
-                            </li>
+                            </li>--}}
                             <li class="list-group-item">
                                 <a href="<?php echo URL::asset('logout') ?>" class="media">
                                     <div class="media-body">

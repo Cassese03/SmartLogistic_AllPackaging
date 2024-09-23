@@ -515,7 +515,7 @@
                                                         <button type="reset" name="evadi_riga"
                                                                 value="<?php echo $r->Cd_AR;?>"
                                                                 class="btn btn-success btn-sm col-3"
-                                                                onclick="controllo_articolo_smart2('<?php echo $r->Cd_AR?>;0;<?php echo ($r->Cd_ARLotto) ? $r->Cd_ARLotto :'0' ?>')">
+                                                                onclick="controllo_articolo_smart2('<?php echo $r->Cd_ARLotto; ?>')">
                                                             <i class="bi bi-check-circle">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16"
                                                                      height="16" fill="currentColor"
@@ -686,51 +686,6 @@
                         No
                     </button>
                     <button type="button" class="btn btn-primary" onclick="salva_documento()">Si</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="modal" id="modal_inserisci_scatole" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form method="post">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Inserire Scatoloni</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                            onclick="$('#modal_inserisci_scatole').modal('hide');$('#cerca_articolo2').val('');$('#cerca_articolo2').focus()">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="row" style="margin: 2%">
-                        @foreach($scatoli as $s)
-                            <div class="col-xl-4 col-xs-4" style="padding: 1%">
-                                <input type="text" readonly class="form-control"
-                                       id="ar_scatolo_{{$s->Cd_AR}}"
-                                       value="<?php echo $s->Cd_AR ?>">
-                            </div>
-                            <div class="col-xl-6 col-xs-6" style="padding: 1%">
-                                <input type="text" readonly class="form-control"
-                                       id="desc_scatolo_{{$s->Cd_AR}}"
-                                       value="<?php echo $s->Descrizione?>">
-                            </div>
-                            <div class="col-xl-2 col-xs-2" style="padding: 1%">
-                                <input type="number" class="form-control" step="1" min="0" max="99"
-                                       id="qta_scatolo_{{$s->Cd_AR}}" value="0">
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                            onclick="$('#modal_inserisci_scatole').modal('hide');$('#cerca_articolo2').val('');$('#cerca_articolo2').focus()">
-                        No
-                    </button>
-                    <button type="button" class="btn btn-primary" onclick="salva_scatoloni()">Si</button>
                 </div>
             </div>
         </form>
@@ -1099,6 +1054,7 @@
         </form>
     </div>
 </div>
+
 <div class="modal" id="modal_segnalare" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form method="post">
@@ -1136,66 +1092,6 @@
     </div>
 </div>
 
-
-<div class="modal" id="modal_numero_colli" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form method="post">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Numero Colli Documento</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                            onclick="$('#modal_numero_colli').modal('hide');$('#cerca_articolo2').val('');$('#cerca_articolo2').focus()">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="ajax_numero_colli">
-                    <label>Vuoi inserire il numero dei colli ?</label>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" style="width: 33%" data-dismiss="modal"
-                            onclick="$('#modal_numero_colli').modal('hide');$('#cerca_articolo2').val('');$('#cerca_articolo2').focus()">
-                        No
-                    </button>
-                    <button type="button" class="btn btn-primary" style="width: 33%"
-                            onclick="invia_numero_colli();">Si
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<div class="modal" id="modal_peso" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form method="post">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Inserire Peso</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                            onclick="$('#modal_peso').modal('hide');$('#cerca_articolo2').val('');$('#cerca_articolo2').focus()">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="ajax_peso">
-                    <label>Vuoi inserire il peso ?</label>
-                    <input type="number" class="form-control" step="0.01" min="0" id="peso_documento" value="0">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" style="width: 33%" data-dismiss="modal"
-                            onclick="$('#modal_peso').modal('hide');top.location.reload();">
-                        No
-                    </button>
-                    <button type="button" class="btn btn-primary" style="width: 33%"
-                            onclick="invia_peso();">Si
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
 <div class="modal" id="modal_noriga" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="alert alert-warning alert-dismissible fade show">
         <button type="button" class="close"
@@ -1215,6 +1111,7 @@
         <strong>Warning!</strong> <br>La riga è gia' in fase di evasione</a>.
     </div>
 </div>
+
 <div class="modal" id="modal_alertMaxEvasione" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="alert alert-success alert-dismissible fade show">
         <button type="button" class="close"
@@ -1224,6 +1121,7 @@
         <strong>Warning!</strong> <br>La riga ha raggiunto il massimo della quantità evadibile</a>.
     </div>
 </div>
+
 <div class="modal" id="modal_alertSegnalazione" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="alert alert-success alert-dismissible fade show">
         <button type="button" class="close" data-dismiss="alert"
@@ -1475,25 +1373,6 @@
         $('#modal_rimuovi_lotto_' + id_riga).modal('hide');
     }
 
-    function invia_peso() {
-        $('#modal_peso').modal('hide');
-
-        dotes = document.getElementById('ajax_peso').value;
-
-        invia_numero_colli(dotes);
-
-        peso = document.getElementById('peso_documento').value;
-
-
-        $.ajax({
-            url: "<?php echo URL::asset('ajax/inserisci_peso') ?>/" + dotes + "/" + peso,
-        }).done(function (result) {
-            if (result == 'Errore')
-                alert('Peso non inserito. Prego comunicare all\'amministrazione!');
-            else
-                top.location.href = '<?php echo ($do[0]->CliFor == 'C') ? '/magazzino/attivo' : '/magazzino/passivi' ?>'
-        });
-    }
 
     function change_scad() {
         lotto = document.getElementById('modal_controllo_lotto').value;
@@ -1534,25 +1413,6 @@
         }
     }
 
-    function salva_scatoloni() {
-        @foreach($scatoli as $s)
-            ar = document.getElementById('ar_scatolo_{{$s->Cd_AR}}').value;
-        qta = document.getElementById('qta_scatolo_{{$s->Cd_AR}}').value;
-        if (qta >= 1) {
-
-            $.ajax({
-                url: "<?php echo URL::asset('ajax/inserisci_scatolone_in_doc_evaso') ?>/<?php echo $id_dotes ?>/" + ar + "/" + qta,
-            }).done(function (result) {
-                if (result == 'Errore')
-                    alert('Scatolone non inserito. Prego Riprovare');
-            });
-        }
-        @endforeach
-        $('#modal_inserisci_scatole').modal('hide');
-        $('#modal_peso').modal('show');
-
-        //top.location.reload();
-    }
 
     function salva_documento() {
 
@@ -1617,10 +1477,7 @@
             $('#ajax_loader').fadeOut();
             $('#modal_conf_riga').modal('hide');
 
-            document.getElementById('ajax_numero_colli').value = result;
-            document.getElementById('ajax_peso').value = result;
-
-            $('#modal_inserisci_scatole').modal('show');
+            top.location.href = '<?php echo ($do[0]->CliFor == 'C') ? '/magazzino/attivo' : '/magazzino/passivi' ?>'
 
 //            $('#modal_numero_colli').modal('show');
             /* if (result.length > 1)

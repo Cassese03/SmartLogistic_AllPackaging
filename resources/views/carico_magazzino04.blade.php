@@ -500,27 +500,9 @@
                     <?php } ?>
 
                     <button
-                        style="margin-top:10px !important;width:80%;margin:0 auto;display:block;background-color:violet;border: violet"
-                        class="btn btn-primary" onclick="$('#modal_inserisci_scatole').modal('show');">Inserire Scatoli
-                    </button>
-
-                    <button
                         style="margin-top:10px !important;width:80%;margin:0 auto;display:block;background-color:#007bff;border: #007bff"
                         class="btn btn-primary" onclick="$('#modal_salva_documento').modal('show');">Salva Documento
                     </button>
-                    <?php if ($documento->Cd_Do == 'DDT'){ ?>
-                    <button
-                        style="margin-top:10px !important;width:80%;margin:0 auto;display:block;background-color:#007bff;border: #007bff"
-                        class="btn btn-primary" onclick="$('#modal_stampa_documento').modal('show');">Stampa Documento
-                    </button>
-                    <?php } ?>
-                    <?php if ($documento->Cd_Do == 'RCF'){ ?>
-                    <button
-                        style="margin-top:10px !important;width:80%;margin:0 auto;display:block;background-color:#007bff;border: #007bff"
-                        class="btn btn-primary" onclick="$('#modal_stampa_documento').modal('show');">Stampa Documento
-                    </button>
-                    <?php } ?>
-
 
                 </div>
             </div>
@@ -1092,41 +1074,16 @@
         }).done(function (result) {
             if (result == 'Eliminato')
                 alert('Documento Eliminato Correttamente');
-            top.location.href = '<?php echo ($do[0]->CliFor == 'C') ? '/magazzino/attivo' : '/magazzino/passivi'?>'
+            top.location.href = '<?php echo ($do[0]->CliFor == 'C') ? '/magazzino/attivo' : '/magazzino/passivi' ?>'
 
         });
     }
 
     function invia() {
-        testo = 'Il documento (documento) è stato salvato.<br> Le righe del documento sono:';
-        <?php foreach ($documento->righe as $r){ ?>
-            articolo = '<?php echo $r->Cd_AR ?>';
-        quantita = '<?php echo $r->Qta ?>';
-        prezzo = '<?php echo $r->PrezzoUnitarioV ?>';
-        testo = testo + '<br> Articolo ' + articolo + ' quantita\' ' + Number.parseFloat(quantita).toFixed(2) + ' prezzo ' + prezzo + '<br>';
-        <?php } ?>
-        $.ajax({
-            url: "<?php echo URL::asset('ajax/invia_mail') ?>/<?php echo $id_dotes ?>/" + 3 + "/" + testo
-        }).done(function (result) {
-        });
+        top.location.href = '<?php echo ($do[0]->CliFor == 'C') ? '/magazzino/attivo' : '/magazzino/passivi' ?>'
     }
 
     function segnalazione() {
-        Id_DoRig = document.getElementById('Segnala_riga').value;
-        Segnalazione = document.getElementById('Segnalazione').value;
-        if (Id_DoRig != '') {
-            $.ajax({
-                url: "<?php echo URL::asset('ajax/segnalazione') ?>/<?php echo $id_dotes ?>/" + Id_DoRig + "/-" + encodeURIComponent(Segnalazione),
-            }).done(function (result) {
-                $('#modal_alertSegnalazione').modal('show');
-            });
-        }
-        if (Id_DoRig != '') {
-            $.ajax({
-                url: "<?php echo URL::asset('ajax/invia_mail') ?>/<?php echo $id_dotes ?>/" + 0 + "/-" + Segnalazione
-            }).done(function (result) {
-            });
-        }
     }
 
     function check() {
@@ -1265,7 +1222,7 @@
             const myArray = fornitore.split("','");
             codice = myArray[1];
             lotto = myArray[2];
-            qta = 0;
+            qta = myArray[3].replaceAll('\'', '');
         }
         $.ajax({
             url: "/ajax/cerca_articolo_codice/<?php echo $fornitore->Cd_CF ?>/" + codice + "/" + lotto + "/" + qta,

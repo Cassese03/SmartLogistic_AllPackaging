@@ -16,18 +16,7 @@
 </head>
 
 <body class="color-theme-blue push-content-right theme-light">
-<div class="loader justify-content-center ">
-    <div class="maxui-roller align-self-center">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-</div>
+
 <div class="wrapper">
 
     <!-- page main start -->
@@ -44,8 +33,7 @@
         </form>
         <header class="row m-0 fixed-header">
             <div class="left">
-                <a style="padding-left:20px;"
-                   href=<?php if ($cd_do == 'BC') echo "/magazzino/carico02/BC"; else echo "/magazzino/carico2/$cd_do"; ?> ><i
+                <a style="padding-left:20px;" href=<?php echo "/magazzino/carico02/$cd_do"; ?>><i
                         class="material-icons">arrow_back_ios</i></a>
             </div>
             <div class="col center">
@@ -63,7 +51,8 @@
 
                 <div class="background bg-125"><img src="/img/background.png" alt=""></div>
                 <div class="w-100">
-                    <h1 class="text-center text-white title-background">Lista Documenti (<?php echo $cd_do ?>)<br><small><?php echo $fornitore->Descrizione ?></small></h1>
+                    <h1 class="text-center text-white title-background">Lista Documenti (<?php echo $cd_do ?>
+                        )<br><small><?php echo $fornitore->Descrizione ?></small></h1>
                 </div>
 
                 <div class="row mx-0" style="margin-bottom:10px;">
@@ -82,7 +71,7 @@
                     <?php foreach ($documenti as $do){ ?>
 
                     <li class="list-group-item">
-                        <a href="/magazzino/carico04/<?php echo $fornitore->Id_CF ?>/<?php echo $do->Id_DoTes ?>"
+                        <a href="/magazzino/<?php echo ($cd_do == 'OAF')? 'carico4':'carico04'; ?>/<?php echo $fornitore->Id_CF ?>/<?php echo $do->Id_DoTes ?>"
                            class="media">
                             <div class="media-body">
                                 <h5><?php echo $cd_do ?> N.<?php echo $do->NumeroDoc ?>
@@ -180,7 +169,8 @@
                     <div>
                         <input type="checkbox" id="check" style="height: 30px;width: 30px;text-align:right;float:right"
                                class="form-control" onclick="redirect_plus('<?php echo $d->Id_DoTes?>')">
-                        <label style="text-align:left;float:left">Codice Documento (<?php echo str_replace(' ','',$d->Cd_Do); ?>)</label>
+                        <label style="text-align:left;float:left">Codice Documento
+                            (<?php echo str_replace(' ', '', $d->Cd_Do); ?>)</label>
                     </div>
                     <input class="form-control" type="number" placeholder="Inserisci Numero Documento" id="NumeroDoc"
                            value="<?php echo $d->Id_DoTes ?>" readonly>
@@ -300,7 +290,7 @@
                 url: "<?php echo URL::asset('ajax/crea_documento_rif') ?>/<?php echo $fornitore->Cd_CF ?>/<?php echo $cd_do ?>/" + numero + "/" + data + "/" + numero_rif + "/" + data_rif + "/" + destinazione
             }).done(function (result) {
                 $('#modal_alertDocumento').modal('show');
-                top.location.href = "/magazzino/carico04/<?php echo $fornitore->Id_CF ?>/"+result;
+                top.location.href = "/magazzino/carico04/<?php echo $fornitore->Id_CF ?>/" + result;
 
             });
 

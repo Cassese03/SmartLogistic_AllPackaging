@@ -286,7 +286,7 @@ class HomeController extends Controller
         if (!session()->has('utente')) {
             return Redirect::to('login');
         }
-        $documenti = DB::select('SELECT * FROM DO WHERE Cd_Do in (\'CMF\',\'OAF\') and CliFor = \'F\'');
+        $documenti = DB::select('SELECT *,(SELECT COUNT(*) FROM DOTes WHERE Cd_DO = DO.Cd_DO and Prelevabile = 1 and RigheEvadibili > 0) as doc_da_lavorare FROM DO WHERE Cd_DO in (\'LP\',\'OAF\') and CliFor = \'F\'');
         return View::make('passivi', compact('documenti'));
     }
 
@@ -296,8 +296,18 @@ class HomeController extends Controller
         if (!session()->has('utente')) {
             return Redirect::to('login');
         }
-        $documenti = DB::select('SELECT *,(SELECT COUNT(*) FROM DOTes WHERE Cd_DO = DO.Cd_DO and Prelevabile = 1 and RigheEvadibili > 0) as doc_da_lavorare FROM DO WHERE Cd_DO in (\'LP\',\'RMC\',\'OVC\',\'OVW\') and CliFor = \'C\'');
+        $documenti = DB::select('SELECT *,(SELECT COUNT(*) FROM DOTes WHERE Cd_DO = DO.Cd_DO and Prelevabile = 1 and RigheEvadibili > 0) as doc_da_lavorare FROM DO WHERE Cd_DO in (\'LPF\',\'RMC\',\'OVC\',\'OVW\') and CliFor = \'C\'');
         return View::make('attivo', compact('documenti'));
+    }
+
+    public function altri()
+    {
+
+        if (!session()->has('utente')) {
+            return Redirect::to('login');
+        }
+        $documenti = DB::select('SELECT * FROM DO WHERE Cd_DO in (\'CTR\')');
+        return View::make('altri', compact('documenti'));
     }
 
     public function carico_magazzino()
@@ -336,10 +346,9 @@ class HomeController extends Controller
         if (!session()->has('utente')) {
             return Redirect::to('login');
         }
-        $fornitori = DB::select('SELECT TOP 50 *,(SELECT SUM(QtaEvadibile) FROM DORIG WHERE ID_DOTES IN (SELECT Id_DOTes FROM DOTes WHERE Cd_DO = \'' . $documenti . '\' AND Cd_CF = CF.Cd_CF and Prelevabile = 1 and RigheEvadibili > 0)) as doc_da_lavorare  from CF where Id_CF in(SELECT r.Id_CF FROM DOTes d,Cf r WHERE d.Cd_CF = r.Cd_CF and Cd_DO = \'' . $documenti . '\' and RigheEvadibili > \'0\' and Cd_MGEsercizio =YEAR(GETDATE())  group by r.Id_CF ) and Fornitore=\'1\'');
-        if (sizeof($fornitori) > 0) {
-            $fornitore = $fornitori[0];
-            return View::make('carico_magazzino02', compact('documenti', 'fornitori'));
+        $fornitori = DB::select('SELECT TOP 50 * from CF where Id_CF in (SELECT r.Id_CF FROM DOTes d,Cf r WHERE d.Cd_CF = r.Cd_CF and Cd_DO = \'' . $documenti . '\' and RigheEvadibili > \'0\' and Cd_MGEsercizio = YEAR(GETDATE())  group by r.Id_CF ) and Fornitore=\'1\'');
+        if ($documenti == 'CTR') {
+            $fornitori = DB::select('SELECT * from CF where Cd_CF = \'F001511\' and Fornitore=\'1\'');
         }
         return View::make('carico_magazzino02', compact('documenti', 'fornitori'));
 
@@ -628,7 +637,7 @@ class HomeController extends Controller
                 if (!session()->has('\'' . $id_dotes . '\'')) {
                     $check_mg = DB::SELECT('SELECT * FROM MGCausale where Cd_MGCausale in (select Cd_MGCausale from do where Cd_Do =  \'' . $flusso[0]->Cd_DO . '\')');
                     if (sizeof($check_mg) > 0) {
-                        $session = array('cd_mg_a' => $check_mg[0]->Cd_MG_A, 'cd_mg_p' => $check_mg[0]->Cd_MG_P, 'doc_evadi' => $flusso[0]->Cd_DO);
+                        $session = array('cd_mg_a' => $check_mg[0]->Cd_MG_A, 'cd_mg_p' => $check_mg[0]->Cd_MG_P, 'doc_evadi' => ($cd_do == 'OAF') ? 'LP' : $flusso[0]->Cd_DO);
                     } else {
                         $session = array('cd_mg_a' => null, 'cd_mg_p' => null, 'doc_evadi' => null);
                     }
@@ -641,7 +650,7 @@ class HomeController extends Controller
                         $check_mg = DB::SELECT('SELECT * FROM MGCausale where Cd_MGCausale in (select Cd_MGCausale from do where Cd_Do =  \'' . $flusso[0]->Cd_DO . '\')');
 
                         if (sizeof($check_mg) > 0) {
-                            $session = array('cd_mg_a' => $check_mg[0]->Cd_MG_A, 'cd_mg_p' => $check_mg[0]->Cd_MG_P, 'doc_evadi' => $flusso[0]->Cd_DO);
+                            $session = array('cd_mg_a' => $check_mg[0]->Cd_MG_A, 'cd_mg_p' => $check_mg[0]->Cd_MG_P, 'doc_evadi' => ($cd_do == 'OAF') ? 'LP' : $flusso[0]->Cd_DO);
                         }
                         session(['\'' . $id_dotes . '\'' => $session]);
                         session()->save();

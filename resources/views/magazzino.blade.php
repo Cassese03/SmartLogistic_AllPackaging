@@ -278,7 +278,15 @@
                             </div>
                         </a>
                     </li>
-
+                    <li class="list-group-item">
+                        <a href="<?php echo URL::asset('magazzino/altri') ?>" class="media">
+                            <div class="media-body">
+                                <h5>Altri Documenti</h5>
+                                <p>Operazioni per movimentazione merce magazzini interni</p>
+                            </div>
+                        </a>
+                    </li>
+                    <!--
                     <li class="list-group-item">
                         <a href="<?php echo URL::asset('magazzino/attivo') ?>" class="media">
                             <div class="media-body">
@@ -287,7 +295,7 @@
                             </div>
                         </a>
                     </li>
-                <!--
+
                     <li class="list-group-item">
                         <a href="<?php echo URL::asset('magazzino/altri') ?>" class="media">
                             <div class="media-body">
