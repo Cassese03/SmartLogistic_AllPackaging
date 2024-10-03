@@ -286,7 +286,7 @@ class HomeController extends Controller
         if (!session()->has('utente')) {
             return Redirect::to('login');
         }
-        $documenti = DB::select('SELECT *,(SELECT COUNT(*) FROM DOTes WHERE Cd_DO = DO.Cd_DO and Prelevabile = 1 and RigheEvadibili > 0) as doc_da_lavorare FROM DO WHERE Cd_DO in (\'LP\',\'OAF\') and CliFor = \'F\'');
+        $documenti = DB::select('SELECT *,(SELECT COUNT(*) FROM DOTes WHERE Cd_DO = DO.Cd_DO and Prelevabile = 1 and RigheEvadibili > 0) as doc_da_lavorare FROM DO WHERE Cd_DO in (\'DCF\',\'OAF\') and CliFor = \'F\'');
         return View::make('passivi', compact('documenti'));
     }
 
@@ -296,7 +296,7 @@ class HomeController extends Controller
         if (!session()->has('utente')) {
             return Redirect::to('login');
         }
-        $documenti = DB::select('SELECT *,(SELECT COUNT(*) FROM DOTes WHERE Cd_DO = DO.Cd_DO and Prelevabile = 1 and RigheEvadibili > 0) as doc_da_lavorare FROM DO WHERE Cd_DO in (\'LPF\',\'RMC\',\'OVC\',\'OVW\') and CliFor = \'C\'');
+        $documenti = DB::select('SELECT *,(SELECT COUNT(*) FROM DOTes WHERE Cd_DO = DO.Cd_DO and Prelevabile = 1 and RigheEvadibili > 0) as doc_da_lavorare FROM DO WHERE Cd_DO in (\'DCF\',\'RMC\',\'OVC\',\'OVW\') and CliFor = \'C\'');
         return View::make('attivo', compact('documenti'));
     }
 
@@ -637,7 +637,7 @@ class HomeController extends Controller
                 if (!session()->has('\'' . $id_dotes . '\'')) {
                     $check_mg = DB::SELECT('SELECT * FROM MGCausale where Cd_MGCausale in (select Cd_MGCausale from do where Cd_Do =  \'' . $flusso[0]->Cd_DO . '\')');
                     if (sizeof($check_mg) > 0) {
-                        $session = array('cd_mg_a' => $check_mg[0]->Cd_MG_A, 'cd_mg_p' => $check_mg[0]->Cd_MG_P, 'doc_evadi' => ($cd_do == 'OAF') ? 'LP' : $flusso[0]->Cd_DO);
+                        $session = array('cd_mg_a' => $check_mg[0]->Cd_MG_A, 'cd_mg_p' => $check_mg[0]->Cd_MG_P, 'doc_evadi' => ($cd_do == 'OAF') ? 'DCF' : $flusso[0]->Cd_DO);
                     } else {
                         $session = array('cd_mg_a' => null, 'cd_mg_p' => null, 'doc_evadi' => null);
                     }
@@ -650,7 +650,7 @@ class HomeController extends Controller
                         $check_mg = DB::SELECT('SELECT * FROM MGCausale where Cd_MGCausale in (select Cd_MGCausale from do where Cd_Do =  \'' . $flusso[0]->Cd_DO . '\')');
 
                         if (sizeof($check_mg) > 0) {
-                            $session = array('cd_mg_a' => $check_mg[0]->Cd_MG_A, 'cd_mg_p' => $check_mg[0]->Cd_MG_P, 'doc_evadi' => ($cd_do == 'OAF') ? 'LP' : $flusso[0]->Cd_DO);
+                            $session = array('cd_mg_a' => $check_mg[0]->Cd_MG_A, 'cd_mg_p' => $check_mg[0]->Cd_MG_P, 'doc_evadi' => ($cd_do == 'OAF') ? 'DCF' : $flusso[0]->Cd_DO);
                         }
                         session(['\'' . $id_dotes . '\'' => $session]);
                         session()->save();
