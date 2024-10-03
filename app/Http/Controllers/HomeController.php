@@ -306,7 +306,7 @@ class HomeController extends Controller
         if (!session()->has('utente')) {
             return Redirect::to('login');
         }
-        $documenti = DB::select('SELECT * FROM DO WHERE Cd_DO in (\'CTR\')');
+        $documenti = DB::select('SELECT * FROM DO WHERE Cd_DO in (\'CTR\',\'RCT\')');
         return View::make('altri', compact('documenti'));
     }
 
