@@ -466,9 +466,6 @@
                                                     @if($r->Cd_ARLotto != '')
                                                             <?php echo '<br> Lotto : ' . $r->Cd_ARLotto; ?>
                                                     @endif
-                                                    @if($r->Data_Scadenza != '')
-                                                            <?php echo '<br> Data Scadenza : ' . date('d/m/Y', strtotime($r->Data_Scadenza)); ?>
-                                                    @endif
 
                                                     <br> Qta
                                                     : <?php echo floatval($r->QtaEvadibile) ?><?php /* echo  'Magazzino di Partenza: '.$r->Cd_MG_P;if($r->Cd_MGUbicazione_A != null) echo ' - '.$r->Cd_MGUbicazione_A;?><br><?php echo' Magazzino di Arrivo: '.$r->Cd_MG_A;?><br><?php if($r->Cd_ARLotto != Null)echo 'Lotto: '.$r->Cd_ARLotto;*/ ?>
@@ -477,15 +474,14 @@
                                             </div>
                                             <div class="col-xs-6 col-sm-6 col-md-6 col-xl-12"
                                                  style="padding-left: 10px">
-                                                <form method="post"
-                                                      onsubmit="return confirm('Vuoi Eliminare Questa Riga ?')">
+                                                <form method="post">
                                                     <div class="row">
                                                         <input type="hidden" id="codice"
                                                                value="<?php echo $r->Cd_AR ?>">
                                                         <button type="reset" name="segnalazione"
                                                                 value=""
-                                                                class="btn btn-warning btn-sm col-3"
-                                                                onclick="rimuoviLotto('<?php echo $r->Id_DORig?>')">
+                                                                class="btn btn-warning btn-sm col-4"
+                                                                onclick="$('#modal_segnalazione<?php echo $r->Id_DORig ?>').modal('show')">
                                                             <i class="fa fa-exclamation-triangle" aria-hidden="true">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16"
                                                                      height="16" fill="currentColor"
@@ -500,8 +496,8 @@
                                                         </button>
                                                         <button type="reset" name="modifica_riga"
                                                                 value="<?php echo $r->Cd_AR;?>"
-                                                                class="btn btn-primary btn-sm col-3"
-                                                                onclick="$('#modal_modifica_<?php echo $r->Id_DORig ?>').modal('show');">
+                                                                class="btn btn-primary btn-sm col-4"
+                                                                onclick="rimuoviLotto('<?php echo $r->Id_DORig?>');">
                                                             <i class="bi bi-pencil">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16"
                                                                      height="16" fill="currentColor"
@@ -514,7 +510,7 @@
                                                         </button>
                                                         <button type="reset" name="evadi_riga"
                                                                 value="<?php echo $r->Cd_AR;?>"
-                                                                class="btn btn-success btn-sm col-3"
+                                                                class="btn btn-success btn-sm col-4"
                                                                 onclick="controllo_articolo_smart2('<?php echo $r->Cd_ARLotto; ?>')">
                                                             <i class="bi bi-check-circle">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16"
@@ -529,7 +525,7 @@
                                                         </button>
                                                         <input type="hidden" name="Id_DORig"
                                                                value="<?php echo $r->Id_DORig ?>">
-                                                        <button type="submit" name="elimina_riga"
+                                                        {{--<button type="submit" name="elimina_riga"
                                                                 value="Elimina" class="btn btn-danger btn-sm col-3">
                                                             <i class="bi bi-trash-fill">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16"
@@ -539,7 +535,7 @@
                                                                         d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                                                                 </svg>
                                                             </i>
-                                                        </button>
+                                                        </button>--}}
                                                     </div>
                                                 </form>
 
@@ -639,9 +635,9 @@
                            onchange="change_scad()">
                     <datalist id="modal_list_controllo_lotto"></datalist>
 
-                    <label>Data Scadenza</label>
+                    {{--<label>Data Scadenza</label>
                     <select class="form-control" id="modal_controllo_data_scadenza" autocomplete="off">
-                    </select>
+                    </select>--}}
 
                     <input class="form-control" type="hidden" id="modal_controllo_dorig" value="" autocomplete="off"
                            readonly>
@@ -1246,24 +1242,24 @@
         lotto.classList.add('btn');
         lotto.classList.add('btn-sm');
         lotto.classList.add('btn-primary');
-        lotto.classList.add('col-3');
+        lotto.classList.add('col-4');
         lotto.disabled = 'true';
         lotto.innerHTML = 'Lotto';
 
-        scadenza = document.createElement('button');
-        scadenza.classList.add('btn');
-        scadenza.classList.add('btn-sm');
-        scadenza.classList.add('btn-primary');
-        scadenza.classList.add('col-3');
-        scadenza.disabled = 'true';
-        scadenza.value = 'Scadenza';
-        scadenza.innerHTML = 'Scadenza';
+        /*        scadenza = document.createElement('button');
+                scadenza.classList.add('btn');
+                scadenza.classList.add('btn-sm');
+                scadenza.classList.add('btn-primary');
+                scadenza.classList.add('col-3');
+                scadenza.disabled = 'true';
+                scadenza.value = 'Scadenza';
+                scadenza.innerHTML = 'Scadenza';*/
 
         codice = document.createElement('button');
         codice.classList.add('btn');
         codice.classList.add('btn-sm');
         codice.classList.add('btn-primary');
-        codice.classList.add('col-3');
+        codice.classList.add('col-4');
         codice.disabled = 'true';
         codice.value = 'Id Riga';
         codice.innerHTML = 'Id Riga';
@@ -1272,7 +1268,7 @@
         rimuovi.classList.add('btn');
         rimuovi.classList.add('btn-sm');
         rimuovi.classList.add('btn-danger');
-        rimuovi.classList.add('col-3');
+        rimuovi.classList.add('col-4');
         codice.disabled = 'true';
         rimuovi.value = 'Rimuovi';
         rimuovi.innerHTML = 'Rimuovi';
@@ -1280,7 +1276,7 @@
 
         newElement.appendChild(codice);
         newElement.appendChild(lotto);
-        newElement.appendChild(scadenza);
+        //newElement.appendChild(scadenza);
         newElement.appendChild(rimuovi);
 
         document.getElementById('ajax_rimuovi_lotti' + id_dorig).appendChild(newElement);
@@ -1294,25 +1290,25 @@
                 lotto.classList.add('btn');
                 lotto.classList.add('btn-sm');
                 lotto.classList.add('btn-primary');
-                lotto.classList.add('col-3');
+                lotto.classList.add('col-4');
                 lotto.disabled = 'true';
                 lotto.value = result[2];
                 lotto.innerHTML = result[2];
 
-                scadenza = document.createElement('button');
-                scadenza.classList.add('btn');
-                scadenza.classList.add('btn-sm');
-                scadenza.classList.add('btn-primary');
-                scadenza.classList.add('col-3');
-                scadenza.disabled = 'true';
-                scadenza.value = result[1];
-                scadenza.innerHTML = result[1];
+                /*              scadenza = document.createElement('button');
+                              scadenza.classList.add('btn');
+                              scadenza.classList.add('btn-sm');
+                              scadenza.classList.add('btn-primary');
+                              scadenza.classList.add('col-3');
+                              scadenza.disabled = 'true';
+                              scadenza.value = result[1];
+                              scadenza.innerHTML = result[1];*/
 
                 codice = document.createElement('button');
                 codice.classList.add('btn');
                 codice.classList.add('btn-sm');
                 codice.classList.add('btn-primary');
-                codice.classList.add('col-3');
+                codice.classList.add('col-4');
                 codice.disabled = 'true';
                 codice.value = result[0];
                 codice.innerHTML = result[0];
@@ -1321,7 +1317,7 @@
                 rimuovi.classList.add('btn');
                 rimuovi.classList.add('btn-sm');
                 rimuovi.classList.add('btn-danger');
-                rimuovi.classList.add('col-3');
+                rimuovi.classList.add('col-4');
                 rimuovi.onclick = function () {
                     eliminaLotto(item.key);
                 };
@@ -1331,7 +1327,7 @@
 
                 newElement.appendChild(codice);
                 newElement.appendChild(lotto);
-                newElement.appendChild(scadenza);
+                // / newElement.appendChild(scadenza);
                 newElement.appendChild(rimuovi);
 
                 // newElement.innerHTML = 'Vuoi eliminare Lotto ' + result[2] + ' con valore : ' + item.value;
@@ -1374,7 +1370,7 @@
     }
 
 
-    function change_scad() {
+    /*function change_scad() {
         lotto = document.getElementById('modal_controllo_lotto').value;
         scadenza = document.getElementById('modal_controllo_data_scadenza');
         scadenze = scadenza.options;
@@ -1385,7 +1381,7 @@
                 break;
             }
         }
-    }
+    }*/
 
     function change_mag() {
         $('#session').submit();
@@ -1409,6 +1405,7 @@
                 url: "<?php echo URL::asset('ajax/invia_mail') ?>/<?php echo $id_dotes ?>/" + 2 + "/-" + Segnalazione
             }).done(function (result) {
                 $('#modal_alertSegnalazione').modal('show');
+                top.location.href = window.location.href;
             });
         }
     }
@@ -1500,9 +1497,7 @@
             text = document.getElementById('modal_controllo_dorig').value;
             textXEvasione = document.getElementById('modal_controllo_dorig').value;
 
-            data_scadenza = document.getElementById('modal_controllo_data_scadenza').value;
-            if (data_scadenza == 'Nessuna Scadenza' || data_scadenza == 'undefined' || data_scadenza == null)
-                data_scadenza = 0;
+            data_scadenza = 0;
 
             lotto = document.getElementById('modal_controllo_lotto').value;
             if (lotto == 'Nessun Lotto' || lotto == 'undefined' || lotto == null)

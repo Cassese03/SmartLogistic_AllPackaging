@@ -430,17 +430,17 @@
                                                             <?php echo '<br> Lotto : ' . $r->Cd_ARLotto; ?>
                                                     @endif
 
-                                                    @if($r->Data_Scadenza != '')
+                                                    {{--@if($r->Data_Scadenza != '')
                                                             <?php echo '<br> Data Scadenza : ' . date('d/m/Y', strtotime($r->Data_Scadenza)); ?>
-                                                    @endif <br>
+                                                    @endif--}} <br>
                                                     Qta: <?php echo floatval($r->QtaEvadibile) ?><?php /* echo  'Magazzino di Partenza: '.$r->Cd_MG_P;if($r->Cd_MGUbicazione_A != null) echo ' - '.$r->Cd_MGUbicazione_A;?><br><?php echo' Magazzino di Arrivo: '.$r->Cd_MG_A;?><br><?php if($r->Cd_ARLotto != Null)echo 'Lotto: '.$r->Cd_ARLotto;*/ ?>
                                                 </h5>
                                             </div>
                                             <div class=" col-xl-12 col-xs-6 col-sm-6 col-md-6">
 
-                                                <form method="post"
-                                                      onsubmit="return confirm('Vuoi Eliminare Questa Riga ?')">
+                                                <form method="post">
                                                     <div class="row">
+                                                        <div class="col-2"></div>
                                                         <button type="reset" name="segnalazione" value=""
                                                                 class="btn btn-warning btn-sm col-4"
                                                                 onclick="$('#modal_segnalazione<?php echo $r->Id_DORig?>').modal('show');">
@@ -474,7 +474,7 @@
                                                         </button>
                                                         <input type="hidden" name="Id_DORig"
                                                                value="<?php echo $r->Id_DORig ?>">
-                                                        <button type="submit" name="elimina_riga"
+                                                        {{--<button type="submit" name="elimina_riga"
                                                                 value="Elimina" class="btn btn-danger btn-sm col-4">
                                                             <i class="bi bi-trash-fill">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16"
@@ -484,7 +484,9 @@
                                                                         d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                                                                 </svg>
                                                             </i>
-                                                        </button>
+                                                        </button>--}}
+                                                        <div class="col-2"></div>
+
                                                     </div>
                                                 </form>
                                             </div>
@@ -623,9 +625,9 @@
                     <input class="form-control" list="modal_list_lotto" id="modal_lotto" autocomplete="off"
                            onchange="change_scad()">
                     <datalist id="modal_list_lotto"></datalist>
-                    <label>Data Scadenza</label>
+                    {{--<label>Data Scadenza</label>
                     <select class="form-control" id="modal_data_scadenza" autocomplete="off" readonly></select>
-                </div>
+                --}}</div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"
@@ -1014,18 +1016,18 @@
 </script>--}}
 <script type="text/javascript">
 
-    function change_scad() {
-        lotto = document.getElementById('modal_lotto').value;
-        scadenza = document.getElementById('modal_data_scadenza');
-        scadenze = scadenza.options;
+    /*    function change_scad() {
+            lotto = document.getElementById('modal_lotto').value;
+            scadenza = document.getElementById('modal_data_scadenza');
+            scadenze = scadenza.options;
 
-        for (i = 0; i < scadenze.length; i++) {
-            if (scadenze[i].getAttribute('lotto') === lotto) {
-                scadenze[i].selected = true;
-                break;
+            for (i = 0; i < scadenze.length; i++) {
+                if (scadenze[i].getAttribute('lotto') === lotto) {
+                    scadenze[i].selected = true;
+                    break;
+                }
             }
-        }
-    }
+        }*/
 
     function change_mag() {
         $('#session').submit();
@@ -1084,6 +1086,24 @@
     }
 
     function segnalazione() {
+        Id_DoRig = document.getElementById('Segnala_riga').value;
+        Segnalazione = document.getElementById('Segnalazione').value;
+
+        if (Id_DoRig != '') {
+            $.ajax({
+                url: "<?php echo URL::asset('ajax/segnalazione') ?>/<?php echo $id_dotes ?>/" + Id_DoRig + "/-" + encodeURIComponent(Segnalazione),
+
+            }).done(function (result) {
+            });
+        }
+        if (Id_DoRig != '') {
+            $.ajax({
+                url: "<?php echo URL::asset('ajax/invia_mail') ?>/<?php echo $id_dotes ?>/" + 2 + "/-" + Segnalazione
+            }).done(function (result) {
+                $('#modal_alertSegnalazione').modal('show');
+                top.location.href = window.location.href;
+            });
+        }
     }
 
     function check() {

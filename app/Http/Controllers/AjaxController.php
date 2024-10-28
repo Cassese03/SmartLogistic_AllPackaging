@@ -1396,6 +1396,7 @@ class AjaxController extends Controller
     public
     function invia_mail($id_dotes, $id_dorig, $testo)
     {
+
         if ($id_dorig == '1') {
             if (substr($testo, 0, 2) == '01') {
                 $decoder = new Decoder($delimiter = '');
@@ -1438,6 +1439,27 @@ class AjaxController extends Controller
             $testo = str_replace('(documento)', $documento, $testo);
             $where = $testo;
         }
+
+        $mail = new  PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'softmaint.fb@gmail.com';
+        $mail->Password = 'blgxmnrwhxmontlj';
+        $mail->SMTPSecure = 'ssl';
+        $mail->CharSet = 'utf-8';
+        $mail->Port = 465;
+        $mail->setFrom('softmaint.fb@gmail.com');
+        $mail->addAddress('laboratorio@allpackaging.it');
+        $mail->addAddress('lorenzo.cassese@promedya.it');
+        $mail->IsHTML(true);
+
+        $mail->Subject = 'Smart Produzione - All Packaging - Nuova Segnalazione Riga ' . $id_dorig;
+
+        $mail->Body = ' SEGNALAZIONE LOGISTICA - ' . $testo;
+
+        $mail->send();
+
 
     }
 

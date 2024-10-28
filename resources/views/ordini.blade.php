@@ -68,7 +68,7 @@
                     <li class="list-group-item">
                         <a href="<?php echo URL::asset('magazzino/altri') ?>" class="media">
                             <div class="media-body">
-                                <h5>Altri Documenti</h5>
+                                <h5>Trasferimento</h5>
                                 <p>Operazioni svolte con Altri Tipi di Documenti</p>
                             </div>
                         </a>
