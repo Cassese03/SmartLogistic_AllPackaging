@@ -304,6 +304,26 @@ class AjaxController extends Controller
             } else
                 DB::update('Update DOTes set NotePiede = \'' . $testo . '\' where Id_DoTes = \'' . $id_dorig_evade[0]->Id_DOTes . '\' ');
         }
+
+        $mail = new  PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'softmaint.fb@gmail.com';
+        $mail->Password = 'blgxmnrwhxmontlj';
+        $mail->SMTPSecure = 'ssl';
+        $mail->CharSet = 'utf-8';
+        $mail->Port = 465;
+        $mail->setFrom('softmaint.fb@gmail.com');
+        $mail->addAddress('laboratorio@allpackaging.it');
+        $mail->addAddress('lorenzo.cassese@promedya.it');
+        $mail->IsHTML(true);
+
+        $mail->Subject = 'Smart Produzione - All Packaging - Nuova Segnalazione SALVA DOCUMENTO ' . $id_dotes;
+
+        $mail->Body = ' SEGNALAZIONE LOGISTICA - ' . $testo;
+
+        $mail->send();
     }
 
     public function segnalazione($id_dotes, $id_dorig, $testo)
@@ -1044,12 +1064,32 @@ class AjaxController extends Controller
         }
     }
 
+    public function cerca_documento($id_dotes)
+    {
+        $cerca = DB::SELECT('SELECT * FROM dotes where id_dotes = ' . $id_dotes);
+        if (sizeof($cerca) > 0) {
+            $id_cd_cf = DB::SELECT('SELECT * from cf where cd_cf = \'' . $cerca[0]->Cd_CF . '\'');
+            if (sizeof($id_cd_cf) > 0) {
+                ?>
+                <li class="list-group-item">
+                    <a href="/magazzino/carico4/<?php echo $id_cd_cf[0]->Id_CF; ?>/<?php echo $id_dotes; ?>"
+                       class="media">
+                        <div class="media-body">
+                            <h5>Documento: <?php echo $cerca[0]->Cd_Do ?> N° <?php echo $cerca[0]->NumeroDoc ?></h5>
+                        </div>
+                    </a>
+                </li>
+                <?php
+            }
+        }
+    }
 
     public
     function controllo_articolo_smart($q, $id_dotes)
     {
         if (substr($q, 0, '2') == '01') {
             $pos = '';
+            $where2 = '';
             $pos = strpos($q, '*****');
             if ($pos == '')
                 $q = substr($q, 0, '10') . '*****' . substr($q, '10');
@@ -1071,7 +1111,7 @@ class AjaxController extends Controller
                 if ($field['code'] == '310') {
                     $decimali = floatval(substr($field['raw_content'], -2));
                     $quantita = floatval(substr($field['raw_content'], 0, 4)) + $decimali / 100;
-                    //$where .= ' and Qta Like \'%' . $qta . '%\'';
+                    $where2 = ' and Qta Like \'%' . $quantita . '%\'';
 
                 }
 
@@ -1100,36 +1140,37 @@ class AjaxController extends Controller
                 }
             }
         }
-        $articoli = DB::select('SELECT * FROM DoRig /*WHERE Cd_ARLotto is null and Cd_AR = \'' . $q . '\'*/ ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\') Order By QtaEvadibile DESC');
-        if (sizeof($articoli) > 0)
-            $articoli = $articoli[0];
-        else
+        $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' ' . $where2 . ' and Id_DoTes in (\'' . $id_dotes . '\') Order By QtaEvadibile DESC');
+        if (!(sizeof($articoli) > 0))
+            /*            $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\') Order By QtaEvadibile DESC');
+                    if (!(sizeof($articoli) > 0))*/
             return '';
-        $lotto = DB::select('SELECT * FROM ARLotto WHERE Cd_AR = \'' . $articoli->Cd_AR . '\'');
 
-        ?>
-        <script type="text/javascript">
+        foreach ($articoli as $articoli) {
+            $lotto = DB::select('SELECT * FROM ARLotto WHERE Cd_AR = \'' . $articoli->Cd_AR . '\'');
+            ?>
+            <script type="text/javascript">
 
-            $('#modal_controllo_articolo').val('<?php echo $articoli->Cd_AR ?>');
-            $('#modal_controllo_quantita').val(<?php echo floatval($quantita) ?>);
+                $('#modal_controllo_articolo').val('<?php echo $articoli->Cd_AR ?>');
+                $('#modal_controllo_quantita').val(<?php echo floatval($quantita) ?>);
 
-            $('#modal_controllo_lotto').val(
-                <?php if ($lotto_scelto != 0) {
-                    echo '\'' . $lotto_scelto . '\'';
-                } else {
-                    echo '\'Nessun Lotto\'';
-                } ?>)
-            $('#modal_list_controllo_lotto').html('<option value="Nessun Lotto">Nessun Lotto</option>')
-            <?php foreach($lotto as $l){?>
-            $('#modal_list_controllo_lotto').append('<option value="<?php echo $l->Cd_ARLotto;?>"><?php echo $l->Cd_ARLotto ?></option>')
-            <?php } ?>
+                $('#modal_controllo_lotto').val(
+                    <?php if ($lotto_scelto != 0) {
+                        echo '\'' . $lotto_scelto . '\'';
+                    } else {
+                        echo '\'Nessun Lotto\'';
+                    } ?>)
+                $('#modal_list_controllo_lotto').html('<option value="Nessun Lotto">Nessun Lotto</option>')
+                <?php foreach($lotto as $l){?>
+                $('#modal_list_controllo_lotto').append('<option value="<?php echo $l->Cd_ARLotto;?>"><?php echo $l->Cd_ARLotto ?></option>')
+                <?php } ?>
 
-            //$('#modal_controllo_lotto').val('<?php echo $articoli->Cd_ARLotto ?>');
-            $('#modal_controllo_dorig').val('<?php echo $articoli->Id_DORig ?>');
-            change_scad();
+                //$('#modal_controllo_lotto').val('<?php echo $articoli->Cd_ARLotto ?>');
+                $('#modal_controllo_dorig').val('<?php echo $articoli->Id_DORig ?>');
+                change_scad();
 
-        </script>
-
+            </script>
+        <?php } ?>
         <!--        <?php
         /*        $articoli = DB::select('SELECT * FROM DoRig WHERE Cd_AR = \'' . $q . '\' and Id_DoTes in (\'' . $id_dotes . '\') Order By QtaEvadibile DESC');
                 if (sizeof($articoli) > 0)

@@ -310,6 +310,16 @@ class HomeController extends Controller
         return View::make('altri', compact('documenti'));
     }
 
+    public function cerca_documento()
+    {
+
+        if (!session()->has('utente')) {
+            return Redirect::to('login');
+        }
+
+        return View::make('cerca_documento');
+    }
+
     public function carico_magazzino()
     {
 

@@ -286,6 +286,14 @@
                             </div>
                         </a>
                     </li>
+                    <li class="list-group-item">
+                        <a href="<?php echo URL::asset('magazzino/cerca_documento') ?>" class="media">
+                            <div class="media-body">
+                                <h5>Cerca Documento</h5>
+                                <p>Cerca documento tramite identificativo.</p>
+                            </div>
+                        </a>
+                    </li>
                     <!--
                     <li class="list-group-item">
                         <a href="<?php echo URL::asset('magazzino/attivo') ?>" class="media">

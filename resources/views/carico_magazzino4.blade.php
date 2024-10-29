@@ -1773,7 +1773,8 @@
                 if (result != '') {
                     $('#modal_cerca_articolo').modal('hide');
                     $('#ajax_lista_articoli').html(result);
-                    evadi_articolo2('0');
+                    $('#modal_lista_articoli_daevadere').modal('show');
+//                    evadi_articolo2('0');
                 } else {
                     errorAudio.play();
                     $('#modal_segnalare').modal('show');

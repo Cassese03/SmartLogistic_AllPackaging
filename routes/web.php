@@ -29,11 +29,13 @@ Route::any('ordini', 'HomeController@ordini');
 Route::any('magazzino/attivo', 'HomeController@attivo');
 Route::any('magazzino/passivi', 'HomeController@passivi');
 Route::any('magazzino/altri', 'HomeController@altri');
+Route::any('magazzino/cerca_documento', 'HomeController@cerca_documento');
 
 Route::any('ajax/conferma_righe/{dorig}/{cd_mg_a}/{cd_mg_p}/{cd_do}', 'AjaxController@conferma_righe');
 Route::any('ajax/inserisci_peso/{id_dotes}/{peso}', 'AjaxController@inserisci_peso');
 Route::any('ajax/inserisci_numero_colli/{id_dotes}', 'AjaxController@inserisci_numero_colli');
 Route::any('ajax/crea_doc_riordino/{id_dotes}', 'AjaxController@crea_doc_riordino');
+Route::any('ajax/cerca_documento/{id_dotes}', 'AjaxController@cerca_documento');
 
 Route::any('magazzino/carico', 'HomeController@carico_magazzino');
 Route::any('magazzino/carico2/{cd_do}', 'HomeController@carico_magazzino2');
