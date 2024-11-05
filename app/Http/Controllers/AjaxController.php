@@ -1147,6 +1147,7 @@ class AjaxController extends Controller
             return '';
 
         foreach ($articoli as $articoli) {
+            $quantita = $articoli->QtaEvadibile;
             $lotto = DB::select('SELECT * FROM ARLotto WHERE Cd_AR = \'' . $articoli->Cd_AR . '\'');
             ?>
             <script type="text/javascript">
