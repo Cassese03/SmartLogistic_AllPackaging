@@ -1087,9 +1087,9 @@ class AjaxController extends Controller
     public
     function controllo_articolo_smart($q, $id_dotes)
     {
+        $where2 = '';
         if (substr($q, 0, '2') == '01') {
             $pos = '';
-            $where2 = '';
             $pos = strpos($q, '*****');
             if ($pos == '')
                 $q = substr($q, 0, '10') . '*****' . substr($q, '10');
