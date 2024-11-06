@@ -1111,17 +1111,19 @@ class AjaxController extends Controller
                 if ($field['code'] == '310') {
                     $decimali = floatval(substr($field['raw_content'], -2));
                     $quantita = floatval(substr($field['raw_content'], 0, 4)) + $decimali / 100;
-                    $where2 = ' and Qta Like \'%' . $quantita . '%\'';
+                    $where2 = ' and Qta =  \'' . $quantita . '\'';
 
                 }
 
             }
-
-            $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\')   Order By Cd_AR DESC');
+            $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\')  and QtaEvadibile > 0   Order By Cd_AR DESC');
             if (sizeof($articoli) != '0') {
                 if ($articoli[0]->QtaEvadibile <= 0) {
-                    echo 'Gia Evaso';
-                    exit();
+                    $check = DB::select('SELECT SUM(QtaEvadibile) as qtaevasa FROM DoRig ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\')');
+                    if ($check[0]->qtaevasa <= 0) {
+                        echo 'Gia Evaso';
+                        exit();
+                    }
                 }
             }
         } else {
@@ -1129,47 +1131,57 @@ class AjaxController extends Controller
             $where = ' where 1=1 ';
             $where .= ' and Cd_AR Like \'%' . $cerca[0]->Cd_AR . '%\'';
             $where .= ' and  Cd_ARLotto Like \'%' . $q . '%\'';
-            $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\')   Order By Cd_AR DESC');
+            $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\')  and QtaEvadibile > 0  Order By Cd_AR DESC');
             if ($articoli != '') {
                 if ($articoli[0]->QtaEvadibile <= 0) {
-                    echo 'Gia Evaso';
-                    exit();
+                    $check = DB::select('SELECT SUM(QtaEvadibile) as qtaevasa FROM DoRig ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\')');
+                    if ($check[0]->qtaevasa <= 0) {
+                        echo 'Gia Evaso';
+                        exit();
+                    }
                 } else {
                     $quantita = $articoli[0]->QtaEvadibile;
                     $lotto_scelto = $articoli[0]->Cd_ARLotto;
                 }
             }
         }
-        $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' ' . $where2 . ' and Id_DoTes in (\'' . $id_dotes . '\') Order By QtaEvadibile DESC');
+        $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' ' . $where2 . ' and Id_DoTes in (\'' . $id_dotes . '\')  and QtaEvadibile > 0   Order By QtaEvadibile DESC');
         if (!(sizeof($articoli) > 0))
             /*            $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\') Order By QtaEvadibile DESC');
                     if (!(sizeof($articoli) > 0))*/
             return '';
-
         foreach ($articoli as $articoli) {
             $quantita = $articoli->QtaEvadibile;
-            $lotto = DB::select('SELECT * FROM ARLotto WHERE Cd_AR = \'' . $articoli->Cd_AR . '\'');
+            $lotto_scelto = $articoli->Cd_ARLotto;
             ?>
             <script type="text/javascript">
+                textXEvasione2 = '<?php echo $articoli->Id_DORig?>';
+                data_scadenza = 0;
+                lotto = '<?php echo $lotto_scelto;?>';
 
-                $('#modal_controllo_articolo').val('<?php echo $articoli->Cd_AR ?>');
-                $('#modal_controllo_quantita').val(<?php echo floatval($quantita) ?>);
+                textXEvasione2 = textXEvasione2 + ';' + data_scadenza;
+                textXEvasione2 = textXEvasione2 + ';' + lotto;
 
-                $('#modal_controllo_lotto').val(
-                    <?php if ($lotto_scelto != 0) {
-                        echo '\'' . $lotto_scelto . '\'';
-                    } else {
-                        echo '\'Nessun Lotto\'';
-                    } ?>)
-                $('#modal_list_controllo_lotto').html('<option value="Nessun Lotto">Nessun Lotto</option>')
-                <?php foreach($lotto as $l){?>
-                $('#modal_list_controllo_lotto').append('<option value="<?php echo $l->Cd_ARLotto;?>"><?php echo $l->Cd_ARLotto ?></option>')
-                <?php } ?>
+                if (evadi[textXEvasione2] == undefined || evadi[textXEvasione2] == null) {
 
-                //$('#modal_controllo_lotto').val('<?php echo $articoli->Cd_ARLotto ?>');
-                $('#modal_controllo_dorig').val('<?php echo $articoli->Id_DORig ?>');
-                change_scad();
+                    $('#modal_controllo_articolo').val('<?php echo $articoli->Cd_AR ?>');
+                    $('#modal_controllo_quantita').val(<?php echo floatval($quantita) ?>);
 
+                    $('#modal_controllo_lotto').val(
+                        <?php if ($lotto_scelto != 0) {
+                            echo '\'' . $lotto_scelto . '\'';
+                        } else {
+                            echo '\'Nessun Lotto\'';
+                        } ?>)
+                    $('#modal_list_controllo_lotto').html('<option value="Nessun Lotto">Nessun Lotto</option>')
+                    <?php /*foreach($lotto as $l){?>
+                    $('#modal_list_controllo_lotto').append('<option value="<?php echo $l->Cd_ARLotto;?>"><?php echo $l->Cd_ARLotto ?></option>')
+                    <?php } */?>
+
+                    //$('#modal_controllo_lotto').val('<?php echo $articoli->Cd_ARLotto ?>');
+                    $('#modal_controllo_dorig').val('<?php echo $articoli->Id_DORig ?>');
+                    change_scad();
+                }
             </script>
         <?php } ?>
         <!--        <?php
