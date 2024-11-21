@@ -35,6 +35,10 @@ class HomeController extends Controller
 
             if (sizeof($utenti) > 0) {
                 $utente = $utenti[0];
+
+                session(['utente' => $utente]);
+                session()->save();
+                /*
                 $password = DB::SELECT('SELECT * FROM Operatore WHERE Id_Operatore = ' . $utente->Id_Operatore);
 
                 if ($password != null)
@@ -51,7 +55,7 @@ class HomeController extends Controller
                     return View::make('login', compact('ditta', 'psw'));
                 }
                 session(['utente' => $utente]);
-                session()->save();
+                session()->save();*/
             } else {
                 $ditta = DB::select('SELECT * from Ditta')[0];
                 $psw = '2';

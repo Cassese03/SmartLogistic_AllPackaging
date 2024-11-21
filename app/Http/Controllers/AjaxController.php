@@ -315,7 +315,7 @@ class AjaxController extends Controller
         $mail->CharSet = 'utf-8';
         $mail->Port = 465;
         $mail->setFrom('softmaint.fb@gmail.com');
-        $mail->addAddress('laboratorio@allpackaging.it');
+        $mail->addAddress('acquisti@allpackaging.it');
         $mail->addAddress('lorenzo.cassese@promedya.it');
         $mail->IsHTML(true);
 
@@ -1504,7 +1504,7 @@ class AjaxController extends Controller
         $mail->CharSet = 'utf-8';
         $mail->Port = 465;
         $mail->setFrom('softmaint.fb@gmail.com');
-        $mail->addAddress('laboratorio@allpackaging.it');
+        $mail->addAddress('acquisti@allpackaging.it');
         $mail->addAddress('lorenzo.cassese@promedya.it');
         $mail->IsHTML(true);
 
