@@ -307,14 +307,14 @@ class AjaxController extends Controller
 
         $mail = new  PHPMailer(true);
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
+        $mail->Host = 'out.postassl.it';
         $mail->SMTPAuth = true;
-        $mail->Username = 'softmaint.fb@gmail.com';
-        $mail->Password = 'blgxmnrwhxmontlj';
+        $mail->Username = 'produzione@allpackaging.it';
+        $mail->Password = '#4fxJ934Mk76';
         $mail->SMTPSecure = 'ssl';
         $mail->CharSet = 'utf-8';
         $mail->Port = 465;
-        $mail->setFrom('softmaint.fb@gmail.com');
+        $mail->setFrom('produzione@allpackaging.it', 'Logistica All Packaging');
         $mail->addAddress('acquisti@allpackaging.it');
         $mail->addAddress('lorenzo.cassese@promedya.it');
         $mail->IsHTML(true);
@@ -1496,14 +1496,14 @@ class AjaxController extends Controller
 
         $mail = new  PHPMailer(true);
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
+        $mail->Host = 'out.postassl.it';
         $mail->SMTPAuth = true;
-        $mail->Username = 'softmaint.fb@gmail.com';
-        $mail->Password = 'blgxmnrwhxmontlj';
+        $mail->Username = 'produzione@allpackaging.it';
+        $mail->Password = '#4fxJ934Mk76';
         $mail->SMTPSecure = 'ssl';
         $mail->CharSet = 'utf-8';
         $mail->Port = 465;
-        $mail->setFrom('softmaint.fb@gmail.com');
+        $mail->setFrom('produzione@allpackaging.it', 'Logistica All Packaging');
         $mail->addAddress('acquisti@allpackaging.it');
         $mail->addAddress('lorenzo.cassese@promedya.it');
         $mail->IsHTML(true);
