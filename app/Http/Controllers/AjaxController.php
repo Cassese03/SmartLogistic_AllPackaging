@@ -304,6 +304,7 @@ class AjaxController extends Controller
             } else
                 DB::update('Update DOTes set NotePiede = \'' . $testo . '\' where Id_DoTes = \'' . $id_dorig_evade[0]->Id_DOTes . '\' ');
         }
+        $fornitore = (sizeof($id_dorig_evade) > 0) ? $id_dorig_evade[0]->Cd_CF : '';
 
         $mail = new  PHPMailer(true);
         $mail->isSMTP();
@@ -319,7 +320,7 @@ class AjaxController extends Controller
         $mail->addAddress('lorenzo.cassese@promedya.it');
         $mail->IsHTML(true);
 
-        $mail->Subject = 'Smart Produzione - All Packaging - Nuova Segnalazione SALVA DOCUMENTO ' . $id_dotes;
+        $mail->Subject = 'Smart Produzione - All Packaging - Nuova Segnalazione SALVA DOCUMENTO ' . $id_dotes . ' - ' . $fornitore;
 
         $mail->Body = ' SEGNALAZIONE LOGISTICA - ' . $testo;
 
@@ -770,6 +771,8 @@ class AjaxController extends Controller
                     if ($magazzino_A != '0')
                         $insert_evasione['Cd_MG_A'] = $magazzino_A;
                     if ($ScontoCassa != null) DB::UPDATE("Update dotes set dotes.ScontoCassa= '$ScontoCassa' where dotes.id_dotes = '$Id_DoTes'");
+                    $utente = session()->get('utente')->Cd_Operatore;
+                    if ($utente != null) DB::UPDATE("Update dotes set dotes.xCd_Operatore= '" . str_replace('\'', '', $utente) . "' where dotes.id_dotes = '$Id_DoTes'");
                     //DB::update("Update dotes set dotes.reserved_1= 'RRRRRRRRRR' where dotes.id_dotes = '$Id_DoTes'");
                     //DB::statement("exec asp_DO_End $Id_DoTes");
 
@@ -847,6 +850,8 @@ class AjaxController extends Controller
 
                 DB::table('DoRig')->insertGetId($insert_evasione);
 
+                $rif_ddt = $insert_evasione;
+
                 $Id_DoRig_OLD = DB::SELECT('SELECT TOP 1 * FROM DORIG ORDER BY Id_DORig DESC')[0]->Id_DORig;
 
                 if ($qtadaEvadere < $Riga[0]->QtaEvadibile) {
@@ -863,6 +868,25 @@ class AjaxController extends Controller
             DB::statement("exec asp_DO_End '$Id_DoTes_old'");
             DB::update("Update dotes set dotes.reserved_1= 'RRRRRRRRRR' where dotes.id_dotes = '$Id_DoTes1'");
             DB::statement("exec asp_DO_End '$Id_DoTes1'");
+            if (isset($rif_ddt)) {
+                $desc_old_doc = DB::SELECT('SELECT CONCAT(Cd_DO,\' \',NumeroDocI,\' del \',DataDoc) as DescrizioneOLD FROM DOTes where Id_DOTes in (SELECT Id_DOTes FROM DORig WHERE Id_DORig = ' . $rif_ddt['Id_DORig_Evade'] . ')');
+                if (sizeof($desc_old_doc) > 0)
+                    $desc_old_doc = 'Ns. Ord. ' . $desc_old_doc[0]->DescrizioneOLD;
+                else
+                    $desc_old_doc = '';
+                $check_desc = DB::SELECT('SELECT * FROM DoRig where Cd_AR is null and Id_DOTes = ' . $rif_ddt['Id_DoTes'] . ' AND Descrizione = \'' . $desc_old_doc . '\'');
+                if (sizeof($check_desc) > 0)
+                    return $Id_DoTes1;
+                $rif_ddt['Cd_AR'] = null;
+                $rif_ddt['Descrizione'] = $desc_old_doc;
+                $rif_ddt['Qta'] = 0;
+                $rif_ddt['QtaEvadibile'] = 0;
+                $rif_ddt['Cd_ARLotto'] = null;
+                $rif_ddt['Id_DORig_Evade'] = null;
+                $rif_ddt['Cd_CGConto'] = null;
+                $rif_ddt['Cd_Aliquota'] = null;
+                DB::table('DoRig')->insertGetId($rif_ddt);
+            }
             return $Id_DoTes1;
         } catch (\Exception $e) {
             DB::ROLLBACK();

@@ -1830,6 +1830,12 @@
             articolo = $('#modal_Cd_AR_c_<?php echo $r->Id_DORig ?>').val();
         articolo = articolo.replaceAll(';', 'punto');
         articolo = articolo.replaceAll('/', 'slash');
+        fornitore = '<?php echo $r->Fornitore ?>';
+        fornitore = fornitore.replaceAll(';', 'punto');
+        fornitore = fornitore.replaceAll('/', 'slash');
+        descrizioneAR = '<?php echo $r->descrizioneAR ?>';
+        descrizioneAR = descrizioneAR.replaceAll(';', 'punto');
+        descrizioneAR = descrizioneAR.replaceAll('/', 'slash');
         quantita = $('#modal_Qta_c_<?php echo $r->Id_DORig ?>').val();
         lotto = $('#modal_Cd_ARLotto_c_<?php echo $r->Id_DORig ?>').val();
         lotto = lotto.replaceAll(';', 'punto');
@@ -1841,9 +1847,9 @@
             if (quantita_evasa != '0') {
                 if (articolo != '' && quantita != '') {
                     if (lotto != '')
-                        testo = 'Articolo ' + articolo + ' del lotto ' + lotto + ' con quantita ' + quantitaEvadibile + ' non evaso ';
+                        testo = 'Articolo ' + articolo + ' ' + descrizioneAR + ' del lotto ' + lotto + ' ' + fornitore + ' con quantita ' + quantitaEvadibile + ' non evaso ';
                     else
-                        testo = 'Articolo ' + articolo + ' con quantita ' + quantitaEvadibile + ' non evaso ';
+                        testo = 'Articolo ' + articolo + ' ' + descrizioneAR + ' ' + fornitore + ' con quantita ' + quantitaEvadibile + ' non evaso ';
 
                     $.ajax({
                         url: "<?php echo URL::asset('ajax/segnalazione_salva') ?>/<?php echo $id_dotes ?>/" + id_dorig + "/" + testo,

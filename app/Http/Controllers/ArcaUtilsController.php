@@ -135,7 +135,8 @@ class ArcaUtilsController extends Controller
                     $nuovaRiga = db::select('SELECT TOP 1 Id_DORig FROM DORig ORDER BY TIMEINS DESC')[0]->Id_DORig;
                 }
 
-
+                $utente = session()->get('utente')->Cd_Operatore;
+                if ($utente != null) DB::UPDATE("Update dotes set dotes.xCd_Operatore= '" . str_replace('\'', '', $utente) . "' where dotes.id_dotes = '$id_ordine'");
                 ArcaUtilsController::calcola_totale_ordine($id_ordine);
 
             }

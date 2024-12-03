@@ -588,6 +588,11 @@ class HomeController extends Controller
         }
         $dati = $request->all();
         if (isset($dati['elimina_riga'])) {
+            $utente = session()->get('utente')->Cd_Operatore;
+            $id_ordine = DB::SELECT('SELECT Id_DOTes FROM DORig where Id_DORig = ' . $dati['Id_DORig']);
+            if (sizeof($id_ordine) > 0)
+                if ($utente != null)
+                    DB::UPDATE("Update dotes set dotes.xCd_Operatore= '" . str_replace('\'', '', $utente) . "' where dotes.id_dotes = '$id_ordine'");
             DB::table('DoRig')->where('Id_DORig', $dati['Id_DORig'])->delete();
         }
 
@@ -638,7 +643,7 @@ class HomeController extends Controller
             $fornitore = $fornitori[0];
             $date = date('d/m/Y', strtotime('today'));
             foreach ($documenti as $documento)
-                $documento->righe = DB::select('SELECT *,(SELECT DataScadenza FROM ARLotto where Cd_AR = DORig.Cd_AR and Cd_ARLotto = DORig.CD_ARLotto) as Data_Scadenza from DORig where Id_DoTes in (' . $id_dotes . ') and Qta > \'0\' ORDER BY Cd_AR');
+                $documento->righe = DB::select('SELECT *,(SELECT TOP 1 CONCAT(Cd_CF,\' - \',Descrizione) FROM CF where Cd_CF = DORig.Cd_CF) as Fornitore,(SELECT TOP 1 Descrizione FROM AR where Cd_AR = DORig.Cd_AR) as DescrizioneAR,(SELECT DataScadenza FROM ARLotto where Cd_AR = DORig.Cd_AR and Cd_ARLotto = DORig.CD_ARLotto) as Data_Scadenza from DORig where Id_DoTes in (' . $id_dotes . ') and Qta > \'0\' ORDER BY Cd_AR');
 
             foreach ($documento->righe as $r) {
                 $r->lotti = DB::select('SELECT * FROM ARLotto WHERE Cd_AR = \'' . $r->Cd_AR . '\' ORDER BY TimeIns DESC');
@@ -705,6 +710,11 @@ class HomeController extends Controller
             return Redirect::to('magazzino/carico04/' . $id_fornitore . '/' . $id_dotes);
         }
         if (isset($dati['elimina_riga'])) {
+            $utente = session()->get('utente')->Cd_Operatore;
+            $id_ordine = DB::SELECT('SELECT Id_DOTes FROM DORig where Id_DORig = ' . $dati['Id_DORig']);
+            if (sizeof($id_ordine) > 0)
+                if ($utente != null)
+                    DB::UPDATE("Update dotes set dotes.xCd_Operatore= '" . str_replace('\'', '', $utente) . "' where dotes.id_dotes = '$id_ordine'");
             DB::table('DoRig')->where('Id_DORig', $dati['Id_DORig'])->delete();
         }
         if (isset($dati['modifica_riga'])) {
@@ -739,8 +749,8 @@ class HomeController extends Controller
             $fornitore = $fornitori[0];
             $date = date('d/m/Y', strtotime('today'));
             foreach ($documenti as $documento)
-                $documento->righe = DB::select('SELECT *,(SELECT DataScadenza FROM ARLotto where Cd_AR = DORig.Cd_AR and Cd_ARLotto = DORig.CD_ARLotto) as Data_Scadenza  from DORig where Id_DoTes in (' . $id_dotes . ') and Qta > \'0\'  ORDER BY Cd_AR');
 
+                $documento->righe = DB::select('SELECT *,(SELECT TOP 1 CONCAT(Cd_CF,\' - \',Descrizione) FROM CF where Cd_CF = DORig.Cd_CF) as Fornitore,(SELECT TOP 1 Descrizione FROM AR where Cd_AR = DORig.Cd_AR) as DescrizioneAR ,(SELECT DataScadenza FROM ARLotto where Cd_AR = DORig.Cd_AR and Cd_ARLotto = DORig.CD_ARLotto) as Data_Scadenza  from DORig where Id_DoTes in (' . $id_dotes . ') and Qta > \'0\'  ORDER BY Cd_AR');
             foreach ($documento->righe as $r) {
                 $r->lotti = DB::select('SELECT * FROM ARLotto WHERE Cd_AR = \'' . $r->Cd_AR . '\'  ORDER BY TimeIns DESC ');
             }
