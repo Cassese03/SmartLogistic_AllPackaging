@@ -1833,7 +1833,7 @@
         fornitore = '<?php echo $r->Fornitore ?>';
         fornitore = fornitore.replaceAll(';', 'punto');
         fornitore = fornitore.replaceAll('/', 'slash');
-        descrizioneAR = '<?php echo $r->descrizioneAR ?>';
+        descrizioneAR = '<?php echo $r->DescrizioneAR ?>';
         descrizioneAR = descrizioneAR.replaceAll(';', 'punto');
         descrizioneAR = descrizioneAR.replaceAll('/', 'slash');
         quantita = $('#modal_Qta_c_<?php echo $r->Id_DORig ?>').val();
