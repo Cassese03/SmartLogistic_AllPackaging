@@ -1474,7 +1474,7 @@
             $('#ajax_loader').fadeOut();
             $('#modal_conf_riga').modal('hide');
 
-            top.location.href = '<?php echo ($do[0]->CliFor == 'C') ? '/magazzino/attivo' : '/magazzino/passivi' ?>'
+            top.location.href = '/magazzino';
 
 //            $('#modal_numero_colli').modal('show');
             /* if (result.length > 1)
@@ -1820,7 +1820,7 @@
         $.ajax({
             url: "<?php echo URL::asset('ajax/crea_doc_riordino') ?>/<?php echo $id_dotes ?>",
         }).done(function (result) {
-            top.location.href = '<?php echo ($do[0]->CliFor == 'C') ? '/magazzino/attivo' : '/magazzino/passivi' ?>'
+            top.location.href = '/magazzino';
         });
     }
 

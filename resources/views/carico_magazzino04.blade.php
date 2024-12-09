@@ -711,56 +711,56 @@
             </form>
         </div>
     </div>
-{{--    <?php foreach ($documento->righe as $r) { ?>
-    <div class="modal" id="modal_modifica_<?php  echo $r->Id_DORig ?>" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <form method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modifica Articolo <?php echo $r->Cd_AR ?></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                                onclick="$('#modal_modifica_<?php  echo $r->Id_DORig ?>').modal('hide');$('#cerca_articolo2').val('');$('#cerca_articolo2').focus()">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="ajax_modal_modifica"></div>
+    {{--    <?php foreach ($documento->righe as $r) { ?>
+        <div class="modal" id="modal_modifica_<?php  echo $r->Id_DORig ?>" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form method="post">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modifica Articolo <?php echo $r->Cd_AR ?></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                    onclick="$('#modal_modifica_<?php  echo $r->Id_DORig ?>').modal('hide');$('#cerca_articolo2').val('');$('#cerca_articolo2').focus()">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="ajax_modal_modifica"></div>
 
-                        <label>Quantita</label>
-                        <input class="form-control" type="number" name="Qta" value="<?php echo floatval($r->Qta) ?>"
-                               required placeholder="Inserisci una Quantità" autocomplete="off" step="0.01">
-                            <?php /*
-                        <label>Quantita Evadibile</label>
-                        <input class="form-control" type="number" name="QtaEvadibile" value="<?php echo floatval($r->QtaEvadibile) ?>" required placeholder="Inserisci una Quantità" autocomplete="off" step="0.01">
-                        <label>Prezzo</label>
-                        <input class="form-control" type="number" name="PrezzoUnitarioV" value="<?php echo floatval($r->PrezzoUnitarioV) ?>" required placeholder="Inserisci un Prezzo" autocomplete="off" step="0.01" >
-*/ ?>
-                            <!--
-                    <label>Prezzo (&euro;)</label>
-                    <input class="form-control" type="number" name="PrezzoUnitarioV" value="<?php echo intval($r->PrezzoUnitarioV) ?>" required placeholder="Inserisci un Prezzo" autocomplete="off"; step="0.01">
--->
-                        <input type="hidden" class="form-control" id="modal_magazzino_P_m"
-                               value="00001 - Magazzino Centrale">
-                        <input type="hidden" class="form-control" id="modal_ubicazione_A_m" name="modal_ubicazione_A_m"
-                               value="0">
-                        <input type="hidden" class="form-control" id="modal_magazzino_A_m"
-                               value="00001 - Magazzino Centrale">
-                        <input type="hidden" class="form-control" id="modal_lotto_m" name="modal_lotto_m" value="0">
+                            <label>Quantita</label>
+                            <input class="form-control" type="number" name="Qta" value="<?php echo floatval($r->Qta) ?>"
+                                   required placeholder="Inserisci una Quantità" autocomplete="off" step="0.01">
+                                <?php /*
+                            <label>Quantita Evadibile</label>
+                            <input class="form-control" type="number" name="QtaEvadibile" value="<?php echo floatval($r->QtaEvadibile) ?>" required placeholder="Inserisci una Quantità" autocomplete="off" step="0.01">
+                            <label>Prezzo</label>
+                            <input class="form-control" type="number" name="PrezzoUnitarioV" value="<?php echo floatval($r->PrezzoUnitarioV) ?>" required placeholder="Inserisci un Prezzo" autocomplete="off" step="0.01" >
+    */ ?>
+                                <!--
+                        <label>Prezzo (&euro;)</label>
+                        <input class="form-control" type="number" name="PrezzoUnitarioV" value="<?php echo intval($r->PrezzoUnitarioV) ?>" required placeholder="Inserisci un Prezzo" autocomplete="off"; step="0.01">
+    -->
+                            <input type="hidden" class="form-control" id="modal_magazzino_P_m"
+                                   value="00001 - Magazzino Centrale">
+                            <input type="hidden" class="form-control" id="modal_ubicazione_A_m" name="modal_ubicazione_A_m"
+                                   value="0">
+                            <input type="hidden" class="form-control" id="modal_magazzino_A_m"
+                                   value="00001 - Magazzino Centrale">
+                            <input type="hidden" class="form-control" id="modal_lotto_m" name="modal_lotto_m" value="0">
 
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="Id_DORig" value="<?php echo $r->Id_DORig ?>">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                    onclick="$('#modal_modifica_<?php  echo $r->Id_DORig ?>').modal('hide');$('#cerca_articolo2').val('');$('#cerca_articolo2').focus()">
+                                Chiudi
+                            </button>
+                            <button type="submit" name="modifica_riga" value="Salva" class="btn btn-primary">Salva</button>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <input type="hidden" name="Id_DORig" value="<?php echo $r->Id_DORig ?>">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                                onclick="$('#modal_modifica_<?php  echo $r->Id_DORig ?>').modal('hide');$('#cerca_articolo2').val('');$('#cerca_articolo2').focus()">
-                            Chiudi
-                        </button>
-                        <button type="submit" name="modifica_riga" value="Salva" class="btn btn-primary">Salva</button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
-    <?php } ?>--}}
+        <?php } ?>--}}
     <div class="modal" id="modal_lista_salva" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <form method="post">
@@ -1045,8 +1045,8 @@
         $.ajax({
             url: "<?php echo URL::asset('ajax/salva') ?>/<?php echo $id_dotes ?>"
         }).done(function (result) {
-            top.location.href = '<?php echo ($do[0]->CliFor == 'C') ? '/magazzino/attivo' : '/magazzino/passivi' ?>'
 
+            top.location.href = '/magazzino';
         });
     }
 
@@ -1076,13 +1076,14 @@
         }).done(function (result) {
             if (result == 'Eliminato')
                 alert('Documento Eliminato Correttamente');
-            top.location.href = '<?php echo ($do[0]->CliFor == 'C') ? '/magazzino/attivo' : '/magazzino/passivi' ?>'
 
+            top.location.href = '/magazzino';
         });
     }
 
     function invia() {
-        top.location.href = '<?php echo ($do[0]->CliFor == 'C') ? '/magazzino/attivo' : '/magazzino/passivi' ?>'
+
+        top.location.href = '/magazzino';
     }
 
     function segnalazione() {
@@ -1251,6 +1252,9 @@
             if (result != '') {
                 $('#modal_carico').modal('show');
                 $('#ajax_modal_carico').html(result);
+                <?php if ($documento->Cd_Do == 'RCT') {
+                    echo "$('#modal_quantita').val(0);";
+                } ?>
             } else {
                 $('#modal_inserimento').modal('show');
                 $('#modal_inserimento_barcode').val(code);
