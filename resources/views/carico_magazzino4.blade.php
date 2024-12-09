@@ -1843,21 +1843,19 @@
         quantita_evasa = $('#modal_QtaEvasa_c_<?php echo $r->Id_DORig ?>').val();
         quantitaEvadibile = $('#modal_QtaEvadibile_c_<?php echo $r->Id_DORig ?>').val();
         id_dorig = '00000';
-        if (!articolo.startsWith('SCATOLO')) {
-            if (quantita_evasa != '0') {
-                if (articolo != '' && quantita != '') {
-                    if (lotto != '')
-                        testo = 'Articolo ' + articolo + ' ' + descrizioneAR + ' del lotto ' + lotto + ' ' + fornitore + ' con quantita ' + quantitaEvadibile + ' non evaso ';
-                    else
-                        testo = 'Articolo ' + articolo + ' ' + descrizioneAR + ' ' + fornitore + ' con quantita ' + quantitaEvadibile + ' non evaso ';
+        if (quantita_evasa != '0') {
+            if (articolo != '' && quantita != '') {
+                if (lotto != '')
+                    testo = 'Articolo ' + articolo + ' ' + descrizioneAR + ' del lotto ' + lotto + ' ' + fornitore + ' con quantita ' + quantitaEvadibile + ' non evaso ';
+                else
+                    testo = 'Articolo ' + articolo + ' ' + descrizioneAR + ' ' + fornitore + ' con quantita ' + quantitaEvadibile + ' non evaso ';
 
-                    $.ajax({
-                        url: "<?php echo URL::asset('ajax/segnalazione_salva') ?>/<?php echo $id_dotes ?>/" + id_dorig + "/" + testo,
-                    }).done(function (result) {
+                $.ajax({
+                    url: "<?php echo URL::asset('ajax/segnalazione_salva') ?>/<?php echo $id_dotes ?>/" + id_dorig + "/" + testo,
+                }).done(function (result) {
 
-                    });
-                    segnalazioni = segnalazioni + testo + '<br>';
-                }
+                });
+                segnalazioni = segnalazioni + testo + '<br>';
             }
         }
         <?php } ?>

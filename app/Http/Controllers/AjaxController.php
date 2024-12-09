@@ -367,6 +367,14 @@ class AjaxController extends Controller
         } else
             DB::update('Update DOTes set NotePiede = \'' . $where . '\' where Id_DoTes = \'' . $id_dotes . '\' ');
 
+        $esiste_riga = DB::SELECT('SELECT * FROM DORig WHERE Id_DORig = \'' . $id_dorig . '\' ')[0]->NoteRiga;
+        if ($esiste_riga != null) {
+            $esiste_riga .= '                                    ';
+            $esiste_riga .= $where;
+            DB::update('Update DORig set NoteRiga = \'' . $esiste_riga . '\' where Id_DORig = \'' . $id_dorig . '\' ');
+        } else
+            DB::update('Update DORig set NoteRiga = \'' . $where . '\' where Id_DORig = \'' . $id_dorig . '\' ');
+
     }
 
     public function cerca_fornitore_new($q = '', $dest)
@@ -1539,9 +1547,9 @@ class AjaxController extends Controller
         $mail->addAddress('lorenzo.cassese@promedya.it');
         $mail->IsHTML(true);
 
-        $mail->Subject = 'Smart Produzione - All Packaging - Nuova Segnalazione Riga ' . $id_dorig;
+        $mail->Subject = 'Smart Produzione - All Packaging - Nuova Segnalazione Documento ' . $id_dotes;
 
-        $mail->Body = ' SEGNALAZIONE LOGISTICA - ' . $testo;
+        $mail->Body = ' SEGNALAZIONE LOGISTICA ' . $testo;
 
         $mail->send();
 

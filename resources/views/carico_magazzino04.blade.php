@@ -1099,7 +1099,7 @@
         }
         if (Id_DoRig != '') {
             $.ajax({
-                url: "<?php echo URL::asset('ajax/invia_mail') ?>/<?php echo $id_dotes ?>/" + 2 + "/-" + Segnalazione
+                url: "<?php echo URL::asset('ajax/invia_mail') ?>/<?php echo $id_dotes ?>/" + 2 + "/-" + encodeURIComponent(Segnalazione)
             }).done(function (result) {
                 $('#modal_alertSegnalazione').modal('show');
                 top.location.href = window.location.href;
