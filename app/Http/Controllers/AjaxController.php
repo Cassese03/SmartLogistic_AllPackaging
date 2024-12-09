@@ -337,7 +337,9 @@ class AjaxController extends Controller
             foreach ($barcode->toArray()['identifiers'] as $field) {
 
                 if ($field['code'] == '01') {
-                    $contenuto = trim($field['content'], '*,');
+
+                    //$contenuto = trim($field['content'], '*,');
+                    $contenuto = explode('*', $field['content'])[0];
                     $where .= $contenuto . ' con lotto ';
 
                 }
@@ -1012,7 +1014,8 @@ class AjaxController extends Controller
             foreach ($barcode->toArray()['identifiers'] as $field) {
 
                 if ($field['code'] == '01') {
-                    $contenuto = trim($field['content'], '*,');
+                    //$contenuto = trim($field['content'], '*,');
+                    $contenuto = explode('*', $field['content'])[0];
                     $where .= ' and Cd_AR = \'' . $contenuto . '\'';
 
                 }
@@ -1123,7 +1126,8 @@ class AjaxController extends Controller
             foreach ($barcode->toArray()['identifiers'] as $field) {
 
                 if ($field['code'] == '01') {
-                    $contenuto = trim($field['content'], '*,');
+                    //$contenuto = trim($field['content'], '*,');
+                    $contenuto = explode('*', $field['content'])[0];
                     $where .= ' and Cd_AR = \'' . $contenuto . '\'';
 
                 }
@@ -1250,7 +1254,8 @@ class AjaxController extends Controller
             foreach ($barcode->toArray()['identifiers'] as $field) {
 
                 if ($field['code'] == '01') {
-                    $testo = trim($field['content'], '*,');
+                    //$contenuto = trim($field['content'], '*,');
+                    $contenuto = explode('*', $field['content'])[0];
                     $where .= ' and AR.Cd_AR Like \'%' . $testo . '%\'';
 
                 }
@@ -1365,7 +1370,8 @@ class AjaxController extends Controller
                 foreach ($barcode->toArray()['identifiers'] as $field) {
 
                     if ($field['code'] == '01') {
-                        $contenuto = trim($field['content'], '*,');
+                        //$contenuto = trim($field['content'], '*,');
+                        $contenuto = explode('*', $field['content'])[0];
                         $where .= ' and Cd_AR = \'' . $contenuto . '\'';
 
                     }
@@ -1483,7 +1489,8 @@ class AjaxController extends Controller
                 foreach ($barcode->toArray()['identifiers'] as $field) {
 
                     if ($field['code'] == '01') {
-                        $contenuto = trim($field['content'], '*,');
+                        //$contenuto = trim($field['content'], '*,');
+                        $contenuto = explode('*', $field['content'])[0];
                         $where .= $contenuto;
 
                     }
