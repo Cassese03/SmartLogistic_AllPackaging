@@ -71,7 +71,7 @@ class AjaxController extends Controller
             $mpdf->curlAllowUnsafeSslRequests = true;
             $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
             $mpdf->WriteHTML($html);
-            $mpdf->Output('upload/GB/Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes, 'F');
+            $mpdf->Output('upload/GB/Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'F');
         } else {
             return 'alert("Errore nel caricamento della riga")';
         }
