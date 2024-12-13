@@ -24,6 +24,52 @@ use Symfony\Component\VarDumper\Cloner\Data;
  */
 class AjaxController extends Controller
 {
+
+    public function stampa($id_dorig){
+        $DORig = DB::SELECT('SELECT * FROM DORig WHERE Id_DORig = \''.$id_dorig.'\'');
+        if(sizeof($DORig)>0){
+            $DORig = $DORig[0];
+            $quantita = number_format($DORig->Qta,2,'','');
+            $lotto = strtoupper($DORig->Cd_ARLotto);
+            $codice = strtoupper($DORig->Cd_AR);
+            $html = '<!DOCTYPE html>
+                            <html>
+                            <body>
+                            <div class="barcodecell" style="padding-top: -2rem">
+                                <barcode code="01'.$codice.'*****3100'.$quantita.'10';$html .= strtoupper($lotto);$html .= '" type="C128A" style="margin:0 auto;display:block" size="0.80" text="1" class="barcode" />
+                                <barcode code="01'.$codice.'*****3100'.$quantita.'10'; $html .= strtoupper($lotto);$html .= '" type="C128A" style="margin:0 auto;display:block" size="0.80" text="1" class="barcode" />
+                            </div>
+                            <p style="font-size:13px;padding-top: -1rem;padding-left: 2.5em;">01'.$codice.'*****3100'.$quantita.'10'.$lotto.'</p>
+                            <p style="padding-left: -2.5rem;">Lotto</p>
+                            <p style="padding-top: -1.25rem;padding-left: -2.5rem;font-weight: bold">'.$lotto.'</p>
+                            <p style="padding-top: -2.50rem;padding-left:3.5rem">Quantita</p>
+                            <p style="padding-top: -1.25rem;font-weight: bold;padding-left:3.5rem">'.number_format($DORig->Qta, 2,',','').'</p>
+                            <p style="padding-top: -2.50rem;padding-left:150px">Codice Prodotto</p>
+                            <p style="padding-top: -1.25rem;font-weight: bold;padding-left:150px">'.$codice.'</p>
+                            </body>
+                            </html>
+                            <style>
+                .barcode {
+                    padding: 0;
+                    margin: 0;
+                    vertical-align: top;
+                    color: #000044;
+                }
+                .barcodecell {
+                    text-align: center;
+                    vertical-align: middle;
+                }
+            </style>';
+            $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8','format'=>[110,60]]);
+            $mpdf->curlAllowUnsafeSslRequests = true;
+            $mpdf->SetTitle('Etichetta_'.$codice.'_'.$lotto.'_'.$DORig->Id_DOTes);
+            $mpdf->WriteHTML($html);
+            $mpdf->Output('Etichetta_'.$codice.'_'.$lotto.'_'.$DORig->Id_DOTes,'I');
+        }else{
+            return 'alert("Errore nel caricamento della riga")';
+        }
+    }
+
     public function barcode_add($codice, $scadenza, $lotto)
     {
         $codice = str_replace('slash', '/', $codice);
@@ -500,6 +546,19 @@ class AjaxController extends Controller
         //TODO Controllare Data Scadenza togliere i commenti
 
         $date = date('d/m/Y', strtotime('today'));
+        if($Cd_ARLotto != '0')
+            $newInfo = DB::select('SELECT NoteRiga from DORig WHERE Cd_AR = \'' . $codice . '\' and Cd_ARLotto = \'' . $Cd_ARLotto . '\' and Cd_DO = \'OAF\' ');
+        else
+            $newInfo = [];
+
+        if(sizeof($newInfo) > 0){
+            if($newInfo[0]->NoteRiga != null)
+                $newInfo = 'NoteRiga : '.$newInfo[0]->NoteRiga;
+            else
+                $newInfo = '';
+        }else{
+            $newInfo = '';
+        }
 
         if ($Cd_ARLotto != '0')
             $lotto = DB::select('SELECT * FROM ARLotto WHERE Cd_AR = \'' . $articoli[0]->Cd_AR . '\' and Cd_ARLotto !=\'' . $Cd_ARLotto . '\'  ');
@@ -510,6 +569,8 @@ class AjaxController extends Controller
             $articolo = $articoli[0];
             echo '<h3>    Barcode: ' . $articolo->barcode . '<br>
                           Codice: ' . $articolo->Cd_AR . '<br>
+                          Codice Lotto: ' . $Cd_ARLotto . '<br>
+                          '.$newInfo.'<br>
                           Descrizione:<br>' . $articolo->Descrizione . '</h3>';
             ?>
             <script type="text/javascript">
