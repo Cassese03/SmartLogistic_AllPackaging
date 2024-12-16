@@ -67,11 +67,17 @@ class AjaxController extends Controller
             $mpdf->WriteHTML($html);
             $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes, 'I');
 
+            if (substr($codice, 0, 2) == '14') {
+                $folder = 'saldatrici';
+            } else {
+                $folder = 'estrusore';
+            }
+                
             $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [110, 60]]);
             $mpdf->curlAllowUnsafeSslRequests = true;
             $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
             $mpdf->WriteHTML($html);
-            $mpdf->Output('upload/GB/Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'F');
+            $mpdf->Output('upload/GB/'.$folder.'/Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'F');
         } else {
             return 'alert("Errore nel caricamento della riga")';
         }
