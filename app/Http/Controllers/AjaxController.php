@@ -35,6 +35,18 @@ class AjaxController extends Controller
             $codice = strtoupper($DORig->Cd_AR);
             $html = '<!DOCTYPE html>
                             <html>
+                            <style>
+                                .barcode {
+                                    padding: 0;
+                                    margin: 0;
+                                    vertical-align: top;
+                                    color: #000044;
+                                }
+                                .barcodecell {
+                                    text-align: center;
+                                    vertical-align: middle;
+                                }
+                            </style>
                             <body>
                             <div class="barcodecell" style="padding-top: -2rem">
                                 <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.80" text="1" class="barcode" />
@@ -48,36 +60,33 @@ class AjaxController extends Controller
                             <p style="padding-top: -2.50rem;padding-left:150px">Codice Prodotto</p>
                             <p style="padding-top: -1.25rem;font-weight: bold;padding-left:150px">' . $codice . '</p>
                             </body>
-                            </html>
-                            <style>
-                .barcode {
-                    padding: 0;
-                    margin: 0;
-                    vertical-align: top;
-                    color: #000044;
-                }
-                .barcodecell {
-                    text-align: center;
-                    vertical-align: middle;
-                }
-            </style>';
-            $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100]]);
+                            </html>';
+/*            $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100]]);
             $mpdf->curlAllowUnsafeSslRequests = true;
             $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
             $mpdf->WriteHTML($html);
             $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'I');
-
+*/
             if (substr($codice, 0, 2) == '14') {
                 $folder = 'saldatrici';
+                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [80, 40]]);
+                $mpdf->curlAllowUnsafeSslRequests = true;
+                $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
+                $mpdf->WriteHTML($html);
+                $mpdf->Output('upload/GB/'.$folder.'/Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'F');
+                $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'I');
+
             } else {
                 $folder = 'estrusore';
+                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 80]]);
+                $mpdf->curlAllowUnsafeSslRequests = true;
+                $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
+                $mpdf->WriteHTML($html);
+                $mpdf->Output('upload/GB/'.$folder.'/Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'F');
+                $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'I');
+
             }
 
-            $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100]]);
-            $mpdf->curlAllowUnsafeSslRequests = true;
-            $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
-            $mpdf->WriteHTML($html);
-            $mpdf->Output('upload/GB/'.$folder.'/Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'F');
         } else {
             return 'alert("Errore nel caricamento della riga")';
         }
