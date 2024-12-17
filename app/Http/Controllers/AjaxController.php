@@ -72,7 +72,7 @@ class AjaxController extends Controller
             } else {
                 $folder = 'estrusore';
             }
-                
+
             $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [110, 60]]);
             $mpdf->curlAllowUnsafeSslRequests = true;
             $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
@@ -817,6 +817,7 @@ class AjaxController extends Controller
             $date = date('d/m/Y', strtotime('today'));
 
             $righe = DB::select('SELECT * FROM DORIG WHERE ID_DORIG IN (\'' . $Id_DoRig . '\')');
+            $Id_DoTes = '';
             foreach ($righe as $r) {
                 $Id_DoRig = $r->Id_DORig;
                 $qtadaEvadere = ${$r->Id_DORig . '_qta'};
