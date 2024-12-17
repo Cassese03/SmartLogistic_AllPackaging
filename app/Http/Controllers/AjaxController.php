@@ -65,7 +65,7 @@ class AjaxController extends Controller
             $mpdf->curlAllowUnsafeSslRequests = true;
             $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
             $mpdf->WriteHTML($html);
-            $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes, 'I');
+            $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'I');
 
             if (substr($codice, 0, 2) == '14') {
                 $folder = 'saldatrici';
