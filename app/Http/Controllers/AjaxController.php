@@ -61,7 +61,7 @@ class AjaxController extends Controller
                     vertical-align: middle;
                 }
             </style>';
-            $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [110, 60]]);
+            $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100]]);
             $mpdf->curlAllowUnsafeSslRequests = true;
             $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
             $mpdf->WriteHTML($html);
@@ -73,7 +73,7 @@ class AjaxController extends Controller
                 $folder = 'estrusore';
             }
 
-            $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [110, 60]]);
+            $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100]]);
             $mpdf->curlAllowUnsafeSslRequests = true;
             $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
             $mpdf->WriteHTML($html);
