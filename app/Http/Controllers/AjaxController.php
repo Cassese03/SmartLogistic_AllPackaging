@@ -33,7 +33,14 @@ class AjaxController extends Controller
             $quantita = number_format($DORig->Qta, 2, '', '');
             $lotto = strtoupper($DORig->Cd_ARLotto);
             $codice = strtoupper($DORig->Cd_AR);
-            $html = '<!DOCTYPE html>
+/*            $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100]]);
+            $mpdf->curlAllowUnsafeSslRequests = true;
+            $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
+            $mpdf->WriteHTML($html);
+            $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'I');
+*/
+            if (substr($codice, 0, 2) == '14') {
+                $html = '<!DOCTYPE html>
                             <html>
                             <style>
                                 .barcode {
@@ -45,31 +52,26 @@ class AjaxController extends Controller
                                 .barcodecell {
                                     text-align: center;
                                     vertical-align: middle;
+                                    padding-top: 1rem
                                 }
                             </style>
                             <body>
-                            <div class="barcodecell" style="padding-top: -2rem">
-                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.80" text="1" class="barcode" />
-                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.80" text="1" class="barcode" />
+                            <div class="barcodecell">
+                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.52" text="1" class="barcode" />
+                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.52" text="1" class="barcode" />
                             </div>
-                            <p style="font-size:13px;padding-top: -1rem;padding-left: 2.5em;">01' . $codice . '*****3100' . $quantita . '10' . $lotto . '</p>
-                            <p style="padding-left: -2.5rem;">Lotto</p>
-                            <p style="padding-top: -1.25rem;padding-left: -2.5rem;font-weight: bold">' . $lotto . '</p>
-                            <p style="padding-top: -2.50rem;padding-left:3.5rem">Quantita</p>
-                            <p style="padding-top: -1.25rem;font-weight: bold;padding-left:3.5rem">' . number_format($DORig->Qta, 2, ',', '') . '</p>
-                            <p style="padding-top: -2.50rem;padding-left:150px">Codice Prodotto</p>
-                            <p style="padding-top: -1.25rem;font-weight: bold;padding-left:150px">' . $codice . '</p>
+                            <div style="position:absolute;top:80px;left:15px;text-align:center;font-weight: bold;">01' . $codice . '*****3100' . $quantita . '10' . $lotto . '</div>
+                            <div style="position:absolute;top:95px;left:25px;text-align:center;font-weight: bold;">Lotto</div>
+                            <div style="position:absolute;top:110px;left:25px;text-align:center;font-weight: bold;">' . $lotto . '</div>
+                            <div style="position:absolute;top:95px;left:125px;text-align:center;font-weight: bold;">Quantita</div>
+                            <div style="position:absolute;top:110px;left:125px;text-align:center;font-weight: bold;">' . number_format($DORig->Qta, 2, ',', '') . '</div>
+                            <div style="position:absolute;top:95px;left:225px;text-align:center;font-weight: bold;">Codice</div>
+                            <div style="position:absolute;top:110px;left:225px;text-align:center;font-weight: bold;">' . $codice . '</div>
                             </body>
                             </html>';
-/*            $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100]]);
-            $mpdf->curlAllowUnsafeSslRequests = true;
-            $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
-            $mpdf->WriteHTML($html);
-            $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'I');
-*/
-            if (substr($codice, 0, 2) == '14') {
+
                 $folder = 'saldatrici';
-                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [80, 40]]);
+                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [80, 40], 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
                 $mpdf->curlAllowUnsafeSslRequests = true;
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
                 $mpdf->WriteHTML($html);
@@ -77,8 +79,37 @@ class AjaxController extends Controller
                 $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'I');
 
             } else {
+                $html = '<!DOCTYPE html>
+                            <html>
+                            <style>
+                                .barcode {
+                                    padding: 0;
+                                    margin: 0;
+                                    vertical-align: top;
+                                    color: #000044;
+                                }
+                                .barcodecell {
+                                    text-align: center;
+                                    vertical-align: middle;
+                                    padding-top: 5rem
+                                }
+                            </style>
+                            <body>
+                            <div class="barcodecell">
+                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.60" text="1" class="barcode" />
+                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.60" text="1" class="barcode" />
+                            </div>
+                            <div style="position:absolute;top:140px;left:50px;text-align:center;font-weight: bold;">01' . $codice . '*****3100' . $quantita . '10' . $lotto . '</div>
+                            <div style="position:absolute;top:170px;left:25px;text-align:center;font-weight: bold;">Lotto</div>
+                            <div style="position:absolute;top:190px;left:25px;text-align:center;font-weight: bold;">' . $lotto . '</div>
+                            <div style="position:absolute;top:170px;left:125px;text-align:center;font-weight: bold;">Quantita</div>
+                            <div style="position:absolute;top:190px;left:125px;text-align:center;font-weight: bold;">' . number_format($DORig->Qta, 2, ',', '') . '</div>
+                            <div style="position:absolute;top:170px;left:225px;text-align:center;font-weight: bold;">Codice Prodotto</div>
+                            <div style="position:absolute;top:190px;left:225px;text-align:center;font-weight: bold;">' . $codice . '</div>
+                            </body>
+                            </html>';
                 $folder = 'estrusore';
-                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 80]]);
+                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 80], 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
                 $mpdf->curlAllowUnsafeSslRequests = true;
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
                 $mpdf->WriteHTML($html);
