@@ -33,12 +33,12 @@ class AjaxController extends Controller
             $quantita = number_format($DORig->Qta, 2, '', '');
             $lotto = strtoupper($DORig->Cd_ARLotto);
             $codice = strtoupper($DORig->Cd_AR);
-/*            $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100]]);
-            $mpdf->curlAllowUnsafeSslRequests = true;
-            $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
-            $mpdf->WriteHTML($html);
-            $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'I');
-*/
+            /*            $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100]]);
+                        $mpdf->curlAllowUnsafeSslRequests = true;
+                        $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
+                        $mpdf->WriteHTML($html);
+                        $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'I');
+            */
             if (substr($codice, 0, 2) == '14') {
                 $html = '<!DOCTYPE html>
                             <html>
@@ -75,8 +75,8 @@ class AjaxController extends Controller
                 $mpdf->curlAllowUnsafeSslRequests = true;
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
                 $mpdf->WriteHTML($html);
-                $mpdf->Output('upload/GB/'.$folder.'/Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'F');
-                $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'I');
+                $mpdf->Output('upload/GB/' . $folder . '/Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes . '.pdf', 'F');
+                $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes . '.pdf', 'I');
 
             } else {
                 $html = '<!DOCTYPE html>
@@ -113,8 +113,8 @@ class AjaxController extends Controller
                 $mpdf->curlAllowUnsafeSslRequests = true;
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
                 $mpdf->WriteHTML($html);
-                $mpdf->Output('upload/GB/'.$folder.'/Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'F');
-                $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes.'.pdf', 'I');
+                $mpdf->Output('upload/GB/' . $folder . '/Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes . '.pdf', 'F');
+                $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes . '.pdf', 'I');
 
             }
 
@@ -1552,19 +1552,20 @@ class AjaxController extends Controller
         if ($tipo == 'ARTICOLO') {
             $articoli = DB::select('SELECT AR.[Id_AR],AR.[Cd_AR],AR.[Descrizione] FROM ARLotto LEFT JOIN AR on AR.Cd_AR = ARLotto.Cd_AR where ARLotto.Cd_AR = \'' . $q . '\'');
             if (sizeof($articoli) > 0) {
-                foreach ($articoli as $articolo) { ?>
+                $articolo = $articoli[0];
+                ?>
 
-                    <li class="list-group-item">
-                        <a href="#" onclick="" class="media">
-                            <div class="media-body"
-                                 onclick="cerca_articolo_inventario_codice('<?php echo $articolo->Cd_AR ?>','ND')">
-                                <h5><?php echo $articolo->Descrizione ?></h5>
-                                <p>Codice: <?php echo $articolo->Cd_AR ?></p>
-                            </div>
-                        </a>
-                    </li>
+                <li class="list-group-item">
+                    <a href="#" onclick="" class="media">
+                        <div class="media-body"
+                             onclick="cerca_articolo_inventario_codice('<?php echo $articolo->Cd_AR ?>','ND')">
+                            <h5><?php echo $articolo->Descrizione ?></h5>
+                            <p>Codice: <?php echo $articolo->Cd_AR ?></p>
+                        </div>
+                    </a>
+                </li>
 
-                <?php }
+                <?php
             } else
                 echo 'Nessun Articolo Trovato';
         }
@@ -1582,7 +1583,7 @@ class AjaxController extends Controller
             $quantita = 0;
             $disponibilita = DB::select('SELECT ISNULL(sum(QuantitaSign),0) as disponibilita from MGMOV where Cd_MGEsercizio = ' . date('Y') . ' and Cd_AR = \'' . $articolo->Cd_AR . '\'');
             if (sizeof($disponibilita) > 0) {
-                $prova = DB::SELECT('SELECT ISNULL(sum(QuantitaSign),0) as disponibilita,Cd_ARLotto,Cd_MG from MGMOV where Cd_MGEsercizio = ' . date('Y') . ' and Cd_AR = \'' . $articolo->Cd_AR . '\' and Cd_ARLotto IS NOT NULL group by Cd_ARLotto, Cd_MG HAVING SUM(QuantitaSign)!= 0  ');
+                $prova = DB::SELECT('SELECT ISNULL(sum(QuantitaSign),0) as disponibilita,Cd_ARLotto,Cd_MG from MGMOV where Cd_MGEsercizio = ' . date('Y') . ' and Cd_AR = \'' . $articolo->Cd_AR . '\' and Cd_ARLotto IS NOT NULL group by Cd_ARLotto, Cd_MG HAVING SUM(QuantitaSign)!= 0 ORDER BY CAST(Cd_ARLotto AS INT) DESC ');
             }
 
             /* echo '<h3>Disponibilit??: ' . $quantita . '</h3>';*/
