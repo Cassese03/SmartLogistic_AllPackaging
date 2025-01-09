@@ -1583,7 +1583,7 @@ class AjaxController extends Controller
             $quantita = 0;
             $disponibilita = DB::select('SELECT ISNULL(sum(QuantitaSign),0) as disponibilita from MGMOV where Cd_MGEsercizio = ' . date('Y')-1 . ' and Cd_AR = \'' . $articolo->Cd_AR . '\'');
             if (sizeof($disponibilita) > 0) {
-                $prova = DB::SELECT('SELECT ISNULL(sum(QuantitaSign),0) as disponibilita,Cd_ARLotto,Cd_MG from MGMOV where Cd_MGEsercizio = ' . date('Y')-1 . ' and Cd_AR = \'' . $articolo->Cd_AR . '\' and Cd_ARLotto IS NOT NULL group by Cd_ARLotto, Cd_MG HAVING SUM(QuantitaSign)!= 0 ORDER BY CAST(Cd_ARLotto AS INT) DESC ');
+                $prova = DB::SELECT('SELECT ISNULL(sum(QuantitaSign),0) as disponibilita,Cd_ARLotto,Cd_MG from MGMOV where Cd_MGEsercizio = ' . date('Y')-1 . ' and Cd_AR = \'' . $articolo->Cd_AR . '\' and Cd_ARLotto IS NOT NULL group by Cd_ARLotto, Cd_MG ORDER BY CAST(Cd_ARLotto AS INT) DESC ');
             }
 
             /* echo '<h3>Disponibilit??: ' . $quantita . '</h3>';*/
