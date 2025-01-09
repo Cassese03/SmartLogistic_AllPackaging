@@ -363,9 +363,10 @@
 
                     <label>Tipo Ricerca</label>
                     <select class="form-control" type="text" id="tipo_articolo">
+                        <option value="LOTTO">Lotto</option>
+
                        {{-- <option value="QRCode">QRCode</option>--}}
                         <option value="EAN">Barcode</option>
-                        <option value="LOTTO">Lotto</option>
                         <option value="ARTICOLO">Codice Articolo</option>
                     </select>
 
