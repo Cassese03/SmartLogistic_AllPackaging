@@ -31,7 +31,7 @@ class AjaxController extends Controller
         if (sizeof($DORig) > 0) {
             $DORig = $DORig[0];
             $quantita = number_format($DORig->Qta, 2, '', '');
-            $lotto = strtoupper($DORig->Cd_ARLotto);
+            $lotto = $DORig->Cd_ARLotto;
             $codice = strtoupper($DORig->Cd_AR);
             /*            $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100]]);
                         $mpdf->curlAllowUnsafeSslRequests = true;
@@ -43,35 +43,30 @@ class AjaxController extends Controller
                 $html = '<!DOCTYPE html>
                             <html>
                             <style>
-                                .barcode {
-                                    padding: 0;
-                                    margin: 0;
-                                    vertical-align: top;
-                                    color: #000044;
-                                }
+
                                 .barcodecell {
                                     text-align: center;
                                     vertical-align: middle;
-                                    padding-top: 1rem
+                                    padding-top: 4rem
                                 }
                             </style>
                             <body>
                             <div class="barcodecell">
-                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.52" text="1" class="barcode" />
-                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.52" text="1" class="barcode" />
+                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . $lotto . '" type="C128A" size="0.5" text="0"   />
+                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . $lotto . '" type="C128A" size="0.5" text="0"   />
                             </div>
-                            <div style="position:absolute;top:80px;left:15px;text-align:center;font-weight: bold;">01' . $codice . '*****3100' . $quantita . '10' . $lotto . '</div>
-                            <div style="position:absolute;top:95px;left:25px;text-align:center;font-weight: bold;">Lotto</div>
-                            <div style="position:absolute;top:110px;left:25px;text-align:center;font-weight: bold;">' . $lotto . '</div>
-                            <div style="position:absolute;top:95px;left:125px;text-align:center;font-weight: bold;">Quantita</div>
-                            <div style="position:absolute;top:110px;left:125px;text-align:center;font-weight: bold;">' . number_format($DORig->Qta, 2, ',', '') . '</div>
-                            <div style="position:absolute;top:95px;left:225px;text-align:center;font-weight: bold;">Codice</div>
-                            <div style="position:absolute;top:110px;left:225px;text-align:center;font-weight: bold;">' . $codice . '</div>
+                            <div style="position:absolute;top:100px;left:20px;text-align:center;font-weight: bold;">01' . $codice . '*****3100' . $quantita . '10' . $lotto . '</div>
+                            <div style="position:absolute;top:130px;left:50px;text-align:center;font-weight: bold;">Lotto</div>
+                            <div style="position:absolute;top:100px;left:50px;text-align:center;font-weight: bold;">' . $lotto . '</div>
+                            <div style="position:absolute;top:130px;left:50px;text-align:center;font-weight: bold;">Codice Prodotto</div>
+                            <div style="position:absolute;top:200px;left:50px;text-align:center;font-weight: bold;">' . $codice . '</div>
+                            <div style="position:absolute;top:230px;left:50px;text-align:center;font-weight: bold;">Quantita</div>
+                            <div style="position:absolute;top:260px;left:50px;text-align:center;font-weight: bold;">' . number_format($DORig->Qta, 2, ',', '') . '</div>
                             </body>
                             </html>';
 
                 $folder = 'saldatrici';
-                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [40, 80], 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
+                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [90, 100], 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
                 $mpdf->curlAllowUnsafeSslRequests = true;
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
                 $mpdf->WriteHTML($html);
@@ -82,34 +77,29 @@ class AjaxController extends Controller
                 $html = '<!DOCTYPE html>
                             <html>
                             <style>
-                                .barcode {
-                                    padding: 0;
-                                    margin: 0;
-                                    vertical-align: top;
-                                    color: #000044;
-                                }
+
                                 .barcodecell {
                                     text-align: center;
                                     vertical-align: middle;
-                                    padding-top: 5rem
+                                    padding-top: 7rem
                                 }
                             </style>
                             <body>
                             <div class="barcodecell">
-                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.60" text="1" class="barcode" />
-                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.60" text="1" class="barcode" />
+                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . $lotto . '" type="C128A" size="0.5" text="0"   />
+                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . $lotto . '" type="C128A" size="0.5" text="0"   />
                             </div>
-                            <div style="position:absolute;top:140px;left:50px;text-align:center;font-weight: bold;">01' . $codice . '*****3100' . $quantita . '10' . $lotto . '</div>
-                            <div style="position:absolute;top:170px;left:25px;text-align:center;font-weight: bold;">Lotto</div>
-                            <div style="position:absolute;top:190px;left:25px;text-align:center;font-weight: bold;">' . $lotto . '</div>
-                            <div style="position:absolute;top:170px;left:125px;text-align:center;font-weight: bold;">Quantita</div>
-                            <div style="position:absolute;top:190px;left:125px;text-align:center;font-weight: bold;">' . number_format($DORig->Qta, 2, ',', '') . '</div>
-                            <div style="position:absolute;top:170px;left:225px;text-align:center;font-weight: bold;">Codice Prodotto</div>
-                            <div style="position:absolute;top:190px;left:225px;text-align:center;font-weight: bold;">' . $codice . '</div>
+                            <div style="position:absolute;top:150px;left:50px;text-align:center;font-weight: bold;">01' . $codice . '*****3100' . $quantita . '10' . $lotto . '</div>
+                            <div style="position:absolute;top:180px;left:150px;text-align:center;font-weight: bold;">Lotto</div>
+                            <div style="position:absolute;top:200px;left:150px;text-align:center;font-weight: bold;">' . $lotto . '</div>
+                            <div style="position:absolute;top:230px;left:150px;text-align:center;font-weight: bold;">Codice Prodotto</div>
+                            <div style="position:absolute;top:250px;left:150px;text-align:center;font-weight: bold;">' . $codice . '</div>
+                            <div style="position:absolute;top:280px;left:150px;text-align:center;font-weight: bold;">Quantita</div>
+                            <div style="position:absolute;top:300px;left:150px;text-align:center;font-weight: bold;">' . number_format($DORig->Qta, 2, ',', '') . '</div>
                             </body>
                             </html>';
                 $folder = 'estrusore';
-                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [80, 100], 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
+                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100],'orentation' => 'L', 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
                 $mpdf->curlAllowUnsafeSslRequests = true;
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
                 $mpdf->WriteHTML($html);
