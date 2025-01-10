@@ -71,7 +71,7 @@ class AjaxController extends Controller
                             </html>';
 
                 $folder = 'saldatrici';
-                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [80, 40], 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
+                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [40, 80], 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
                 $mpdf->curlAllowUnsafeSslRequests = true;
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
                 $mpdf->WriteHTML($html);
@@ -109,7 +109,7 @@ class AjaxController extends Controller
                             </body>
                             </html>';
                 $folder = 'estrusore';
-                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 80], 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
+                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [80, 100], 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
                 $mpdf->curlAllowUnsafeSslRequests = true;
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
                 $mpdf->WriteHTML($html);
