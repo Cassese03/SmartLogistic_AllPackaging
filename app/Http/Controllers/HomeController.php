@@ -714,7 +714,7 @@ class HomeController extends Controller
             $id_ordine = DB::SELECT('SELECT Id_DOTes FROM DORig where Id_DORig = ' . $dati['Id_DORig']);
             if (sizeof($id_ordine) > 0)
                 if ($utente != null)
-                    DB::UPDATE("Update dotes set dotes.xCd_Operatore= '" . str_replace('\'', '', $utente) . "' where dotes.id_dotes = $id_ordine[0]->Id_DOTes");
+                    DB::UPDATE("Update dotes set dotes.xCd_Operatore= '" . str_replace('\'', '', $utente) . "' where dotes.id_dotes = " . $id_ordine[0]->Id_DOTes);
             DB::table('DoRig')->where('Id_DORig', $dati['Id_DORig'])->delete();
         }
         if (isset($dati['modifica_riga'])) {
