@@ -1174,7 +1174,6 @@
         codice = codice.replaceAll(';', 'punto');
         codice = codice.replaceAll('/', 'slash');
         quantita = $('#modal_quantita').val();
-        alert(quantita);
         /* prezzo    =      $('#modal_prezzo').val();*/
         magazzino_A = '<?php echo $session_mag['cd_mg_a'] ? $session_mag['cd_mg_a'] : 00001; ?>';
         magazzino_P = '<?php echo $session_mag['cd_mg_p'] ? $session_mag['cd_mg_p'] : 00001; ?>';
