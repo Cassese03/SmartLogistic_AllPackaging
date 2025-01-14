@@ -452,7 +452,7 @@
                                             </div>
                                             <div class=" col-xl-12 col-xs-6 col-sm-6 col-md-6">
 
-                                                <form method="post">
+                                                <form method="post" onsubmit="return confirm('Vuoi Eliminare questo articolo ?')">
                                                     <div class="row">
                                                         <button type="reset" name="segnalazione" value=""
                                                                 class="btn btn-warning btn-sm col-4"
