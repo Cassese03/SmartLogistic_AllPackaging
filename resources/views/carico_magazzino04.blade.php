@@ -454,7 +454,6 @@
 
                                                 <form method="post">
                                                     <div class="row">
-                                                        <div class="col-2"></div>
                                                         <button type="reset" name="segnalazione" value=""
                                                                 class="btn btn-warning btn-sm col-4"
                                                                 onclick="$('#modal_segnalazione<?php echo $r->Id_DORig; ?>').modal('show');">
@@ -517,7 +516,6 @@
                                                                 </svg>
                                                             </i>
                                                         </button>
-                                                        <div class="col-2"></div>
 
                                                     </div>
                                                 </form>
