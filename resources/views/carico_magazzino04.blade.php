@@ -315,7 +315,7 @@
         <div></div>
     </div>
 </div>
-<di class="wrapper">
+<div class="wrapper">
 
     <!-- page main start -->
     <div class="page">
@@ -414,9 +414,9 @@
                 <button style="margin-top:20px !important;width:80%;margin:0 auto;display:block;margin-bottom:0;"
                         class="btn btn-primary" onclick="$('#modal_cerca_articolo').modal('show');">Aggiungi Prodotto
                 </button>
-                <?php if (sizeof($documento->righe) > 0){ ?>
 
                 <div class="row">
+                    <?php if (sizeof($documento->righe) > 0){ ?>
 
 
                     <div class="col-sm-6 col-xl-12 " style="margin-top:0px;">
@@ -452,7 +452,8 @@
                                             </div>
                                             <div class=" col-xl-12 col-xs-6 col-sm-6 col-md-6">
 
-                                                <form method="post" onsubmit="return confirm('Vuoi Eliminare questo articolo ?')">
+                                                <form method="post"
+                                                      onsubmit="return confirm('Vuoi Eliminare questo articolo ?')">
                                                     <div class="row">
                                                         <button type="reset" name="segnalazione" value=""
                                                                 class="btn btn-warning btn-sm col-4"
@@ -651,7 +652,7 @@
                 <div class="modal-body">
                     <div id="ajax_modal_carico"></div>
                     <label>Quantita</label>
-                    <input class="form-control" type="number" id="modal_quantita" value="" required
+                    <input class="form-control" type="number" id="modal_quantita" value="" required onchange="$('#modal_quantita').val(this.value);"
                            placeholder="Inserisci una Quantità" autocomplete="off">
                     <input class="form-control" type="hidden" id="modal_Cd_AR" value="" required
                            autocomplete="off">
@@ -1046,7 +1047,7 @@
     <script src="/dist/quagga.js" type="text/javascript"></script>
     <script src="/js/live_w_locator.js" type="text/javascript"></script>
     <script src="/js/jquery.scannerdetection.js" type="text/javascript"></script>
-
+</div>
 </body>
 
 </html>{{--

@@ -52,8 +52,8 @@ class AjaxController extends Controller
                             </style>
                             <body>
                             <div class="barcodecell">
-                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . $lotto . '" type="C128A" size="0.5" text="0"   />
-                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . $lotto . '" type="C128A" size="0.5" text="0"   />
+                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . $lotto . '" type="EAN128A" size="0.8" text="0"   />
+                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . $lotto . '" type="EAN128A" size="0.8" text="0"   />
                             </div>
                             <div style="position:absolute;top:100px;left:20px;text-align:center;font-weight: bold;">01' . $codice . '*****3100' . $quantita . '10' . $lotto . '</div>
                             <div style="position:absolute;top:130px;left:50px;text-align:center;font-weight: bold;">Lotto</div>
@@ -86,8 +86,8 @@ class AjaxController extends Controller
                             </style>
                             <body>
                             <div class="barcodecell">
-                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . $lotto . '" type="C128A" size="0.5" text="0"   />
-                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . $lotto . '" type="C128A" size="0.5" text="0"   />
+                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . $lotto . '" type="EAN128A" size="0.8" text="0"   />
+                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . $lotto . '" type="EAN128A" size="0.8" text="0"   />
                             </div>
                             <div style="position:absolute;top:150px;left:50px;text-align:center;font-weight: bold;">01' . $codice . '*****3100' . $quantita . '10' . $lotto . '</div>
                             <div style="position:absolute;top:180px;left:150px;text-align:center;font-weight: bold;">Lotto</div>
