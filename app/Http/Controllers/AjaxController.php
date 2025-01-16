@@ -86,7 +86,7 @@ class AjaxController extends Controller
                                 .barcodecell {
                     text-align: center;
                                     vertical-align: middle;
-                                    padding-top: 5rem
+                                    padding-top: 7rem
                                 }
                             </style>
                             <body>
