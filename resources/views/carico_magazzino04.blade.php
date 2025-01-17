@@ -21,6 +21,13 @@
     <link rel="stylesheet" href="/vendor/swiper/css/swiper.min.css">
     <link id="theme" rel="stylesheet" href="/css/style.css" type="text/css">
     <title>SMART LOGISTIC</title>
+    <div
+        style="position: fixed;top: 0px;left: 0px;width: 100%;height: 100%;background: rgba(255, 255, 255,1);z-index: 1000000000;display: none;"
+        id="ajax_loader">
+        <img src="<?php echo URL::asset('img/icona_arca.png') ?>" alt="AdminLTE Logo"
+             style="width:400px;margin:0 auto;display:block;margin-top:200px;">
+        <h2 style="text-align:center;margin-top:10px;">Operazione In Corso....</h2>
+    </div>
 </head>
 
 <style>
@@ -652,7 +659,8 @@
                 <div class="modal-body">
                     <div id="ajax_modal_carico"></div>
                     <label>Quantita</label>
-                    <input class="form-control" type="number" id="modal_quantita" value="" required onchange="$('#modal_quantita').val(this.value);"
+                    <input class="form-control" type="number" id="modal_quantita" value="" required
+                           onchange="$('#modal_quantita').val(this.value);"
                            placeholder="Inserisci una Quantità" autocomplete="off">
                     <input class="form-control" type="hidden" id="modal_Cd_AR" value="" required
                            autocomplete="off">
@@ -1171,6 +1179,7 @@
     }
 
     function carica_articolo() {
+        $('#ajax_loader').fadeIn();
         codice = $('#modal_Cd_AR').val();
         codice = codice.replaceAll(';', 'punto');
         codice = codice.replaceAll('/', 'slash');
@@ -1192,6 +1201,8 @@
                 url: "<?php echo URL::asset('ajax/aggiungi_articolo_ordine'); ?>/<?php echo $id_dotes; ?>/" + codice + "/" + quantita + "/" +
                     magazzino_A + "/" + ubicazione_A + "/" + lotto + "/" + magazzino_P + "/" + 'ND'
             }).done(function (result) {
+
+                $('#ajax_loader').fadeOut();
                 $('#modal_carico').modal('hide');
                 $('#modal_Cd_AR').val('');
                 $('#modal_quantita').val('');
@@ -1200,8 +1211,10 @@
                 if (result == 'Articolo Caricato Correttamente ')
                     location.reload();
             });
-        } else
+        } else {
             $('#modal_alertQuantita').modal('show');
+            $('#ajax_loader').fadeOut();
+        }
     }
 
     function modifica_articolo() {

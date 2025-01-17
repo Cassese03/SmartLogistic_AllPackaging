@@ -31,6 +31,8 @@ class AjaxController extends Controller
         if (sizeof($DORig) > 0) {
             $DORig = $DORig[0];
             $quantita = number_format($DORig->Qta, 2, '', '');
+            while(strlen($quantita)<6)
+                $quantita = '0'.$quantita;
             $lotto = $DORig->Cd_ARLotto;
             $codice = strtoupper($DORig->Cd_AR);
             /*            $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100]]);
@@ -78,15 +80,17 @@ class AjaxController extends Controller
                             <html>
                             <style>
                                 .barcode {
-                    padding: 0;
-                    margin: 0;
-                    vertical-align: top;
+                                    padding: 0;
+                                    margin: 0;
+                                    vertical-align: top;
                                     color: #000044;
                                 }
                                 .barcodecell {
-                    text-align: center;
+									position:absolute;
+                                    text-align: center;
                                     vertical-align: middle;
-                                    padding-top: 7rem
+                                    top: 70px;
+									left :10px;
                                 }
                             </style>
                             <body>
@@ -94,17 +98,16 @@ class AjaxController extends Controller
                                 <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.60" text="1" class="barcode" />
                                 <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.60" text="1" class="barcode" />
                             </div>
-                            <div style="position:absolute;top:140px;left:50px;text-align:center;font-weight: bold;">01' . $codice . '*****3100' . $quantita . '10' . $lotto . '</div>
-                            <div style="position:absolute;top:170px;left:25px;text-align:center;font-weight: bold;">Lotto</div>
-                            <div style="position:absolute;top:190px;left:25px;text-align:center;font-weight: bold;">' . $lotto . '</div>
-                            <div style="position:absolute;top:170px;left:125px;text-align:center;font-weight: bold;">Quantita</div>
-                            <div style="position:absolute;top:190px;left:125px;text-align:center;font-weight: bold;">' . number_format($DORig->Qta, 2, ',', '') . '</div>
-                            <div style="position:absolute;top:170px;left:225px;text-align:center;font-weight: bold;">Codice Prodotto</div>
-                            <div style="position:absolute;top:190px;left:225px;text-align:center;font-weight: bold;">' . $codice . '</div>
+                            <div style="position:absolute;top:190px;left:25px;text-align:center;font-weight: bold;">Lotto</div>
+                            <div style="position:absolute;top:210px;left:25px;text-align:center;font-weight: bold;">' . $lotto . '</div>
+                            <div style="position:absolute;top:190px;left:125px;text-align:center;font-weight: bold;">Quantita</div>
+                            <div style="position:absolute;top:210px;left:125px;text-align:center;font-weight: bold;">' . number_format($DORig->Qta, 2, ',', '') . '</div>
+                            <div style="position:absolute;top:190px;left:225px;text-align:center;font-weight: bold;">Codice Prodotto</div>
+                            <div style="position:absolute;top:210px;left:225px;text-align:center;font-weight: bold;">' . $codice . '</div>
                             </body>
                             </html>';
                 $folder = 'estrusore';
-                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100],'orentation' => 'L', 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
+                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100,80], 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
                 $mpdf->curlAllowUnsafeSslRequests = true;
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
                 $mpdf->WriteHTML($html);
@@ -1129,6 +1132,7 @@ class AjaxController extends Controller
             $decoder = new Decoder($delimiter = '');
             $barcode = $decoder->decode($q);
             $where = ' where 1=1 ';
+            //sprint_r($barcode->toArray()['identifiers']);exit();
             foreach ($barcode->toArray()['identifiers'] as $field) {
 
                 if ($field['code'] == '01') {
@@ -1152,7 +1156,7 @@ class AjaxController extends Controller
             }
         } else {
             $where = ' where 1=1 ';
-            $where .= ' and  Cd_ARLotto Like \'%' . $q . '%\'';
+            $where .= ' and  Cd_ARLotto = \'' . $q . '\'';
         }
         $articoli = DB::select('SELECT * FROM ARLotto  ' . $where);
 
