@@ -310,7 +310,7 @@ class HomeController extends Controller
         if (!session()->has('utente')) {
             return Redirect::to('login');
         }
-        $documenti = DB::select('SELECT * FROM DO WHERE Cd_DO in (\'CTR\',\'RCT\')');
+        $documenti = DB::select('SELECT * FROM DO WHERE Cd_DO in (\'CTR\',\'TNC\',\'RCT\')');
         return View::make('altri', compact('documenti'));
     }
 
@@ -361,7 +361,7 @@ class HomeController extends Controller
             return Redirect::to('login');
         }
         $fornitori = DB::select('SELECT TOP 50 * from CF where Id_CF in (SELECT r.Id_CF FROM DOTes d,Cf r WHERE d.Cd_CF = r.Cd_CF and Cd_DO = \'' . $documenti . '\' and RigheEvadibili > \'0\' and Cd_MGEsercizio = YEAR(GETDATE())  group by r.Id_CF ) and Fornitore=\'1\'');
-        if ($documenti == 'CTR' || $documenti == 'RCT') {
+        if ($documenti == 'CTR' || $documenti == 'RCT' || $documenti == 'TNC') {
             $fornitori = DB::select('SELECT * from CF where Cd_CF = \'F001511\' and Fornitore=\'1\'');
         }
         return View::make('carico_magazzino02', compact('documenti', 'fornitori'));
