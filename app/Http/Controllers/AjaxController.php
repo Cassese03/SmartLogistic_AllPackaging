@@ -37,6 +37,7 @@ class AjaxController extends Controller
             $quantita = number_format($DORig->Qta, 2, '', '');
             $lotto = $DORig->Cd_ARLotto;
             $codice = strtoupper($DORig->Cd_AR);
+            $descrizione = ($DORig->Descrizione);
             /*            $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100]]);
                         $mpdf->curlAllowUnsafeSslRequests = true;
                         $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
@@ -56,21 +57,23 @@ class AjaxController extends Controller
                             </style>
                             <body>
                             <div class="barcodecell">
-                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . $lotto . '" type="EAN128A" size="0.8" text="0"   />
-                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . $lotto . '" type="EAN128A" size="0.8" text="0"   />
-                            </div>
-                            <div style="position:absolute;top:100px;left:20px;text-align:center;font-weight: bold;">01' . $codice . '*****3100' . $quantita . '10' . $lotto . '</div>
-                            <div style="position:absolute;top:130px;left:50px;text-align:center;font-weight: bold;">Lotto</div>
-                            <div style="position:absolute;top:100px;left:50px;text-align:center;font-weight: bold;">' . $lotto . '</div>
-                            <div style="position:absolute;top:130px;left:50px;text-align:center;font-weight: bold;">Codice Prodotto</div>
-                            <div style="position:absolute;top:200px;left:50px;text-align:center;font-weight: bold;">' . $codice . '</div>
-                            <div style="position:absolute;top:230px;left:50px;text-align:center;font-weight: bold;">Quantita</div>
-                            <div style="position:absolute;top:260px;left:50px;text-align:center;font-weight: bold;">' . number_format($DORig->Qta, 2, ',', '') . '</div>
+                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.60" text="1" class="barcode" />
+                                <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.60" text="1" class="barcode" />
+                              </div>
+                            <div style="position:absolute;top:110px;left:50px;text-align:center;font-weight: bold;">01' . $codice . '*****3100' . $quantita . '10' . $lotto . '</div>
+                            <div style="position:absolute;top:140px;left:25px;text-align:center;font-weight: bold;">Lotto</div>
+                            <div style="position:absolute;top:160px;left:25px;text-align:center;font-weight: bold;">' . $lotto . '</div>
+                            <div style="position:absolute;top:180px;left:25px;text-align:center;font-weight: bold;">Codice Prodotto</div>
+                            <div style="position:absolute;top:200px;left:25px;text-align:center;font-weight: bold;">' . $codice . '</div>
+                            <div style="position:absolute;top:220px;left:25px;text-align:center;font-weight: bold;">Quantita</div>
+                            <div style="position:absolute;top:240px;left:25px;text-align:center;font-weight: bold;">' . number_format($DORig->Qta, 2, ',', '') . '</div>
+                            <div style="position:absolute;top:260px;left:25px;text-align:center;font-weight: bold;">Descrizione</div>
+                            <div style="position:absolute;top:280px;left:25px;text-align:left;font-weight: bold;">' . $descrizione . '</div>
                             </body>
                             </html>';
 
                 $folder = 'saldatrici';
-                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [90, 100], 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
+                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100], 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
                 $mpdf->curlAllowUnsafeSslRequests = true;
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
                 $mpdf->WriteHTML($html);
@@ -98,13 +101,15 @@ class AjaxController extends Controller
                                 <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.60" text="1" class="barcode" />
                                 <barcode code="01' . $codice . '*****3100' . $quantita . '10' . strtoupper($lotto) . '" type="C128A" style="margin:0 auto;display:block" size="0.60" text="1" class="barcode" />
                             </div>
-                            <div style="position:absolute;top:140px;left:50px;text-align:center;font-weight: bold;">01' . $codice . '*****3100' . $quantita . '10' . $lotto . '</div>
+                            <div style="position:absolute;top:150px;left:50px;text-align:center;font-weight: bold;">01' . $codice . '*****3100' . $quantita . '10' . $lotto . '</div>
                             <div style="position:absolute;top:170px;left:25px;text-align:center;font-weight: bold;">Lotto</div>
                             <div style="position:absolute;top:190px;left:25px;text-align:center;font-weight: bold;">' . $lotto . '</div>
                             <div style="position:absolute;top:170px;left:125px;text-align:center;font-weight: bold;">Quantita</div>
                             <div style="position:absolute;top:190px;left:125px;text-align:center;font-weight: bold;">' . number_format($DORig->Qta, 2, ',', '') . '</div>
                             <div style="position:absolute;top:170px;left:225px;text-align:center;font-weight: bold;">Codice Prodotto</div>
                             <div style="position:absolute;top:190px;left:225px;text-align:center;font-weight: bold;">' . $codice . '</div>
+                           <div style="position:absolute;top:220px;left:25px;text-align:center;font-weight: bold;">Descrizione Prodotto</div>
+                            <div style="position:absolute;top:240px;left:25px;text-align:center;font-weight: bold;">' . $descrizione . '</div>
                             </body>
                             </html>';
                 $folder = 'estrusore';
