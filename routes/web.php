@@ -50,6 +50,7 @@ Route::any('magazzino/carico04/{id_fornitore}/{id_dotes}', 'HomeController@caric
 
 Route::any('magazzino/inventario', 'HomeController@inventario_magazzino');
 Route::any('calcola_totali_ordine', 'HomeController@calcola_totali_ordine');
+Route::any('stampa_pers/{stampante}/{pdf}', 'AjaxController@stampa_pers');
 
 Route::any('ajax/cerca_articolo/{q}', 'AjaxController@cerca_articolo');
 Route::any('ajax/cerca_fornitore_new/{q}/{dest}', 'AjaxController@cerca_fornitore_new');

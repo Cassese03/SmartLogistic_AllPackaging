@@ -24,6 +24,10 @@ use Symfony\Component\VarDumper\Cloner\Data;
  */
 class AjaxController extends Controller
 {
+    public function stampa_pers($stampante,$pdf)
+    {
+        return View::make('stampa_pers', compact('pdf','stampante'));
+    }
 
     public function stampa($id_dorig)
     {
@@ -104,7 +108,7 @@ class AjaxController extends Controller
                             </body>
                             </html>';
                 $folder = 'estrusore';
-                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100],'orentation' => 'L', 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
+                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100], 'orentation' => 'L', 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
                 $mpdf->curlAllowUnsafeSslRequests = true;
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
                 $mpdf->WriteHTML($html);
