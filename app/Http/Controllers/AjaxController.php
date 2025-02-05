@@ -1000,7 +1000,7 @@ class AjaxController extends Controller
             DB::update("Update dotes set dotes.reserved_1= 'RRRRRRRRRR' where dotes.id_dotes = '$Id_DoTes1'");
             DB::statement("exec asp_DO_End '$Id_DoTes1'");
             if (isset($rif_ddt)) {
-                $desc_old_doc = DB::SELECT('SELECT CONCAT(Cd_DO,\' \',NumeroDocI,\' del \',DataDoc) as DescrizioneOLD FROM DOTes where Id_DOTes in (SELECT Id_DOTes FROM DORig WHERE Id_DORig = ' . $rif_ddt['Id_DORig_Evade'] . ')');
+                $desc_old_doc = DB::SELECT('SELECT CONCAT(Cd_DO,\' \',NumeroDocI,\' del \',Format(DataDoc,\'dd-MM-yyyy\')) as DescrizioneOLD FROM DOTes where Id_DOTes in (SELECT Id_DOTes FROM DORig WHERE Id_DORig = ' . $rif_ddt['Id_DORig_Evade'] . ')');
                 if (sizeof($desc_old_doc) > 0)
                     $desc_old_doc = 'Ns. Ord. ' . $desc_old_doc[0]->DescrizioneOLD;
                 else
@@ -1136,7 +1136,9 @@ class AjaxController extends Controller
             $pos = '';
             $pos = strpos($q, '*****');
             if ($pos == '')
-                $q = substr($q, 0, '10') . '*****' . substr($q, '10');
+                $q = substr($q, 0, '9') . '*****' . substr($q, '10');
+            else
+                $q = str_pad(substr($q, 0, $pos), 11, '*', STR_PAD_RIGHT).substr($q,$pos++);
             $decoder = new Decoder($delimiter = '');
             $barcode = $decoder->decode($q);
             $where = ' where 1=1 ';
@@ -1248,7 +1250,9 @@ class AjaxController extends Controller
             $pos = '';
             $pos = strpos($q, '*****');
             if ($pos == '')
-                $q = substr($q, 0, '10') . '*****' . substr($q, '10');
+                $q = substr($q, 0, '9') . '*****' . substr($q, '10');
+            else
+                $q = str_pad(substr($q, 0, $pos), 11, '*', STR_PAD_RIGHT).substr($q,$pos++);
             $decoder = new Decoder($delimiter = '');
             $barcode = $decoder->decode($q);
             $where = ' where 1=1 ';
@@ -1489,11 +1493,13 @@ class AjaxController extends Controller
         }
         if ($tipo == 'EAN') {
             if (substr($q, 0, '2') == '01') {
+
                 $pos = '';
                 $pos = strpos($q, '*****');
                 if ($pos == '')
-                    $q = substr($q, 0, '10') . '*****' . substr($q, '10');
-                $decoder = new Decoder($delimiter = '');
+                    $q = substr($q, 0, '9') . '*****' . substr($q, '10');
+                else
+                    $q = str_pad(substr($q, 0, $pos), 11, '*', STR_PAD_RIGHT).substr($q,$pos++);$decoder = new Decoder($delimiter = '');
                 $barcode = $decoder->decode($q);
                 $where = ' where 1=1 ';
                 foreach ($barcode->toArray()['identifiers'] as $field) {
