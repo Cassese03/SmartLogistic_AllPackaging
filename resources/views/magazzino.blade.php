@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
     <link rel="apple-touch-icon" href="img/icona_arca.png">
     <link rel="icon" href="img/icona_arca.png">
     <link rel="stylesheet" href="vendor/bootstrap-4.1.3/css/bootstrap.min.css">
@@ -15,7 +16,16 @@
 
 <body class="color-theme-blue push-content-right theme-light">
 <div class="loader justify-content-center ">
-    <div class="maxui-roller align-self-center"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    <div class="maxui-roller align-self-center">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
 </div>
 <div class="wrapper">
     <!-- sidebar left start -->
@@ -23,7 +33,7 @@
         <div class="profile-link">
             <a href="#" class="media">
                 <div class="w-auto h-100">
-                    <figure class="avatar avatar-40"><img src="img/user1.png" alt=""> </figure>
+                    <figure class="avatar avatar-40"><img src="img/user1.png" alt=""></figure>
                 </div>
                 <div class="media-body">
                     <h5>John Doe <span class="status-online bg-success"></span></h5>
@@ -34,7 +44,8 @@
         <nav class="navbar">
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a href="" class="item-link item-content dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a href="" class="item-link item-content dropdown-toggle" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="item-title">
                             <i class="material-icons">menu</i> Menu
                         </div>
@@ -46,7 +57,8 @@
                         <a href="#" class="sidebar-close dropdown-item menu-right">
                             Push Content
                         </a>
-                        <a href="javascript:void(0)" class="sidebar-close dropdown-item popup-open" data-toggle="modal" data-target="#fullscreenmenu">
+                        <a href="javascript:void(0)" class="sidebar-close dropdown-item popup-open" data-toggle="modal"
+                           data-target="#fullscreenmenu">
                             Full Screen
                         </a>
                     </div>
@@ -119,7 +131,8 @@
     <div class="sidebar sidebar-right">
         <header class="row m-0 fixed-header">
             <div class="left">
-                <a href="javascript:void(0)" class="menu-left-close"><i class="material-icons">keyboard_backspace</i></a>
+                <a href="javascript:void(0)" class="menu-left-close"><i
+                        class="material-icons">keyboard_backspace</i></a>
             </div>
             <div class="col center">
                 <a href="" class="logo">Best Rated</a>
@@ -144,7 +157,10 @@
                                         <i class="material-icons">star</i>
 
                                     </h5>
-                                    <div class="mb-0">MobileUX is HTML template based on Bootstrap 4.1 framework. This html template can be used in various business domains like Manufacturing, inventory, IT, administration etc.</div>
+                                    <div class="mb-0">MobileUX is HTML template based on Bootstrap 4.1 framework. This
+                                        html template can be used in various business domains like Manufacturing,
+                                        inventory, IT, administration etc.
+                                    </div>
                                     <br>
                                 </div>
                             </div>
@@ -244,20 +260,23 @@
         <form class="searchcontrol">
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <button type="button" class="input-group-text close-search"><i class="material-icons">keyboard_backspace</i></button>
+                    <button type="button" class="input-group-text close-search"><i class="material-icons">keyboard_backspace</i>
+                    </button>
                 </div>
                 <input type="email" class="form-control border-0" placeholder="Cerca Articolo..." aria-label="Username">
             </div>
         </form>
         <header class="row m-0 fixed-header">
             <div class="left">
-                <a style="padding-left:20px;" href="/" ><i class="material-icons">arrow_back_ios</i></a>
+                <a style="padding-left:20px;" href="/"><i class="material-icons">arrow_back_ios</i></a>
             </div>
             <div class="col center">
-                <a href="#" class="logo"><figure><img src="img/logo_arca.png" alt=""></figure> Magazzino</a>
+                <a href="#" class="logo">
+                    <figure><img src="img/logo_arca.png" alt=""></figure>
+                    Magazzino</a>
             </div>
             <div class="right">
-                <a style="padding-left:20px;" href="/" ><i class="material-icons">home</i></a>
+                <a style="padding-left:20px;" href="/"><i class="material-icons">home</i></a>
             </div>
         </header>
 
@@ -270,7 +289,15 @@
                 </div>
 
                 <ul class="list-group">
-                    <li class="list-group-item">
+                    {{--<li class="list-group-item">
+                        <a href="<?php echo URL::asset('magazzino/attivo') ?>" class="media">
+                            <div class="media-body">
+                                <h5>Ciclo Attivo</h5>
+                                <p>Effettua un Scarico di Magazzino a Cliente</p>
+                            </div>
+                        </a>
+                    </li>
+                    --}}<li class="list-group-item">
                         <a href="<?php echo URL::asset('magazzino/passivi') ?>" class="media">
                             <div class="media-body">
                                 <h5>Ciclo Passivo</h5>
@@ -295,14 +322,6 @@
                         </a>
                     </li>
                     <!--
-                    <li class="list-group-item">
-                        <a href="<?php echo URL::asset('magazzino/attivo') ?>" class="media">
-                            <div class="media-body">
-                                <h5>Ciclo Attivo</h5>
-                                <p>Effettua un Carico di Magazzino Da Fornitore</p>
-                            </div>
-                        </a>
-                    </li>
 
                     <li class="list-group-item">
                         <a href="<?php echo URL::asset('magazzino/altri') ?>" class="media">
@@ -351,7 +370,7 @@
 -->
 
                     <li class="list-group-item">
-                        <a class="media" href="<?php echo URL::asset('magazzino/inventario') ?>" >
+                        <a class="media" href="<?php echo URL::asset('magazzino/inventario') ?>">
                             <div class="media-body">
                                 <h5>Inventario</h5>
                                 <p>Effettua Inventario Rettificando le Quantità</p>
@@ -368,8 +387,6 @@
     <!-- page main ends -->
 
 </div>
-
-
 
 
 <!-- Optional JavaScript -->

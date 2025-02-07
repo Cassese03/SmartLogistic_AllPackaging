@@ -300,7 +300,7 @@ class HomeController extends Controller
         if (!session()->has('utente')) {
             return Redirect::to('login');
         }
-        $documenti = DB::select('SELECT *,(SELECT COUNT(*) FROM DOTes WHERE Cd_DO = DO.Cd_DO and Prelevabile = 1 and RigheEvadibili > 0) as doc_da_lavorare FROM DO WHERE Cd_DO in (\'DCF\',\'RMC\',\'OVC\',\'OVW\') and CliFor = \'C\'');
+        $documenti = DB::select('SELECT *,(SELECT COUNT(*) FROM DOTes WHERE Cd_DO = DO.Cd_DO and Prelevabile = 1 and RigheEvadibili > 0) as doc_da_lavorare FROM DO WHERE Cd_DO in (\'OVD\') and CliFor = \'C\'');
         return View::make('attivo', compact('documenti'));
     }
 
@@ -348,7 +348,7 @@ class HomeController extends Controller
         if (!session()->has('utente')) {
             return Redirect::to('login');
         }
-        $fornitori = DB::select('SELECT TOP 50 *,(SELECT SUM(QtaEvadibile) FROM DORIG WHERE ID_DOTES IN (SELECT Id_DOTes FROM DOTes WHERE Cd_DO = \'' . $documenti . '\' AND Cd_CF = CF.Cd_CF and Prelevabile = 1 and RigheEvadibili > 0)) as doc_da_lavorare from CF where Id_CF in(SELECT r.Id_CF FROM DORig d,Cf r WHERE d.Cd_CF=r.Cd_CF and Cd_DO = \'' . $documenti . '\' and QtaEvadibile > \'0\' and (SELECT Prelevabile FROM DOTES WHERE Id_DOTes = d.Id_DOTes) = 1 and Cd_MGEsercizio = YEAR(GETDATE()) group by r.Id_CF ) and Cliente=\'1\'');
+        $fornitori = DB::select('SELECT TOP 50 *,(SELECT SUM(QtaEvadibile) FROM DORIG WHERE ID_DOTES IN (SELECT Id_DOTes FROM DOTes WHERE Cd_DO = \'' . $documenti . '\' AND Cd_CF = CF.Cd_CF and Prelevabile = 1 and RigheEvadibili > 0)) as doc_da_lavorare from CF where Id_CF in(SELECT r.Id_CF FROM DORig d,Cf r WHERE d.Cd_CF=r.Cd_CF and Cd_DO = \'' . $documenti . '\' and QtaEvadibile > \'0\' and (SELECT Prelevabile FROM DOTES WHERE Id_DOTes = d.Id_DOTes) = 1 and (Cd_MGEsercizio = YEAR(GETDATE()) or Cd_MGEsercizio = YEAR(GETDATE()) - 1) group by r.Id_CF ) and Cliente=\'1\'');
 
         return View::make('carico_magazzino2', compact('documenti', 'fornitori'));
 

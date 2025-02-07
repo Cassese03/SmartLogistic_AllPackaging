@@ -32,6 +32,7 @@ Route::any('magazzino/altri', 'HomeController@altri');
 Route::any('magazzino/cerca_documento', 'HomeController@cerca_documento');
 
 Route::any('ajax/conferma_righe/{dorig}/{cd_mg_a}/{cd_mg_p}/{cd_do}', 'AjaxController@conferma_righe');
+Route::any('ajax/conferma_righe_ordini/{dorig}/{cd_mg_a}/{cd_mg_p}/{cd_do}', 'AjaxController@conferma_righe_ordini');
 Route::any('ajax/inserisci_peso/{id_dotes}/{peso}', 'AjaxController@inserisci_peso');
 Route::any('ajax/inserisci_numero_colli/{id_dotes}', 'AjaxController@inserisci_numero_colli');
 Route::any('ajax/crea_doc_riordino/{id_dotes}', 'AjaxController@crea_doc_riordino');
@@ -71,7 +72,6 @@ Route::any('ajax/invia_mail/{dotes}/{dorig}/{testo}', 'AjaxController@invia_mail
 Route::any('ajax/segnalazione_salva/{dotes}/{dorig}/{testo}', 'AjaxController@segnalazione_salva');
 Route::any('ajax/salva_documento1/{dotes}/{cd_do}/{magazzino_A}', 'AjaxController@salva_documento1');
 Route::any('ajax/evadi_articolo/{dorig}/{qtaevasa}/{magazzino}/{ubicazione}/{lotto}/{cd_cf}/{documento}/{cd_ar}/{magazzino_A}', 'AjaxController@evadi_articolo');
-Route::any('ajax/conferma_righe/{dorig}/{qtaevasa}/{magazzino}/{ubicazione}/{lotto}/{cd_cf}/{documento}/{cd_ar}/{magazzino_A}', 'AjaxController@conferma_righe');
 Route::any('ajax/cerca_articolo_codice/{cd_cf}/{codice}/{Cd_ARLotto}/{qta}', 'AjaxController@cerca_articolo_codice');
 Route::any('ajax/aggiungi_articolo_ordine/{id_ordine}/{codice}/{quantita}/{magazzino_A}/{ubicazione_A}/{lotto}/{magazzino_P}/{ubicazione_P}', 'AjaxController@aggiungi_articolo_ordine');
 Route::any('ajax/modifica_articolo_ordine/{id_ordine}/{codice}/{quantita}/{magazzino_A}/{ubicazione_A}/{lotto}/{magazzino_P}/{ubicazione_P}', 'AjaxController@modifica_articolo_ordine');
@@ -79,6 +79,7 @@ Route::any('ajax/crea_documento/{cd_cf}/{cd_do}/{numero}/{data}', 'AjaxControlle
 Route::any('ajax/crea_documento_rif/{cd_cf}/{cd_do}/{numero}/{data}/{numero_rif}/{data_rif}/{destinazione}', 'AjaxController@crea_documento_rif');
 Route::any('ajax/cerca_articolo_smart_automatico/{q}/{cd_cf}', 'AjaxController@cerca_articolo_smart_automatico');
 Route::any('ajax/cerca_articolo_smart_manuale/{q}/{cd_cf}', 'AjaxController@cerca_articolo_smart_manuale');
+Route::any('ajax/controllo_articolo_smart_ordini/{q}/{id_dotes}', 'AjaxController@controllo_articolo_smart_ordini');
 Route::any('ajax/controllo_articolo_smart/{q}/{id_dotes}', 'AjaxController@controllo_articolo_smart');
 Route::any('ajax/stampe/{id_dotes}', 'AjaxController@stampe');
 Route::any('ajax/inserisci_scatolone/{id_dotes}/{ar}/{qta}', 'AjaxController@inserisci_scatolone');

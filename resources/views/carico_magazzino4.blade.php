@@ -1,8 +1,4 @@
-<?php /* TIN04x5;01/08/2025;0*/
-/* TIN04x5;01/08/2025;13GI24TIN04*/ ?>
-<?php $magazzino_prova = DB::select('SELECT MG.*,MGUbicazione.Cd_MGUbicazione from MG LEFT JOIN MGUbicazione on MGUbicazione.Cd_MG = MG.Cd_MG'); ?>
-<?php $magazzino_ord = DB::select('SELECT * from MG '); //TODO MANCANO GLI ALERT?>
-    <!doctype html>
+<!doctype html>
 <html lang="en" class="md">
 
 <head>
@@ -320,6 +316,7 @@
         <div></div>
     </div>
 </div>
+
 <div class="wrapper">
 
     <!-- page main start -->
@@ -784,6 +781,7 @@
         </form>
     </div>
 </div>
+
 <?php foreach ($documento->righe as $r){ ?>
 <div class="modal" id="modal_segnalazione<?php echo $r->Id_DORig?>" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -850,7 +848,6 @@
 </div>
 <?php } ?>
 
-
 <div class="modal" id="modal_carico" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -880,7 +877,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal" id="modal_inserimento" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -1197,17 +1193,7 @@
 <script src="/js/jquery.scannerdetection.js" type="text/javascript"></script>
 
 </body>
-</html>{{--
-<script>
-    window.addEventListener('beforeunload', function (e) {
-        var confirmationMessage = 'Sei sicuro di voler lasciare questa pagina?';
-
-        // Mostra il messaggio di conferma
-        e.preventDefault(); // Necessario per mostrare il dialogo
-        e.returnValue = confirmationMessage; // Compatibilità con alcuni browser
-        return confirmationMessage; // Compatibilità con alcuni browser
-    });
-</script>--}}
+</html>
 
 <script type="text/javascript">
 
@@ -1466,7 +1452,7 @@
 
         dorig = JSON.stringify(evadi);
         $.ajax({
-            url: "<?php echo URL::asset('ajax/conferma_righe') ?>/" + 'old' + "/" + cd_mg_a + "/" + cd_mg_p + "/" + cd_do,
+            url: "<?php $fix_url = ($documento->Cd_Do == 'OVD') ? 'conferma_righe_ordini' : 'conferma_righe'; echo URL::asset('ajax/' . $fix_url) ?>/" + 'old' + "/" + cd_mg_a + "/" + cd_mg_p + "/" + cd_do,
             data: evadi,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -1765,9 +1751,8 @@
         testo = testo.replaceAll('/', 'slash');
         id_dotes = "<?php echo $id_dotes ?>";
         if (testo != '') {
-
             $.ajax({
-                url: "<?php echo URL::asset('ajax/controllo_articolo_smart') ?>/" + testo + "/" + id_dotes,
+                url: "<?php $fix_url = ($documento->Cd_Do == 'OVD') ? 'controllo_articolo_smart_ordini' : 'controllo_articolo_smart'; echo URL::asset('ajax/' . $fix_url); ?>/" + testo + "/" + id_dotes,
                 context: document.body
             }).done(function (result) {
                 if (result != '') {
