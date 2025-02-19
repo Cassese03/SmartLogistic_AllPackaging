@@ -289,7 +289,7 @@
                 </div>
 
                 <ul class="list-group">
-                    {{--<li class="list-group-item">
+                    <li class="list-group-item">
                         <a href="<?php echo URL::asset('magazzino/attivo') ?>" class="media">
                             <div class="media-body">
                                 <h5>Ciclo Attivo</h5>
@@ -297,7 +297,7 @@
                             </div>
                         </a>
                     </li>
-                    --}}<li class="list-group-item">
+                    <li class="list-group-item">
                         <a href="<?php echo URL::asset('magazzino/passivi') ?>" class="media">
                             <div class="media-body">
                                 <h5>Ciclo Passivo</h5>
