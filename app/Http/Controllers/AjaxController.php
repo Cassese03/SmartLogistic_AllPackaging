@@ -1601,7 +1601,7 @@ class AjaxController extends Controller
                 return '';
             foreach ($articoli as $articoli) {
                 $quantita = number_format($ol->QtaProdotta, 2, ',', '');
-                $lotto_scelto = $q;
+                $lotto_scelto = $ol->IdOrdineLavoro;
                 ?>
                 <script type="text/javascript">
                     textXEvasione2 = '<?php echo $articoli->Id_DORig?>';
