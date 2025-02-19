@@ -1575,7 +1575,7 @@ class AjaxController extends Controller
     public
     function controllo_articolo_smart_ordini($q, $id_dotes)
     {
-        $ol = DB::SELECT('SELECT * FROM xWPCollo where IdXWPCOllo = ' . $q);
+        $ol = DB::SELECT('SELECT * FROM xWPCollo where Id_xWPCollo = ' . $q);
         if (sizeof($ol) > 0) {
             $where2 = '';
             $ol = $ol[0];
