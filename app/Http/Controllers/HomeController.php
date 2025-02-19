@@ -411,7 +411,7 @@ class HomeController extends Controller
         $fornitori = DB::select('SELECT * from CF where Id_CF = ' . $id_fornitore . ' order by Id_CF desc');
         if (sizeof($fornitori) > 0) {
             $fornitore = $fornitori[0];
-            $documenti = DB::select('SELECT TOP 50 [Id_DoTes],[NumeroDoc],[DataDoc],[NumeroDocRif],[DataDocRif]  from DOTes where Cd_CF = \'' . $fornitore->Cd_CF . '\' and Cd_DO = \'' . $cd_do . '\' AND  DATEDIFF(DAY,GETDATE(),TimeIns) > -7 order by Id_DOTes DESC');
+            $documenti = DB::select('SELECT TOP 50 [Id_DoTes],[NumeroDoc],[DataDoc],[NumeroDocRif],[DataDocRif]  from DOTes where Cd_CF = \'' . $fornitore->Cd_CF . '\' and Cd_DO = \'' . $cd_do . '\' AND  DATEDIFF(DAY,GETDATE(),TimeIns) > -30 order by Id_DOTes DESC');
             $numero_documento = DB::select('SELECT MAX(numeroDoc)+1 as num from DOTes WHERE Cd_MGEsercizio = YEAR(GETDATE()) and Cd_DO = \'' . $cd_do . '\'')[0]->num;
             $dodo = DB::SELECT('select * from DODOPrel where Cd_DO = \'' . $cd_do . '\'');
             foreach ($dodo as $d) {
@@ -432,7 +432,7 @@ class HomeController extends Controller
         $fornitori = DB::select('SELECT * from CF where Id_CF = ' . $id_fornitore . ' order by Id_CF desc');
         if (sizeof($fornitori) > 0) {
             $fornitore = $fornitori[0];
-            $documenti = DB::select('SELECT * from DOTes where Cd_CF = \'' . $fornitore->Cd_CF . '\' and Cd_DO = \'' . $cd_do . '\' AND  DATEDIFF(DAY,GETDATE(),TimeIns) > -7 order by Id_DOTes DESC');
+            $documenti = DB::select('SELECT * from DOTes where Cd_CF = \'' . $fornitore->Cd_CF . '\' and Cd_DO = \'' . $cd_do . '\' AND  DATEDIFF(DAY,GETDATE(),TimeIns) > -30 order by Id_DOTes DESC');
             $numero_documento = DB::select('SELECT MAX(numeroDoc)+1 as num from DOTes WHERE Cd_MGEsercizio = YEAR(GETDATE()) and Cd_DO = \'' . $cd_do . '\' ')[0]->num;
             $dodo = DB::SELECT('select * from DODOPrel where Cd_DO = \'' . $cd_do . '\'');
             foreach ($dodo as $d) {
