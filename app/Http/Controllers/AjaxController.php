@@ -958,6 +958,7 @@ class AjaxController extends Controller
                 $insert_evasione['Id_DORig_Evade'] = $Id_DoRig;
                 $insert_evasione['PrezzoUnitarioV'] = $r->PrezzoUnitarioV;
                 $insert_evasione['Qta'] = $qtadaEvadere;
+                $insert_evasione['Riga'] = 1;
                 $insert_evasione['QtaEvasa'] = $insert_evasione['Qta'];
 
                 $Riga = DB::SELECT('SELECT * FROM DoRig where Id_DoRig=\'' . $Id_DoRig . '\'');
@@ -1000,7 +1001,7 @@ class AjaxController extends Controller
             DB::update("Update dotes set dotes.reserved_1= 'RRRRRRRRRR' where dotes.id_dotes = '$Id_DoTes1'");
             DB::statement("exec asp_DO_End '$Id_DoTes1'");
             if (isset($rif_ddt)) {
-                $desc_old_doc = DB::SELECT('SELECT CONCAT(Cd_DO,\' \',NumeroDocI,\' del \',DataDoc) as DescrizioneOLD FROM DOTes where Id_DOTes in (SELECT Id_DOTes FROM DORig WHERE Id_DORig = ' . $rif_ddt['Id_DORig_Evade'] . ')');
+                $desc_old_doc = DB::SELECT('SELECT CONCAT(Cd_DO,\' \',NumeroDocI,\' del \',Format(DataDoc,\'dd-MM-yyyy\')) as DescrizioneOLD FROM DOTes where Id_DOTes in (SELECT Id_DOTes FROM DORig WHERE Id_DORig = ' . $rif_ddt['Id_DORig_Evade'] . ')');
                 if (sizeof($desc_old_doc) > 0)
                     $desc_old_doc = 'Ns. Ord. ' . $desc_old_doc[0]->DescrizioneOLD;
                 else
@@ -1016,6 +1017,205 @@ class AjaxController extends Controller
                 $rif_ddt['Id_DORig_Evade'] = null;
                 $rif_ddt['Cd_CGConto'] = null;
                 $rif_ddt['Cd_Aliquota'] = null;
+                $rif_ddt['Riga'] = 0;
+                $rif_ddt['NoteRiga'] = null;
+                DB::table('DoRig')->insertGetId($rif_ddt);
+            }
+            return $Id_DoTes1;
+        } catch (\Exception $e) {
+            DB::ROLLBACK();
+            return $e->getMessage();
+        }
+    }
+
+    public function conferma_righe_ordini($Id_DoRig, $cd_mg_a, $cd_mg_p, $cd_do)
+    {
+        try {
+            $insert = [];
+            DB::beginTransaction();
+
+            $Id_DoRig = 0;
+            foreach ($_GET as $key => $d) {
+                $q = explode(';', $key);
+                if (sizeof($q) > 1)
+                    $data_scadenza = $q[1];
+                else
+                    $data_scadenza = 0;
+                if (sizeof($q) > 2)
+                    $lotto = $q[2];
+                else
+                    $lotto = 0;
+
+                $id_dorig = $q[0];
+
+                ${$id_dorig . '_qta'} = ($d);
+                ${$id_dorig . '_lotto'} = ($lotto);
+                ${$id_dorig . '_data_scadenza'} = ($data_scadenza);
+                $Id_DoRig .= '\',\'' . $id_dorig;
+            }
+            $Id_DoTes = '';
+            $date = date('Y-m-d H:i:s', strtotime('today'));
+            $controllo = DB::SELECT('SELECT * FROM DORIG WHERE Id_DORig in (\'' . $Id_DoRig . '\')')[0]->Id_DOTes;
+            $controlli = DB::SELECT('SELECT * FROM DORIG WHERE Id_DOTes = \'' . $controllo . '\'');
+            foreach ($controlli as $c) {
+                $testata = DB::SELECT('SELECT * FROM DORIG WHERE Cd_DO = \'' . $cd_do . '\' and Id_DORig_Evade = \'' . $c->Id_DORig . '\'');
+                if ($testata != null)
+                    if ($testata[0]->DataDoc == $date)
+                        $Id_DoTes = $testata[0]->Id_DOTes;
+            }
+            $date = date('d/m/Y', strtotime('today'));
+
+            $righe = DB::select('SELECT * FROM DORIG WHERE ID_DORIG IN (\'' . $Id_DoRig . '\')');
+            $Id_DoTes = '';
+            foreach ($righe as $r) {
+                $Id_DoRig = $r->Id_DORig;
+                $qtadaEvadere = ${$r->Id_DORig . '_qta'};
+                $magazzino = $r->Cd_MG_A;
+                $ubicazione = '0';
+                $lotto = ${$r->Id_DORig . '_lotto'};
+                $cd_cf = $r->Cd_CF;
+                $documento = $cd_do;
+                $cd_ar = $r->Cd_AR;
+                $magazzino_A = $cd_mg_a; //magazzino di default
+                $magazzino = $cd_mg_p; //magazzino di default
+                $insert_evasione['Cd_MG_P'] = '';
+                $insert_evasione['Cd_MG_A'] = '';
+                $insert_evasione['TipoPc'] = $r->TipoPC;
+                $old_dotes = DB::SELECT('select * from dotes where Id_DOTes = \'' . $r->Id_DOTes . '\'');
+                if (sizeof($old_dotes) > 0) {
+                    $agente = ($old_dotes[0]->Cd_Agente_1) ? $old_dotes[0]->Cd_Agente_1 : null;
+                    $agente_2 = ($old_dotes[0]->Cd_Agente_2) ? $old_dotes[0]->Cd_Agente_2 : null;
+                    $notepiede = ($old_dotes[0]->NotePiede) ? $old_dotes[0]->NotePiede : null;
+                    $pagamento = ($old_dotes[0]->Cd_PG) ? $old_dotes[0]->Cd_PG : null;
+                    $ScontoCassa = ($old_dotes[0]->ScontoCassa) ? $old_dotes[0]->ScontoCassa : null;
+                } else {
+                    $agente = null;
+                    $agente_2 = null;
+                    $notepiede = null;
+                    $pagamento = null;
+                    $ScontoCassa = null;
+                }
+
+                if ($Id_DoTes == '') {
+                    $Id_DoTes = DB::table('DOTes')->insertGetId(['Esecutivo' => 0, 'Cd_CF' => $cd_cf, 'Cd_Do' => $documento, 'Cd_Agente_1' => $agente, 'Cd_Agente_2' => $agente_2, 'NotePiede' => $notepiede, 'Cd_PG' => $pagamento]);
+                    if ($ubicazione != '0')
+                        $insert_evasione['Cd_MGUbicazione_P'] = $ubicazione;
+                    if ($magazzino != '0')
+                        $insert_evasione['Cd_MG_P'] = $magazzino;
+                    if ($magazzino_A != '0')
+                        $insert_evasione['Cd_MG_A'] = $magazzino_A;
+                    if ($ScontoCassa != null) DB::UPDATE("Update dotes set dotes.ScontoCassa= '$ScontoCassa' where dotes.id_dotes = '$Id_DoTes'");
+                    $utente = session()->get('utente')->Cd_Operatore;
+                    if ($utente != null) DB::UPDATE("Update dotes set dotes.xCd_Operatore= '" . str_replace('\'', '', $utente) . "' where dotes.id_dotes = '$Id_DoTes'");
+                    //DB::update("Update dotes set dotes.reserved_1= 'RRRRRRRRRR' where dotes.id_dotes = '$Id_DoTes'");
+                    //DB::statement("exec asp_DO_End $Id_DoTes");
+
+                    $evasione_dorig_spesa = [];
+                    $dorig_spesa = DB::SELECT('select * from DORigSpesa where Id_DOTes = \'' . $r->Id_DOTes . '\'');
+                    if (sizeof($dorig_spesa) > 0) {
+                        $first_row = $dorig_spesa[0];
+                        foreach ($first_row as $key => $value) {
+                            $evasione_dorig_spesa[$key] = $value;
+                        }
+                        $evasione_dorig_spesa['Id_DoTes'] = $Id_DoTes;
+                        $evasione_dorig_spesa['DataDoc'] = str_replace('-', '', $evasione_dorig_spesa['DataDoc']);
+                        unset($evasione_dorig_spesa['TimeIns']);
+                        unset($evasione_dorig_spesa['TimeUpd']);
+                        unset($evasione_dorig_spesa['UserIns']);
+                        unset($evasione_dorig_spesa['UserUpd']);
+                        unset($evasione_dorig_spesa['Ts']);
+                        unset($evasione_dorig_spesa['ImportoE']);
+                        unset($evasione_dorig_spesa['ImportoEvadibileE']);
+                        unset($evasione_dorig_spesa['ImportoEvasoE']);
+                        unset($evasione_dorig_spesa['ExtraInfoPresent']);
+                        unset($evasione_dorig_spesa['Id_DoRigSpesa']);
+                        unset($evasione_dorig_spesa['Evasa']);
+                        unset($evasione_dorig_spesa['ImportoEvasoV']);
+                        DB::table('DORigSpesa')->insertGetId($evasione_dorig_spesa);
+                    }
+
+                }
+
+                if ($insert_evasione['Cd_MG_P'] == null || $insert_evasione['Cd_MG_P'] == '0')
+                    $insert_evasione['Cd_MG_P'] = $magazzino;
+                if ($insert_evasione['Cd_MG_A'] == null || $insert_evasione['Cd_MG_A'] == '0')
+                    $insert_evasione['Cd_MG_A'] = $magazzino_A;
+                if ($lotto != '0') {
+                    $insert_evasione['NoteRiga'] = $lotto;
+                }
+                $insert_evasione['Riga'] = 1;
+                if (isset($insert_evasione['Cd_ARLotto'])) unset($insert_evasione['Cd_ARLotto']);
+                $check = DB::SELECT('SELECT * from MGCausale where Cd_MGCausale IN (SELECT Cd_MGCausale FROM DO where cd_do = (SELECT TOP 1 Cd_DO FROM DOTes where Id_DOTes = \'' . $Id_DoTes . '\'))');
+                if (sizeof($check) > 0) {
+                    if ($check[0]->MagPFlag == 0)
+                        unset($insert_evasione['Cd_MG_P']);
+                    if ($check[0]->MagAFlag == 0)
+                        unset($insert_evasione['Cd_MG_A']);
+                }
+                $Id_DoTes1 = $Id_DoTes;
+                $insert_evasione['Cd_AR'] = $cd_ar;
+                $insert_evasione['Id_DORig_Evade'] = $Id_DoRig;
+                $insert_evasione['PrezzoUnitarioV'] = $r->PrezzoUnitarioV;
+                $insert_evasione['Qta'] = $qtadaEvadere;
+                $insert_evasione['QtaEvasa'] = $insert_evasione['Qta'];
+
+                $Riga = DB::SELECT('SELECT * FROM DoRig where Id_DoRig=\'' . $Id_DoRig . '\'');
+                $insert_evasione['Cd_Aliquota'] = $r->Cd_Aliquota;
+                if ($r->ProvvigioneRiga_1 != '')
+                    $insert_evasione['ProvvigioneRiga_1'] = $r->ProvvigioneRiga_1;
+                if ($r->ProvvigioneRiga_1 != '')
+                    $insert_evasione['ProvvigioneRiga_2'] = $r->ProvvigioneRiga_1;
+                if ($r->ScontoRiga != '')
+                    $insert_evasione['ScontoRiga'] = $r->ScontoRiga;/*
+                if ($r->NoteRiga != '')
+                    $insert_evasione['NoteRiga'] = $r->NoteRiga;*/
+                $insert_evasione['Cd_CGConto'] = $r->Cd_CGConto;
+                $insert_evasione['Id_DoTes'] = $Id_DoTes1;
+
+
+                $qta_evasa = DB::SELECT('SELECT * FROM DORig WHERE Id_DoRig= \'' . $Id_DoRig . '\' ')[0]->QtaEvasa;
+                $qta_evasa = intval($qta_evasa) + intval($qtadaEvadere);
+                $qta_evadibile = DB::SELECT('SELECT * FROM DORig WHERE Id_DoRig= \'' . $Id_DoRig . '\' ')[0]->QtaEvadibile;
+                $qta_evadibile = intval($qta_evadibile) - intval($qtadaEvadere);
+
+                DB::table('DoRig')->insertGetId($insert_evasione);
+
+                $rif_ddt = $insert_evasione;
+
+                $Id_DoRig_OLD = DB::SELECT('SELECT TOP 1 * FROM DORIG ORDER BY Id_DORig DESC')[0]->Id_DORig;
+
+                if ($qtadaEvadere < $Riga[0]->QtaEvadibile) {
+                    DB::UPDATE('Update DoRig set QtaEvadibile = \'' . $qta_evadibile . '\'WHERE Id_DoRig = \'' . $Id_DoRig . '\'');
+                    DB::UPDATE('Update DoRig set QtaEvasa = \'' . $qta_evasa . '\'WHERE Id_DoRig = \'' . $Id_DoRig_OLD . '\'');
+                } else {
+                    DB::UPDATE('Update DoRig set QtaEvadibile = \'0\'WHERE Id_DoRig = \'' . $Id_DoRig . '\'');
+                    DB::update('Update dorig set Evasa = \'1\'   where Id_DoRig = \'' . $Id_DoRig . '\' ');
+                    $Id_DoTes_old = DB::SELECT('SELECT * from DoRig where id_dorig = \'' . $Id_DoRig . '\' ')[0]->Id_DOTes;
+                }
+            }
+            DB::COMMIT();
+            DB::update("Update dotes set dotes.reserved_1= 'RRRRRRRRRR' where dotes.id_dotes = '$Id_DoTes_old'");
+            DB::statement("exec asp_DO_End '$Id_DoTes_old'");
+            DB::update("Update dotes set dotes.reserved_1= 'RRRRRRRRRR' where dotes.id_dotes = '$Id_DoTes1'");
+            DB::statement("exec asp_DO_End '$Id_DoTes1'");
+            if (isset($rif_ddt)) {
+                $desc_old_doc = DB::SELECT('SELECT CONCAT(Cd_DO,\' \',NumeroDocI,\' del \',Format(DataDoc,\'dd-MM-yyyy\')) as DescrizioneOLD FROM DOTes where Id_DOTes in (SELECT Id_DOTes FROM DORig WHERE Id_DORig = ' . $rif_ddt['Id_DORig_Evade'] . ')');
+                if (sizeof($desc_old_doc) > 0)
+                    $desc_old_doc = 'Ns. Ord. ' . $desc_old_doc[0]->DescrizioneOLD;
+                else
+                    $desc_old_doc = '';
+                $check_desc = DB::SELECT('SELECT * FROM DoRig where Cd_AR is null and Id_DOTes = ' . $rif_ddt['Id_DoTes'] . ' AND Descrizione = \'' . $desc_old_doc . '\'');
+                if (sizeof($check_desc) > 0)
+                    return $Id_DoTes1;
+                $rif_ddt['Cd_AR'] = null;
+                $rif_ddt['Descrizione'] = $desc_old_doc;
+                $rif_ddt['Qta'] = 0;
+                $rif_ddt['QtaEvadibile'] = 0;
+                $rif_ddt['Cd_ARLotto'] = null;
+                $rif_ddt['Id_DORig_Evade'] = null;
+                $rif_ddt['Cd_CGConto'] = null;
+                $rif_ddt['Cd_Aliquota'] = null;
+                $rif_ddt['Riga'] = 0;
                 DB::table('DoRig')->insertGetId($rif_ddt);
             }
             return $Id_DoTes1;
@@ -1369,6 +1569,74 @@ class AjaxController extends Controller
 
         --><?php
 //TODO CAMBAIRE GESTIONE EVASIONE A PZ A SECONDA DEL BARCODE
+
+    }
+
+    public
+    function controllo_articolo_smart_ordini($q, $id_dotes)
+    {
+        $ol = DB::SELECT('SELECT * FROM xWPCollo where IdOrdineLavoro = ' . $q);
+        if (sizeof($ol) > 0) {
+            $where2 = '';
+            $ol = $ol[0];
+            $cerca = DB::SELECT('SELECT * FROM DORIG WHERE Cd_AR = \'' . $ol->Cd_AR . '\'');
+            $where = ' where 1=1 ';
+            $where .= ' and Cd_AR Like \'%' . $cerca[0]->Cd_AR . '%\'';
+            $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\')  and QtaEvadibile > 0  Order By Cd_AR DESC');
+            if ($articoli != '') {
+                if ($articoli[0]->QtaEvadibile <= 0) {
+                    $check = DB::select('SELECT SUM(QtaEvadibile) as qtaevasa FROM DoRig ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\')');
+                    if ($check[0]->qtaevasa <= 0) {
+                        echo 'Gia Evaso';
+                        exit();
+                    }
+                } else {
+                    $quantita = $articoli[0]->QtaEvadibile;
+                    $lotto_scelto = $articoli[0]->Cd_ARLotto;
+                }
+            }
+
+            $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' ' . $where2 . ' and Id_DoTes in (\'' . $id_dotes . '\')  and QtaEvadibile > 0   Order By QtaEvadibile DESC');
+            if (!(sizeof($articoli) > 0))
+                return '';
+            foreach ($articoli as $articoli) {
+                $quantita = $articoli->QtaEvadibile;
+                $lotto_scelto = $q;
+                ?>
+                <script type="text/javascript">
+                    textXEvasione2 = '<?php echo $articoli->Id_DORig?>';
+                    data_scadenza = 0;
+                    lotto = '<?php echo $lotto_scelto;?>';
+
+                    textXEvasione2 = textXEvasione2 + ';' + data_scadenza;
+                    textXEvasione2 = textXEvasione2 + ';' + lotto;
+
+                    if (evadi[textXEvasione2] == undefined || evadi[textXEvasione2] == null) {
+
+                        $('#modal_controllo_articolo').val('<?php echo $articoli->Cd_AR ?>');
+                        $('#modal_controllo_quantita').val(<?php echo floatval($quantita) ?>);
+
+                        $('#modal_controllo_lotto').val(
+                            <?php if ($lotto_scelto != 0) {
+                                echo '\'' . $lotto_scelto . '\'';
+                            } else {
+                                echo '\'Nessun Lotto\'';
+                            } ?>)
+                        $('#modal_list_controllo_lotto').html('<option value="Nessun Lotto">Nessun Lotto</option>')
+                        <?php /*foreach($lotto as $l){?>
+                    $('#modal_list_controllo_lotto').append('<option value="<?php echo $l->Cd_ARLotto;?>"><?php echo $l->Cd_ARLotto ?></option>')
+                    <?php } */?>
+
+                        //$('#modal_controllo_lotto').val('<?php echo $articoli->Cd_ARLotto ?>');
+                        $('#modal_controllo_dorig').val('<?php echo $articoli->Id_DORig ?>');
+                        change_scad();
+                    }
+                </script>
+            <?php } ?>
+            <?php
+        } else {
+            return response()->json(['error' => 'Collo non trovato'], 400);
+        }
 
     }
 
