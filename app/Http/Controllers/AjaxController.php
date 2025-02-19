@@ -517,7 +517,7 @@ class AjaxController extends Controller
             foreach ($fornitori as $f) { ?>
 
                 <li class="list-group-item">
-                    <a href="/magazzino/carico03/<?php echo $f->Id_CF ?>/<?php echo $dest ?>" class="media">
+                    <a href="/magazzino/carico3/<?php echo $f->Id_CF ?>/<?php echo $dest ?>" class="media">
                         <div class="media-body">
                             <h5><?php echo $f->Descrizione ?></h5>
                             <p>Codice: <?php echo $f->Cd_CF ?></p>
