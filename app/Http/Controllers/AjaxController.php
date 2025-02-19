@@ -1575,7 +1575,7 @@ class AjaxController extends Controller
     public
     function controllo_articolo_smart_ordini($q, $id_dotes)
     {
-        $ol = DB::SELECT('SELECT * FROM xWPCollo where IdOrdineLavoro = ' . $q);
+        $ol = DB::SELECT('SELECT * FROM xWPCollo where IdXWPCOllo = ' . $q);
         if (sizeof($ol) > 0) {
             $where2 = '';
             $ol = $ol[0];
@@ -1600,7 +1600,7 @@ class AjaxController extends Controller
             if (!(sizeof($articoli) > 0))
                 return '';
             foreach ($articoli as $articoli) {
-                $quantita = $articoli->QtaEvadibile;
+                $quantita = number_format($ol->QtaProdotta, 2, ',', '');
                 $lotto_scelto = $q;
                 ?>
                 <script type="text/javascript">
