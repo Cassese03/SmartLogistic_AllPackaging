@@ -1178,11 +1178,18 @@ class AjaxController extends Controller
                             $insert_evasione['Cd_MG_P'] = $magazzino;
                         if ($insert_evasione['Cd_MG_A'] == null || $insert_evasione['Cd_MG_A'] == '0')
                             $insert_evasione['Cd_MG_A'] = $magazzino_A;
-                        if ($lotto != '0') {
-                            $insert_evasione['NoteRiga'] = $lotto;
-                        }
+
                         $insert_evasione['Riga'] = 1;
                         if (isset($insert_evasione['Cd_ARLotto'])) unset($insert_evasione['Cd_ARLotto']);
+
+                        if ($lotto != '0') {
+                            $check_lotto = DB::SELECT('SELECT * FROM ARLotto WHERE Cd_AR = \'' . $cd_ar . '\' and Cd_ARLotto = \'' . $lotto . '\'');
+                            if (sizeof($check_lotto) > 0)
+                                $insert_evasione['Cd_ARLotto'] = $lotto;
+                            else
+                                $insert_evasione['NoteRiga'] = $lotto;
+                        }
+
                         $check = DB::SELECT('SELECT * from MGCausale where Cd_MGCausale IN (SELECT Cd_MGCausale FROM DO where cd_do = (SELECT TOP 1 Cd_DO FROM DOTes where Id_DOTes = \'' . $Id_DoTes . '\'))');
                         if (sizeof($check) > 0) {
                             if ($check[0]->MagPFlag == 0)
@@ -1215,6 +1222,9 @@ class AjaxController extends Controller
                         $qta_evadibile = intval($qta_evadibile) - intval($qtadaEvadere);
 
                         DB::table('DoRig')->insertGetId($insert_evasione);
+
+                        $rif_ddt = $insert_evasione;
+
                         unset($insert_evasione['ScontoRiga']);
 
                         $Id_DoRig_OLD = DB::SELECT('SELECT TOP 1 * FROM DORIG ORDER BY Id_DORig DESC')[0]->Id_DORig;
@@ -1250,6 +1260,7 @@ class AjaxController extends Controller
                 $rif_ddt['Qta'] = 0;
                 $rif_ddt['QtaEvadibile'] = 0;
                 $rif_ddt['Cd_ARLotto'] = null;
+                $rif_ddt['NoteRiga'] = null;
                 $rif_ddt['Id_DORig_Evade'] = null;
                 $rif_ddt['Cd_CGConto'] = null;
                 $rif_ddt['Cd_Aliquota'] = null;
@@ -1640,6 +1651,21 @@ class AjaxController extends Controller
             foreach ($articoli as $articoli) {
                 $quantita = number_format($ol->QtaProdotta, 2, ',', '');
                 $lotto_scelto = $ol->IdOrdineLavoro;
+                if ($ol->Cd_ARMisura != $articoli->Cd_ARMisura) {
+                    $um_principale = DB::select('SELECT * FROM ARARMisura WHERE Cd_AR = \'' . $articoli->Cd_AR . '\' and DefaultMisura = 1  ');
+                    $um_ol = DB::select('SELECT * FROM ARARMisura WHERE Cd_AR = \'' . $articoli->Cd_AR . '\'    and Cd_ARMisura = \'' . $ol->Cd_ARMisura . '\'  ');
+                    $um_dorig = DB::select('SELECT * FROM ARARMisura WHERE Cd_AR = \'' . $articoli->Cd_AR . '\' and Cd_ARMisura = \'' . $articoli->Cd_ARMisura . '\'  ');
+                                        if (sizeof($um_principale) > 0) {
+                        if (sizeof($um_ol) > 0) {
+                            if (sizeof($um_dorig) > 0) {
+                                if ($um_principale[0]->Cd_ARMisura != $ol->Cd_ARMisura)
+                                    $quantita = number_format($ol->QtaProdotta * $um_ol[0]->UMFatt, 2, ',', '');
+
+                                $quantita = number_format($ol->QtaProdotta / $um_dorig[0]->UMFatt, 2, ',', '');
+                            }
+                        }
+                    }
+                }
                 ?>
                 <script type="text/javascript">
                     textXEvasione2 = '<?php echo $articoli->Id_DORig?>';

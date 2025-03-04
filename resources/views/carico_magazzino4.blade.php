@@ -345,7 +345,6 @@
                 <a style="padding-left:20px;" href="/"><i class="material-icons">home</i></a>
             </div>
         </header>
-
         <div class="page-content">
             <div class="content-sticky-footer">
 
@@ -418,6 +417,14 @@
                     </label>
                 </fieldset>
                 -->
+
+                <button
+                    style="margin-top:10px !important;width:80%;margin:auto;display:block;background-color:blue;border:blue"
+                    id="evasione_manuale" value="<?php echo ($documento->Cd_Do == 'OVD')?1:0; ?>"
+                    class="btn btn-primary" type="button"
+                    onclick="manuale();">
+                    Evasione <?php echo ($documento->Cd_Do == 'OVD') ? 'Collo' : 'Lotto' ?>
+                </button>
 
                 <button
                     style="margin-top:10px !important;width:80%;margin:auto;display:block;background-color:lightblue;border:lightblue"
@@ -1355,6 +1362,18 @@
         $('#modal_rimuovi_lotto_' + id_riga).modal('hide');
     }
 
+    function manuale() {
+        controllo = document.getElementById('evasione_manuale').value;
+        if (controllo == 1) {
+            document.getElementById('evasione_manuale').value = 0;
+            document.getElementById('evasione_manuale').innerHTML = 'Evasione Lotto';
+        }
+        if (controllo == 0) {
+            document.getElementById('evasione_manuale').value = 1;
+            document.getElementById('evasione_manuale').innerHTML = 'Evasione Collo';
+        }
+        document.getElementById('cerca_articolo2').focus();
+    }
 
     /*function change_scad() {
         lotto = document.getElementById('modal_controllo_lotto').value;
@@ -1451,8 +1470,10 @@
             cd_mg_a = 'ND';
 
         dorig = JSON.stringify(evadi);
+        controllo = document.getElementById('evasione_manuale').value;
         $.ajax({
-            url: "<?php $fix_url = ($documento->Cd_Do == 'OVD') ? 'conferma_righe_ordini' : 'conferma_righe'; echo URL::asset('ajax/' . $fix_url) ?>/" + 'old' + "/" + cd_mg_a + "/" + cd_mg_p + "/" + cd_do,
+
+            url: "<?php echo URL::asset('ajax/conferma_righe_ordini') ?>/" + 'old' + "/" + cd_mg_a + "/" + cd_mg_p + "/" + cd_do,
             data: evadi,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -1751,24 +1772,47 @@
         testo = testo.replaceAll('/', 'slash');
         id_dotes = "<?php echo $id_dotes ?>";
         if (testo != '') {
-            $.ajax({
-                url: "<?php $fix_url = ($documento->Cd_Do == 'OVD') ? 'controllo_articolo_smart_ordini' : 'controllo_articolo_smart'; echo URL::asset('ajax/' . $fix_url); ?>/" + testo + "/" + id_dotes,
-                context: document.body
-            }).done(function (result) {
-                if (result != '') {
-                    $('#modal_cerca_articolo').modal('hide');
-                    $('#ajax_lista_articoli').html(result);
-                    $('#modal_lista_articoli_daevadere').modal('show');
+            controllo = document.getElementById('evasione_manuale').value;
+            if (controllo == 1) {
+                $.ajax({
+                    url: "<?php echo URL::asset('ajax/controllo_articolo_smart_ordini'); ?>/" + testo + "/" + id_dotes,
+                    context: document.body
+                }).done(function (result) {
+                    if (result != '') {
+                        $('#modal_cerca_articolo').modal('hide');
+                        $('#ajax_lista_articoli').html(result);
+                        $('#modal_lista_articoli_daevadere').modal('show');
 //                    evadi_articolo2('0');
-                } else {
-                    errorAudio.play();
-                    $('#modal_segnalare').modal('show');
-                    $('#cerca_articolo2').value = '';
-                    document.getElementById('Segnalazione_C').value = testo;
-                    document.getElementById('id_dotes_C').value = id_dotes;
-                    document.getElementById('id_dorig_C').value = id_dorig;
-                }
-            });
+                    } else {
+                        errorAudio.play();
+                        $('#modal_segnalare').modal('show');
+                        $('#cerca_articolo2').value = '';
+                        document.getElementById('Segnalazione_C').value = testo;
+                        document.getElementById('id_dotes_C').value = id_dotes;
+                        document.getElementById('id_dorig_C').value = id_dorig;
+                    }
+                });
+            }
+            if (controllo == 0) {
+                $.ajax({
+                    url: "<?php echo URL::asset('ajax/controllo_articolo_smart'); ?>/" + testo + "/" + id_dotes,
+                    context: document.body
+                }).done(function (result) {
+                    if (result != '') {
+                        $('#modal_cerca_articolo').modal('hide');
+                        $('#ajax_lista_articoli').html(result);
+                        $('#modal_lista_articoli_daevadere').modal('show');
+//                    evadi_articolo2('0');
+                    } else {
+                        errorAudio.play();
+                        $('#modal_segnalare').modal('show');
+                        $('#cerca_articolo2').value = '';
+                        document.getElementById('Segnalazione_C').value = testo;
+                        document.getElementById('id_dotes_C').value = id_dotes;
+                        document.getElementById('id_dorig_C').value = id_dorig;
+                    }
+                });
+            }
 
         }
     }
