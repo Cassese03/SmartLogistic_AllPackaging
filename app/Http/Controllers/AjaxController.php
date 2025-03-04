@@ -1651,17 +1651,28 @@ class AjaxController extends Controller
             foreach ($articoli as $articoli) {
                 $quantita = number_format($ol->QtaProdotta, 2, ',', '');
                 $lotto_scelto = $ol->IdOrdineLavoro;
-                if ($ol->Cd_ARMisura != $articoli->Cd_ARMisura) {
+                //echo 'Inizio '.$quantita.' '.$ol->Cd_ARMisura.'<br>';
+                if (str_replace(' ', '', $ol->Cd_ARMisura) != str_replace(' ', '', $articoli->Cd_ARMisura)) {
                     $um_principale = DB::select('SELECT * FROM ARARMisura WHERE Cd_AR = \'' . $articoli->Cd_AR . '\' and DefaultMisura = 1  ');
+                    //print_r($um_principale);
+                    //echo '<br>';
                     $um_ol = DB::select('SELECT * FROM ARARMisura WHERE Cd_AR = \'' . $articoli->Cd_AR . '\'    and Cd_ARMisura = \'' . $ol->Cd_ARMisura . '\'  ');
+                    //print_r($um_ol);
+                    //echo '<br>';
                     $um_dorig = DB::select('SELECT * FROM ARARMisura WHERE Cd_AR = \'' . $articoli->Cd_AR . '\' and Cd_ARMisura = \'' . $articoli->Cd_ARMisura . '\'  ');
-                                        if (sizeof($um_principale) > 0) {
+                    //print_r($um_dorig);
+                    //echo '<br>';
+                    if (sizeof($um_principale) > 0) {
                         if (sizeof($um_ol) > 0) {
                             if (sizeof($um_dorig) > 0) {
-                                if ($um_principale[0]->Cd_ARMisura != $ol->Cd_ARMisura)
+                                if (str_replace(' ', '', $um_principale[0]->Cd_ARMisura) != str_replace(' ', '', $ol->Cd_ARMisura)) {
                                     $quantita = number_format($ol->QtaProdotta * $um_ol[0]->UMFatt, 2, ',', '');
-
+                                   //print_r($quantita);
+                                   //echo '<br>';
+                                }
                                 $quantita = number_format($ol->QtaProdotta / $um_dorig[0]->UMFatt, 2, ',', '');
+                                //echo 'Fine ' . $quantita .' '. $um_dorig[0]->Cd_ARMisura . '<br>';
+                                //echo '<br>';
                             }
                         }
                     }
