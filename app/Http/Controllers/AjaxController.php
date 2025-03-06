@@ -1528,11 +1528,17 @@ class AjaxController extends Controller
                 if ($field['code'] == '310') {
                     $decimali = floatval(substr($field['raw_content'], -2));
                     $quantita = floatval(substr($field['raw_content'], 0, 4)) + $decimali / 100;
+                    $quantita_barcode = floatval(substr($field['raw_content'], 0, 4)) + $decimali / 100;
                     $where2 = ' and Qta =  \'' . $quantita . '\'';
 
                 }
 
             }
+            $dotes = DB::SELECT('SELECT * FROM DOTes where Id_DoTes in (\'' . $id_dotes . '\') ');
+            if(sizeof($dotes)>0)
+                if($dotes[0]->Cd_Do == 'OVD')
+                    $where2 = '';
+
             $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\')  and QtaEvadibile > 0   Order By Cd_AR DESC');
             if (sizeof($articoli) != '0') {
                 if ($articoli[0]->QtaEvadibile <= 0) {
@@ -1567,8 +1573,13 @@ class AjaxController extends Controller
             /*            $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\') Order By QtaEvadibile DESC');
                     if (!(sizeof($articoli) > 0))*/
             return '';
+
+        //	dd($articoli);
         foreach ($articoli as $articoli) {
             $quantita = $articoli->QtaEvadibile;
+            if(sizeof($dotes)>0)
+                if($dotes[0]->Cd_Do == 'OVD')
+                    $quantita = $quantita_barcode;
             $lotto_scelto = $articoli->Cd_ARLotto;
             ?>
             <script type="text/javascript">
@@ -1667,8 +1678,8 @@ class AjaxController extends Controller
                             if (sizeof($um_dorig) > 0) {
                                 if (str_replace(' ', '', $um_principale[0]->Cd_ARMisura) != str_replace(' ', '', $ol->Cd_ARMisura)) {
                                     $quantita = number_format($ol->QtaProdotta * $um_ol[0]->UMFatt, 2, ',', '');
-                                   //print_r($quantita);
-                                   //echo '<br>';
+                                    //print_r($quantita);
+                                    //echo '<br>';
                                 }
                                 $quantita = number_format($ol->QtaProdotta / $um_dorig[0]->UMFatt, 2, ',', '');
                                 //echo 'Fine ' . $quantita .' '. $um_dorig[0]->Cd_ARMisura . '<br>';
