@@ -1500,6 +1500,8 @@ class AjaxController extends Controller
     public
     function controllo_articolo_smart($q, $id_dotes)
     {
+        $q = str_replace("punto", ";", $q);
+        $q = str_replace('slash', '/', $q);
         $where2 = '';
         if (substr($q, 0, '2') == '01') {
             $pos = '';
@@ -1636,6 +1638,9 @@ class AjaxController extends Controller
     public
     function controllo_articolo_smart_ordini($q, $id_dotes)
     {
+
+        $q = str_replace("punto", ";", $q);
+        $q = str_replace('slash', '/', $q);
         $ol = DB::SELECT('SELECT * FROM xWPCollo where Id_xWPCollo = ' . $q);
         if (sizeof($ol) > 0) {
             $where2 = '';
