@@ -1379,7 +1379,8 @@ class AjaxController extends Controller
     public
     function cerca_articolo_smart_automatico($q, $cd_cf)
     {
-
+        $q = str_replace("punto", ";", $q);
+        $q = str_replace('slash', '/', $q);
         $qta = '';
         if (substr($q, 0, '2') == '01') {
             $pos = '';
@@ -1535,8 +1536,8 @@ class AjaxController extends Controller
 
             }
             $dotes = DB::SELECT('SELECT * FROM DOTes where Id_DoTes in (\'' . $id_dotes . '\') ');
-            if(sizeof($dotes)>0)
-                if($dotes[0]->Cd_Do == 'OVD')
+            if (sizeof($dotes) > 0)
+                if ($dotes[0]->Cd_Do == 'OVD')
                     $where2 = '';
 
             $articoli = DB::select('SELECT * FROM DoRig ' . $where . ' and Id_DoTes in (\'' . $id_dotes . '\')  and QtaEvadibile > 0   Order By Cd_AR DESC');
@@ -1577,8 +1578,8 @@ class AjaxController extends Controller
         //	dd($articoli);
         foreach ($articoli as $articoli) {
             $quantita = $articoli->QtaEvadibile;
-            if(sizeof($dotes)>0)
-                if($dotes[0]->Cd_Do == 'OVD')
+            if (sizeof($dotes) > 0)
+                if ($dotes[0]->Cd_Do == 'OVD')
                     $quantita = $quantita_barcode;
             $lotto_scelto = $articoli->Cd_ARLotto;
             ?>
@@ -1817,6 +1818,9 @@ class AjaxController extends Controller
     public
     function cerca_articolo_smart_inventario($q, $tipo)
     {
+        $q = str_replace("punto", ";", $q);
+        $q = str_replace('slash', '/', $q);
+
         $Cd_ARLotto = 'NESSUN LOTTO';
         if ($tipo == 'QRCode') {
 
