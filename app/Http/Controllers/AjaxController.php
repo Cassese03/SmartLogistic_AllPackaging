@@ -1157,6 +1157,10 @@ class AjaxController extends Controller
                                 }
                                 $evasione_dorig_spesa['Id_DoTes'] = $Id_DoTes;
                                 $evasione_dorig_spesa['DataDoc'] = str_replace('-', '', $evasione_dorig_spesa['DataDoc']);
+                                $evasione_dorig_spesa['Id_DoRigSpesa_Evade'] = $evasione_dorig_spesa['Id_DoRigSpesa'];
+                                $evasione_dorig_spesa['DoIntentoFix'] = 1;
+                                $evasione_dorig_spesa['ImportoEvasoV'] = $evasione_dorig_spesa['ImportoV'];
+                                $evasione_dorig_spesa['ImportoEvasoE'] = $evasione_dorig_spesa['ImportoE'];
                                 unset($evasione_dorig_spesa['TimeIns']);
                                 unset($evasione_dorig_spesa['TimeUpd']);
                                 unset($evasione_dorig_spesa['UserIns']);
@@ -1165,12 +1169,8 @@ class AjaxController extends Controller
                                 unset($evasione_dorig_spesa['ImportoE']);
                                 unset($evasione_dorig_spesa['ImportoEvadibileE']);
                                 unset($evasione_dorig_spesa['ExtraInfoPresent']);
-                                $evasione_dorig_spesa['Id_DoRigSpesa_Evade'] = $evasione_dorig_spesa['Id_DoRigSpesa'];
                                 unset($evasione_dorig_spesa['Id_DoRigSpesa']);
                                 unset($evasione_dorig_spesa['Evasa']);
-                                $evasione_dorig_spesa['DoIntentoFix'] = 1;
-                                $evasione_dorig_spesa['ImportoEvasoV'] = $evasione_dorig_spesa['ImportoV'];
-                                $evasione_dorig_spesa['ImportoEvasoE'] = $evasione_dorig_spesa['ImportoE'];
                                 DB::table('DORigSpesa')->insertGetId($evasione_dorig_spesa);
                             }
 
