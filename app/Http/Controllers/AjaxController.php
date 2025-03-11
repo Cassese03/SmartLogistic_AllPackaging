@@ -1148,7 +1148,7 @@ class AjaxController extends Controller
                             //DB::update("Update dotes set dotes.reserved_1= 'RRRRRRRRRR' where dotes.id_dotes = '$Id_DoTes'");
                             //DB::statement("exec asp_DO_End $Id_DoTes");
 
-                            /*$evasione_dorig_spesa = [];
+                            $evasione_dorig_spesa = [];
                             $dorig_spesa = DB::SELECT('select * from DORigSpesa where Id_DOTes = \'' . $r->Id_DOTes . '\'');
                             if (sizeof($dorig_spesa) > 0) {
                                 $first_row = $dorig_spesa[0];
@@ -1170,7 +1170,7 @@ class AjaxController extends Controller
                                 unset($evasione_dorig_spesa['Evasa']);
                                 unset($evasione_dorig_spesa['ImportoEvasoV']);
                                 DB::table('DORigSpesa')->insertGetId($evasione_dorig_spesa);
-                            }*/
+                            }
 
                         }
 
