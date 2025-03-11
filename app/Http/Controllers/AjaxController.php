@@ -1164,11 +1164,13 @@ class AjaxController extends Controller
                                 unset($evasione_dorig_spesa['Ts']);
                                 unset($evasione_dorig_spesa['ImportoE']);
                                 unset($evasione_dorig_spesa['ImportoEvadibileE']);
-                                unset($evasione_dorig_spesa['ImportoEvasoE']);
                                 unset($evasione_dorig_spesa['ExtraInfoPresent']);
+                                $evasione_dorig_spesa['Id_DoRigSpesa_Evade'] = $evasione_dorig_spesa['Id_DoRigSpesa'];
                                 unset($evasione_dorig_spesa['Id_DoRigSpesa']);
                                 unset($evasione_dorig_spesa['Evasa']);
-                                unset($evasione_dorig_spesa['ImportoEvasoV']);
+                                $evasione_dorig_spesa['DoIntentoFix'] = 1;
+                                $evasione_dorig_spesa['ImportoEvasoV'] = $evasione_dorig_spesa['ImportoV'];
+                                $evasione_dorig_spesa['ImportoEvasoE'] = $evasione_dorig_spesa['ImportoE'];
                                 DB::table('DORigSpesa')->insertGetId($evasione_dorig_spesa);
                             }
 
