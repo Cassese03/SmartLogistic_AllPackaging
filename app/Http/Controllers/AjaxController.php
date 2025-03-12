@@ -1948,7 +1948,7 @@ class AjaxController extends Controller
                 echo 'Nessun Articolo Trovato';
         }
         if ($tipo == 'ARTICOLO') {
-            $articoli = DB::select('SELECT AR.[Id_AR],AR.[Cd_AR],AR.[Descrizione] FROM ARLotto LEFT JOIN AR on AR.Cd_AR = ARLotto.Cd_AR where ARLotto.Cd_AR = \'' . $q . '\'');
+            $articoli = DB::select('SELECT AR.[Id_AR],AR.[Cd_AR],AR.[Descrizione] FROM AR where Cd_AR = \'' . $q . '\'');
             if (sizeof($articoli) > 0) {
                 $articolo = $articoli[0];
                 ?>
