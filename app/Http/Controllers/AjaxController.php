@@ -35,6 +35,9 @@ class AjaxController extends Controller
         if (sizeof($DORig) > 0) {
             $DORig = $DORig[0];
             $quantita = number_format($DORig->Qta, 2, '', '');
+            if(sizeof($quantita)<6){
+                $quantita = str_pad($quantita, 6, '0', STR_PAD_LEFT);
+            }
             $lotto = $DORig->Cd_ARLotto;
             $codice = strtoupper($DORig->Cd_AR);
             $descrizione = ($DORig->Descrizione);
@@ -113,12 +116,12 @@ class AjaxController extends Controller
                             </body>
                             </html>';
                 $folder = 'estrusore';
-                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 100], 'orentation' => 'L', 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
+                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 99], 'orentation' => 'L', 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
                 $mpdf->curlAllowUnsafeSslRequests = true;
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
                 $mpdf->WriteHTML($html);
                 $mpdf->Output('upload/GB/' . $folder . '/Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes . '.pdf', 'F');
-                $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes . '.pdf', 'I');
+                //$mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes . '.pdf', 'I');
 
             }
 
