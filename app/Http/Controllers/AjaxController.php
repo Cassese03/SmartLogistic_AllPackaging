@@ -35,7 +35,7 @@ class AjaxController extends Controller
         if (sizeof($DORig) > 0) {
             $DORig = $DORig[0];
             $quantita = number_format($DORig->Qta, 2, '', '');
-            if(sizeof($quantita)<6){
+            if (strlen($quantita) < 6) {
                 $quantita = str_pad($quantita, 6, '0', STR_PAD_LEFT);
             }
             $lotto = $DORig->Cd_ARLotto;
