@@ -113,14 +113,16 @@ class AjaxController extends Controller
                             <div style="position:absolute;top:190px;left:225px;text-align:center;font-weight: bold;">' . $codice . '</div>
                            <div style="position:absolute;top:220px;left:25px;text-align:center;font-weight: bold;">Descrizione Prodotto</div>
                             <div style="position:absolute;top:240px;left:25px;text-align:center;font-weight: bold;">' . $descrizione . '</div>
-                            </body>
-                            </html>';
+                            ';
                 $fornitore = DB::SELECT('SELECT CF.Descrizione,CF.Cd_CF FROM DORig left join CF on CF.Cd_CF = DORig.Cd_CF WHERE DORig.Cd_DO = \'OAF\' and DORig.Cd_ARLotto = \'' . $lotto . '\'');
                 if (sizeof($fornitore) > 0) {
                     $fornitore = $fornitore[0];
                     $html .= '<div style="position:absolute;top:220px;left:225px;text-align:center;font-weight: bold;">Fornitore</div>
                             <div style="position:absolute;top:240px;left:225px;text-align:center;font-weight: bold;">' . $fornitore->Cd_CF . ' - ' . $fornitore->Descrizione . '</div>';
                 }
+                $html .= '         </body>
+                            </html>';
+
                 $folder = 'estrusore';
                 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 99], 'orentation' => 'L', 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
                 $mpdf->curlAllowUnsafeSslRequests = true;
