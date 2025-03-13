@@ -600,10 +600,10 @@
         codice = $('#modal_Cd_AR').val();
         lotto = $('#modal_Cd_ARLotto').val();
         magazzino = $('#modal_Cd_MG').val();
-        if (lotto == '')
-            lotto = 0;
         codice = codice.replaceAll('/', 'slash');
         lotto = lotto.replaceAll('/', 'slash');
+        if (lotto == '')
+            lotto = 0;
 
 
         if (quantita_da_rettificare != '') {
