@@ -1594,9 +1594,10 @@ class AjaxController extends Controller
         //	dd($articoli);
         foreach ($articoli as $articoli) {
             $quantita = $articoli->QtaEvadibile;
+            $dotes = DB::SELECT('SELECT * FROM DOTes where Id_DoTes in (\'' . $id_dotes . '\') ');
             if (sizeof($dotes) > 0)
                 if ($dotes[0]->Cd_Do == 'OVD')
-                    $quantita = $quantita_barcode;
+                    $where2 = '';
             $lotto_scelto = $articoli->Cd_ARLotto;
             ?>
             <script type="text/javascript">
