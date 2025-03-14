@@ -1526,6 +1526,10 @@ class AjaxController extends Controller
                 $q = str_replace('******', '*****', $q);
             if ($pos == '')
                 $q = substr($q, 0, '10') . '*****' . substr($q, '10');
+            $pos = strpos($q, '*****');
+            if($pos <= 10)
+                $q = str_replace('*****','******',$q);
+
             $decoder = new Decoder($delimiter = '');
             $barcode = $decoder->decode($q);
             $where = ' where 1=1 ';
@@ -1886,6 +1890,10 @@ class AjaxController extends Controller
                     $q = str_replace('******', '*****', $q);
                 if ($pos == '')
                     $q = substr($q, 0, '10') . '*****' . substr($q, '10');
+                $pos = strpos($q, '*****');
+                if($pos <= 10)
+                    $q = str_replace('*****','******',$q);
+
                 $decoder = new Decoder($delimiter = '');
                 $barcode = $decoder->decode($q);
                 $where = ' where 1=1 ';
