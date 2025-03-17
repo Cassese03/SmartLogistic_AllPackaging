@@ -96,7 +96,7 @@ class AjaxController extends Controller
                                 .barcodecell {
                     text-align: center;
                                     vertical-align: middle;
-                                    padding-top: 7rem
+                                    padding-top: 5rem
                                 }
                             </style>
                             <body>
@@ -129,7 +129,8 @@ class AjaxController extends Controller
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
                 $mpdf->WriteHTML($html);
                 $mpdf->Output('upload/GB/' . $folder . '/Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes . '.pdf', 'F');
-                //$mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes . '.pdf', 'I');
+                //return '<script type="text/javascript">window.close();</script>';
+                $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes . '.pdf', 'I');
 
             }
 

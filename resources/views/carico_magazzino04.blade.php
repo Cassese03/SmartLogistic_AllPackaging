@@ -1328,7 +1328,7 @@
     }
 
     function stampa(id_dorig) {
-        window.open('<?php echo URL::asset('ajax/stampa'); ?>' + "/" + id_dorig);
+        window = window.open('<?php echo URL::asset('ajax/stampa'); ?>' + "/" + id_dorig);
         setTimeout(function () {
             window.close();
         }, 1000);
