@@ -1398,16 +1398,14 @@ class AjaxController extends Controller
         $q = str_replace('slash', '/', $q);
         $qta = '';
         if (substr($q, 0, '2') == '01') {
-            $pos = '';
-            $pos = strpos($q, '******');
-            if ($pos == '')
-                $pos = strpos($q, '*****');
-            else
-                $q = str_replace('******', '*****', $q);
-            if ($pos == '')
-                $q = substr($q, 0, '9') . '*****' . substr($q, '10');
-            else
-                $q = str_pad(substr($q, 0, $pos), 11, '*', STR_PAD_RIGHT) . substr($q, $pos++);
+
+            $lastAsteriskPosition = strrpos($q, '*');
+            $result = substr($q, 0, $lastAsteriskPosition + 1);
+            $result = str_replace('*', '', $result);
+            if (strlen($result) < 16)
+                $result = str_pad($result, 16, '*', STR_PAD_RIGHT);
+            $q = substr($q, $lastAsteriskPosition + 1);
+            $q = $result . $q;
 
             $decoder = new Decoder($delimiter = '');
             $barcode = $decoder->decode($q);
@@ -1519,17 +1517,14 @@ class AjaxController extends Controller
         $q = str_replace('slash', '/', $q);
         $where2 = '';
         if (substr($q, 0, '2') == '01') {
-            $pos = '';
-            $pos = strpos($q, '******');
-            if ($pos == '')
-                $pos = strpos($q, '*****');
-            else
-                $q = str_replace('******', '*****', $q);
-            if ($pos == '')
-                $q = substr($q, 0, '10') . '*****' . substr($q, '10');
-            $pos = strpos($q, '*****');
-            if($pos <= 10)
-                $q = str_replace('*****','******',$q);
+
+            $lastAsteriskPosition = strrpos($q, '*');
+            $result = substr($q, 0, $lastAsteriskPosition + 1);
+            $result = str_replace('*', '', $result);
+            if (strlen($result) < 16)
+                $result = str_pad($result, 16, '*', STR_PAD_RIGHT);
+            $q = substr($q, $lastAsteriskPosition + 1);
+            $q = $result . $q;
 
             $decoder = new Decoder($delimiter = '');
             $barcode = $decoder->decode($q);
@@ -1883,17 +1878,13 @@ class AjaxController extends Controller
         }
         if ($tipo == 'EAN') {
             if (substr($q, 0, '2') == '01') {
-                $pos = '';
-                $pos = strpos($q, '******');
-                if ($pos == '')
-                    $pos = strpos($q, '*****');
-                else
-                    $q = str_replace('******', '*****', $q);
-                if ($pos == '')
-                    $q = substr($q, 0, '10') . '*****' . substr($q, '10');
-                $pos = strpos($q, '*****');
-                if($pos <= 10)
-                    $q = str_replace('*****','******',$q);
+                $lastAsteriskPosition = strrpos($q, '*');
+                $result = substr($q, 0, $lastAsteriskPosition + 1);
+                $result = str_replace('*', '', $result);
+                if (strlen($result) < 16)
+                    $result = str_pad($result, 16, '*', STR_PAD_RIGHT);
+                $q = substr($q, $lastAsteriskPosition + 1);
+                $q = $result . $q;
 
                 $decoder = new Decoder($delimiter = '');
                 $barcode = $decoder->decode($q);
