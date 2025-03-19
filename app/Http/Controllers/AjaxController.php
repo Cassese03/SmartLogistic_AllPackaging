@@ -81,7 +81,7 @@ class AjaxController extends Controller
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
                 $mpdf->WriteHTML($html);
                 $mpdf->Output('upload/GB/' . $folder . '/Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes . '.pdf', 'F');
-                $mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes . '.pdf', 'I');
+                //$mpdf->Output('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes . '.pdf', 'I');
 
             } else {
                 $html = '<!DOCTYPE html>

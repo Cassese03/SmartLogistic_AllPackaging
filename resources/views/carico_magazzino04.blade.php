@@ -1318,7 +1318,7 @@
                     echo "$('#modal_quantita').val(0);";
                 } ?>
                 <?php if ($documento->Cd_Do == 'RCT' || $documento->Cd_Do == 'CTR' || $documento->Cd_Do == 'TNC') {
-                    echo "var codiceArticolo = $('#modal_Cd_AR').val(); if(codiceArticolo.startsWith('14.') === true) $('#modal_quantita').val(0);";
+                    echo "var codiceArticolo = $('#modal_Cd_AR').val();"; /* if(codiceArticolo.startsWith('14.') === true) $('#modal_quantita').val(0); */
                 } ?>
             } else {
                 $('#modal_inserimento').modal('show');
