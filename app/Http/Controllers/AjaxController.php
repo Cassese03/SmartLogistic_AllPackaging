@@ -1217,6 +1217,7 @@ class AjaxController extends Controller
                         $insert_evasione['Id_DORig_Evade'] = $Id_DoRig;
                         $insert_evasione['PrezzoUnitarioV'] = $r->PrezzoUnitarioV;
                         $insert_evasione['Cd_ARMisura'] = $r->Cd_ARMisura;
+                        $insert_evasione['FattoreToUM1'] = $r->FattoreToUM1;
                         $insert_evasione['Qta'] = $qtadaEvadere;
                         $insert_evasione['QtaEvasa'] = $insert_evasione['Qta'];
 
