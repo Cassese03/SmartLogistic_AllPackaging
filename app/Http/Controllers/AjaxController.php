@@ -982,7 +982,7 @@ class AjaxController extends Controller
                 if ($r->ScontoRiga != '')
                     $insert_evasione['ScontoRiga'] = $r->ScontoRiga;
                 $insert_evasione['Cd_CGConto'] = $r->Cd_CGConto;
-                $insert_evasione['NoteRiga'] = $r->NoteRiga;
+                $insert_evasione['NoteRiga'] = $Riga[0]->NoteRiga;
                 $insert_evasione['Id_DoTes'] = $Id_DoTes1;
 
 
@@ -1121,6 +1121,7 @@ class AjaxController extends Controller
                             $notepiede = ($old_dotes[0]->NotePiede) ? $old_dotes[0]->NotePiede : null;
                             $pagamento = ($old_dotes[0]->Cd_PG) ? $old_dotes[0]->Cd_PG : null;
                             $trasporto = ($old_dotes[0]->Cd_DoTrasporto) ? $old_dotes[0]->Cd_DoTrasporto : null;
+                            $trasportodataora = ($old_dotes[0]->TrasportoDataora) ? $old_dotes[0]->TrasportoDataora : date('Y-m-d H:i:s', strtotime('now'));
                             $ScontoCassa = ($old_dotes[0]->ScontoCassa) ? $old_dotes[0]->ScontoCassa : null;
                             $Cd_DoVettore_1 = ($old_dotes[0]->Cd_DoVettore_1) ? $old_dotes[0]->Cd_DoVettore_1 : null;
                             $Cd_DoVettore_2 = ($old_dotes[0]->Cd_DoVettore_2) ? $old_dotes[0]->Cd_DoVettore_2 : null;
@@ -1142,11 +1143,12 @@ class AjaxController extends Controller
                             $destinazione = null;
                             $spedizione = null;
                             $porto = null;
+                            $trasportodataora = date('Y-m-d H:i:s', strtotime('now'));
                             $aspbene = null;
                         }
 
                         if ($Id_DoTes == '') {
-                            $Id_DoTes = DB::table('DOTes')->insertGetId(['Cd_DoSped' => $spedizione, 'Cd_DoPorto' => $porto, 'Cd_DoAspBene' => $aspbene, 'Cd_CFDest' => $destinazione, 'Cd_DoVettore_2' => $Cd_DoVettore_2, 'Cd_DoVettore_1' => $Cd_DoVettore_1, 'Cd_DoTrasporto ' => $trasporto, 'Cd_CGConto_Banca ' => $banca_sconto, 'NumeroDocRif' => $numeroDocRif, 'Esecutivo' => 0, 'Cd_CF' => $cd_cf, 'Cd_Do' => $documento, 'Cd_Agente_1' => $agente, 'Cd_Agente_2' => $agente_2, 'NotePiede' => $notepiede, 'Cd_PG' => $pagamento]);
+                            $Id_DoTes = DB::table('DOTes')->insertGetId(['TrasportoDataora' => $trasportodataora, 'Cd_DoSped' => $spedizione, 'Cd_DoPorto' => $porto, 'Cd_DoAspBene' => $aspbene, 'Cd_CFDest' => $destinazione, 'Cd_DoVettore_2' => $Cd_DoVettore_2, 'Cd_DoVettore_1' => $Cd_DoVettore_1, 'Cd_DoTrasporto ' => $trasporto, 'Cd_CGConto_Banca ' => $banca_sconto, 'NumeroDocRif' => $numeroDocRif, 'Esecutivo' => 0, 'Cd_CF' => $cd_cf, 'Cd_Do' => $documento, 'Cd_Agente_1' => $agente, 'Cd_Agente_2' => $agente_2, 'NotePiede' => $notepiede, 'Cd_PG' => $pagamento]);
                             if ($ubicazione != '0')
                                 $insert_evasione['Cd_MGUbicazione_P'] = $ubicazione;
                             if ($magazzino != '0')
