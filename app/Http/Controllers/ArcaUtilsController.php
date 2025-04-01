@@ -117,23 +117,23 @@ class ArcaUtilsController extends Controller
                     if ($check[0]->MagAFlag == 0)
                         unset($insert_righe_ordine['Cd_MG_A']);
                 }
-                if ($lotto != '0') {
-                    $esiste = DB::select('SELECT * from DORig where Id_DoTes = ' . $id_ordine . ' and Cd_AR =  \'' . $codice_articolo . '\' and Cd_ARLotto = \'' . $lotto . '\' ');
-                } else {
-                    $esiste = DB::select('SELECT * from DORig where Id_DoTes = ' . $id_ordine . ' and Cd_AR =  \'' . $codice_articolo . '\' and Cd_ARLotto is null');
-                }
-                if (sizeof($esiste) > 0) {
-                    $new_qta = $esiste[0]->Qta + $insert_righe_ordine['Qta'];
-                    DB::UPDATE('UPDATE DORig SET Qta = ' . $new_qta . ' WHERE Id_DORig = ' . $esiste[0]->Id_DORig);
-                    $nuovaRiga = $esiste[0]->Id_DORig;
+                /*if ($lotto != '0') {
+                   $esiste = DB::select('SELECT * from DORig where Id_DoTes = ' . $id_ordine . ' and Cd_AR =  \'' . $codice_articolo . '\' and Cd_ARLotto = \'' . $lotto . '\' ');
+               } else {
+                   $esiste = DB::select('SELECT * from DORig where Id_DoTes = ' . $id_ordine . ' and Cd_AR =  \'' . $codice_articolo . '\' and Cd_ARLotto is null');
+               }
+              if (sizeof($esiste) > 0) {
+                   $new_qta = $esiste[0]->Qta + $insert_righe_ordine['Qta'];
+                   DB::UPDATE('UPDATE DORig SET Qta = ' . $new_qta . ' WHERE Id_DORig = ' . $esiste[0]->Id_DORig);
+                   $nuovaRiga = $esiste[0]->Id_DORig;
 
-                } else {
+               } else {*/
                     if ($lotto != '0') {
                         $insert_righe_ordine['Cd_ARLotto'] = $lotto;
                     }
                     DB::table('DORig')->insertGetId($insert_righe_ordine);
                     $nuovaRiga = db::select('SELECT TOP 1 Id_DORig FROM DORig ORDER BY TIMEINS DESC')[0]->Id_DORig;
-                }
+               // }
 
                 $utente = session()->get('utente')->Cd_Operatore;
                 if ($utente != null) DB::UPDATE("Update dotes set dotes.xCd_Operatore= '" . str_replace('\'', '', $utente) . "' where dotes.id_dotes = '$id_ordine'");
