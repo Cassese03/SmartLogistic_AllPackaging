@@ -982,7 +982,7 @@ class AjaxController extends Controller
                 if ($r->ScontoRiga != '')
                     $insert_evasione['ScontoRiga'] = $r->ScontoRiga;
                 $insert_evasione['Cd_CGConto'] = $r->Cd_CGConto;
-                $insert_evasione['NoteRiga'] = $Riga[0]->NoteRiga;
+                $insert_evasione['NoteRiga'] = $r->NoteRiga;
                 $insert_evasione['Id_DoTes'] = $Id_DoTes1;
 
 

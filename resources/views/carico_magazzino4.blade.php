@@ -1472,11 +1472,14 @@
         dorig = JSON.stringify(evadi);
         controllo = document.getElementById('evasione_manuale').value;
         $.ajax({
-
-            url: "<?php echo URL::asset('ajax/conferma_righe_ordini') ?>/" + 'old' + "/" + cd_mg_a + "/" + cd_mg_p + "/" + cd_do,
-            data: evadi,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
+            <?php $ciao = ($documento->Cd_Do != 'OVD') ? 'conferma_righe' : 'conferma_righe_ordini'; ?>
+            url: "<?php echo URL::asset('ajax/' . $ciao) ?>/" + 'old' + "/" + cd_mg_a + "/" + cd_mg_p + "/" + cd_do,
+            data:
+            evadi,
+            contentType:
+                "application/json; charset=utf-8",
+            dataType:
+                "json",
         }).done(function (result) {
             $('#ajax_loader').fadeOut();
             $('#modal_conf_riga').modal('hide');
