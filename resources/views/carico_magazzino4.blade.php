@@ -1598,7 +1598,10 @@
                 else
                     document.getElementById('riga_' + textXEvasione + '_counter').innerHTML = 'Righe in Evasione : ' + evadi[textXEvasione];
             }
-            $('#modal_controllo_dorig').val('');$('#modal_controllo_articolo').val('');$('#modal_controllo_quantita').val('');$('#modal_controllo_lotto').val('');
+            $('#modal_controllo_dorig').val('');
+            $('#modal_controllo_articolo').val('');
+            $('#modal_controllo_quantita').val('');
+            $('#modal_controllo_lotto').val('');
             successAudio.play();
         } else {
             if (Object.keys(evadi).length > 0) {

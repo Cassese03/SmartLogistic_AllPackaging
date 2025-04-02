@@ -1611,7 +1611,7 @@ class AjaxController extends Controller
                 textXEvasione2 = textXEvasione2 + ';' + data_scadenza;
                 textXEvasione2 = textXEvasione2 + ';' + lotto;
 
-                if (evadi[textXEvasione2] == undefined || evadi[textXEvasione2] == null) {
+                //if (evadi[textXEvasione2] == undefined || evadi[textXEvasione2] == null) {
 
                     $('#modal_controllo_articolo').val('<?php echo $articoli->Cd_AR ?>');
                     $('#modal_controllo_quantita').val(<?php echo floatval($quantita) ?>);
@@ -1630,7 +1630,7 @@ class AjaxController extends Controller
                     //$('#modal_controllo_lotto').val('<?php echo $articoli->Cd_ARLotto ?>');
                     $('#modal_controllo_dorig').val('<?php echo $articoli->Id_DORig ?>');
                     change_scad();
-                }
+                //}
             </script>
         <?php } ?>
         <!--        <?php
