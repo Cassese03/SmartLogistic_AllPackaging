@@ -651,11 +651,11 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                            onclick="$('#modal_lista_articoli_daevadere').modal('hide');$('#cerca_articolo2').val('');$('#cerca_articolo2').focus()">
+                            onclick="$('#modal_controllo_dorig').val('');$('#modal_controllo_articolo').val('');$('#modal_controllo_quantita').val('');$('#modal_controllo_lotto').val('');$('#modal_lista_articoli_daevadere').modal('hide');$('#cerca_articolo2').val('');$('#cerca_articolo2').focus()">
                         Chiudi
                     </button>
                     <button type="button" class="btn btn-primary"
-                            onclick="$('#modal_lista_articoli_daevadere').modal('hide');$('#cerca_articolo2').val('');$('#cerca_articolo2').focus();evadi_articolo2('0');">
+                            onclick="$('#modal_controllo_dorig').val('');$('#modal_controllo_articolo').val('');$('#modal_controllo_quantita').val('');$('#modal_controllo_lotto').val('');$('#modal_lista_articoli_daevadere').modal('hide');$('#cerca_articolo2').val('');$('#cerca_articolo2').focus();evadi_articolo2('0');">
                         Evadi Riga
                     </button>
                 </div>
