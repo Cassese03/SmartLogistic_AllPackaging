@@ -1611,6 +1611,7 @@ class AjaxController extends Controller
                 textXEvasione2 = textXEvasione2 + ';' + data_scadenza;
                 textXEvasione2 = textXEvasione2 + ';' + lotto;
 
+
                 <?php if ($dotes[0]->Cd_Do != 'OVD'){?>if (evadi[textXEvasione2] == undefined || evadi[textXEvasione2] == null) {<?php } ?>
 
                     $('#modal_controllo_articolo').val('<?php echo $articoli->Cd_AR ?>');
