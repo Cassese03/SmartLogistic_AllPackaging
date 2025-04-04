@@ -1610,9 +1610,10 @@ class AjaxController extends Controller
 
                 textXEvasione2 = textXEvasione2 + ';' + data_scadenza;
                 textXEvasione2 = textXEvasione2 + ';' + lotto;
-
-                //if (evadi[textXEvasione2] == undefined || evadi[textXEvasione2] == null) {
-
+                if ($dotes[0]->
+                Cd_Do == 'OVD'
+                )
+                {
                     $('#modal_controllo_articolo').val('<?php echo $articoli->Cd_AR ?>');
                     $('#modal_controllo_quantita').val(<?php echo floatval($quantita) ?>);
 
@@ -1630,7 +1631,30 @@ class AjaxController extends Controller
                     //$('#modal_controllo_lotto').val('<?php echo $articoli->Cd_ARLotto ?>');
                     $('#modal_controllo_dorig').val('<?php echo $articoli->Id_DORig ?>');
                     change_scad();
-                //}
+                }
+                else
+                {
+                    if (evadi[textXEvasione2] == undefined || evadi[textXEvasione2] == null) {
+
+                        $('#modal_controllo_articolo').val('<?php echo $articoli->Cd_AR ?>');
+                        $('#modal_controllo_quantita').val(<?php echo floatval($quantita) ?>);
+
+                        $('#modal_controllo_lotto').val(
+                            <?php if ($lotto_scelto != 0) {
+                                echo '\'' . $lotto_scelto . '\'';
+                            } else {
+                                echo '\'Nessun Lotto\'';
+                            } ?>)
+                        $('#modal_list_controllo_lotto').html('<option value="Nessun Lotto">Nessun Lotto</option>')
+                        <?php /*foreach($lotto as $l){?>
+                    $('#modal_list_controllo_lotto').append('<option value="<?php echo $l->Cd_ARLotto;?>"><?php echo $l->Cd_ARLotto ?></option>')
+                    <?php } */?>
+
+                        //$('#modal_controllo_lotto').val('<?php echo $articoli->Cd_ARLotto ?>');
+                        $('#modal_controllo_dorig').val('<?php echo $articoli->Id_DORig ?>');
+                        change_scad();
+                    }
+                }
             </script>
         <?php } ?>
         <!--        <?php
@@ -1723,24 +1747,24 @@ class AjaxController extends Controller
 
                     //if (evadi[textXEvasione2] == undefined || evadi[textXEvasione2] == null) {
 
-                        $('#modal_controllo_articolo').val('<?php echo $articoli->Cd_AR ?>');
-                        $('#modal_controllo_quantita').val(<?php echo floatval($quantita) ?>);
+                    $('#modal_controllo_articolo').val('<?php echo $articoli->Cd_AR ?>');
+                    $('#modal_controllo_quantita').val(<?php echo floatval($quantita) ?>);
 
-                        $('#modal_controllo_lotto').val(
-                            <?php if ($lotto_scelto != 0) {
-                                echo '\'' . $lotto_scelto . '\'';
-                            } else {
-                                echo '\'Nessun Lotto\'';
-                            } ?>)
-                        $('#modal_list_controllo_lotto').html('<option value="Nessun Lotto">Nessun Lotto</option>')
-                        <?php /*foreach($lotto as $l){?>
+                    $('#modal_controllo_lotto').val(
+                        <?php if ($lotto_scelto != 0) {
+                            echo '\'' . $lotto_scelto . '\'';
+                        } else {
+                            echo '\'Nessun Lotto\'';
+                        } ?>)
+                    $('#modal_list_controllo_lotto').html('<option value="Nessun Lotto">Nessun Lotto</option>')
+                    <?php /*foreach($lotto as $l){?>
                     $('#modal_list_controllo_lotto').append('<option value="<?php echo $l->Cd_ARLotto;?>"><?php echo $l->Cd_ARLotto ?></option>')
                     <?php } */?>
 
-                        //$('#modal_controllo_lotto').val('<?php echo $articoli->Cd_ARLotto ?>');
-                        $('#modal_controllo_dorig').val('<?php echo $articoli->Id_DORig ?>');
-                        change_scad();
-                   // }
+                    //$('#modal_controllo_lotto').val('<?php echo $articoli->Cd_ARLotto ?>');
+                    $('#modal_controllo_dorig').val('<?php echo $articoli->Id_DORig ?>');
+                    change_scad();
+                    // }
                 </script>
             <?php } ?>
             <?php
