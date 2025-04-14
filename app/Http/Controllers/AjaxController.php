@@ -1661,7 +1661,7 @@ class AjaxController extends Controller
 
         $q = str_replace("punto", ";", $q);
         $q = str_replace('slash', '/', $q);
-        $ol = DB::SELECT('SELECT * FROM xWPCollo where Id_xWPCollo = ' . $q);
+        $ol = DB::SELECT('SELECT * FROM xWPCollo where Id_xWPCollo = ' . $q . ' order by TimeIns');
         if (sizeof($ol) > 0) {
             $where2 = '';
             $ol = $ol[0];
