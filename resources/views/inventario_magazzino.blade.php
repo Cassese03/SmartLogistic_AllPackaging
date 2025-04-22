@@ -413,7 +413,7 @@
         <form method="post">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Carica Articolo</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Carica Articolo Inventario</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"
                             onclick="location.reload()">
                         <span aria-hidden="true">×</span>
@@ -426,6 +426,8 @@
                     <label>Lotto</label>
                     <select class="form-control" id="modal_Cd_ARLotto" onchange="cambioLotto()">
                     </select>
+                    <label>Unità di Misura</label>
+                    <select class="form-control" id="modal_Cd_ARMisura" onchange="cambioMisura()"></select>
                     <label>Magazzino</label>
                     <input class="form-control" type="text" id="modal_Cd_MG" readonly>
                     <label>Quantita Sistema</label>
@@ -513,6 +515,8 @@
 
 <script type="text/javascript">
 
+    let conversione_old = 1;
+
     $('.modal').on('shown.bs.modal', function () {
         $(this).find('[autofocus]').focus();
     });
@@ -546,10 +550,28 @@
 
     }
 
+    function cambioMisura() {
+        misura = $('#modal_Cd_ARMisura').val();
+
+        conversione = $('#modal_Cd_ARMisura option:selected').attr('conversione');
+
+        quantita = $('#modal_quantita').val();
+
+        if (conversione != 1) {
+            quantita = parseFloat(quantita) / parseFloat(conversione);
+        } else {
+            quantita = parseFloat(quantita) * parseFloat(conversione_old);
+        }
+
+        conversione_old = conversione;
+
+        $('#modal_quantita').val(quantita);
+    }
+
     function cerca_articolo_smart_automatico() {
 
         testo = $('#cerca_articolo1').val();
-        testo = testo.replaceAll('/','slash');
+        testo = testo.replaceAll('/', 'slash');
 
         tipo = $('#tipo_articolo').val();
         if (testo != '') {
@@ -605,6 +627,18 @@
         if (lotto == '')
             lotto = 0;
 
+        misura = $('#modal_Cd_ARMisura').val();
+
+        conversione = $('#modal_Cd_ARMisura option:selected').attr('conversione');
+
+        quantita = $('#modal_quantita_da_rettificare').val();
+
+        if (conversione != 1) {
+            quantita = parseFloat(parseFloat(quantita) * parseFloat(conversione));
+        } else {
+            alert('wow');
+        }
+        quantita_da_rettificare = quantita;
 
         if (quantita_da_rettificare != '') {
             $.ajax({

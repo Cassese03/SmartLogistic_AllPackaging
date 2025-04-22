@@ -1984,6 +1984,8 @@ class AjaxController extends Controller
 
         if (sizeof($articoli) > 0) {
             $articolo = $articoli[0];
+            $misura = DB::SELECT('SELECT * FROM ARARMisura WHERE Cd_AR = \'' . $articolo->Cd_AR . '\' and DefaultMisura = 0');
+            $principale = DB::SELECT('SELECT * FROM ARARMisura WHERE Cd_AR = \'' . $articolo->Cd_AR . '\' and DefaultMisura = 1');
             $quantita = 0;
             $disponibilita = DB::select('SELECT ISNULL(sum(QuantitaSign),0) as disponibilita from MGMOV where Cd_MG = \'00001\' and Cd_MGEsercizio = ' . date('Y') . ' and Cd_AR = \'' . $articolo->Cd_AR . '\'');
             if (sizeof($disponibilita) > 0) {
@@ -1994,6 +1996,10 @@ class AjaxController extends Controller
             ?>
             <script type="text/javascript">
                 $('#modal_Cd_AR').val('<?php echo $articolo->Cd_AR ?>');
+                $('#modal_Cd_ARMisura').html('<option selected conversione="1" value="<?php echo $principale[0]->Cd_ARMisura;?>"><?php echo $principale[0]->Cd_ARMisura;?></option>');
+                <?php foreach($misura as $m){?>
+                $('#modal_Cd_ARMisura').append('<option conversione="<?php echo $m->UMFatt ?>" value="<?php echo $m->Cd_ARMisura;?>"><?php echo $m->Cd_ARMisura ?></option>')
+                <?php } ?>
                 $('#modal_Cd_ARLotto').html('<option magazzino="00001" value="" quantita="<?php if (sizeof($disponibilita) > 0) {
                     echo $disponibilita[0]->disponibilita;
                 } else echo 0;?>">Nessun Lotto</option>');
@@ -2008,6 +2014,7 @@ class AjaxController extends Controller
         }
 
     }
+
 
     public
     function elimina($id_dotes)
