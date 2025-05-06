@@ -943,7 +943,22 @@ class AjaxController extends Controller
                         unset($evasione_dorig_spesa['Evasa']);
                         DB::table('DORigSpesa')->insertGetId($evasione_dorig_spesa);
                         if (sizeof($old_dotes) > 0) {
-                            DB::UPDATE("Update dotes set xPesoConai = '" . $old_dotes[0]->xPesoConai . "', xPesoConaiEsente = '" . $old_dotes[0]->xPesoConaiEsente . "', xImportoConai = '" . $old_dotes[0]->xImportoConai . "', xConfermato = '" . $old_dotes[0]->xConfermato . "', xImportoPolieco = '" . $old_dotes[0]->xImportoPolieco . "', xValorePolieco = '" . $old_dotes[0]->xValorePolieco . "', xPesoPolieco = '" . $old_dotes[0]->xPesoPolieco . "' where dotes.id_dotes = '$Id_DoTes'");
+                            $contributi = DB::SELECT('SELECT CAST(sum(iif(dorig.xARPolieco = 1 , DORIG.Qta / ARARMisura.UMFatt, 0)) as Decimal(16,2)) as kg_polieco,CAST(sum(iif(dorig.xARConai = 1 , DORIG.Qta/ ARARMisura.UMFatt, 0)) as decimal (16,2))as kg_conai
+                                              FROM DORIG
+                                              LEFT JOIN ARARMisura ON DORIG.Cd_ARMisura = ARARMisura.Cd_ARMisura and DORIG.Cd_AR = ARARMisura.Cd_AR
+                                              where id_Dotes = ' . $old_dotes[0]->Id_DOTes);
+                            if (sizeof($contributi) > 0) {
+                                DB::UPDATE("Update dotes set
+                                xPesoConai = '" . $contributi[0]->kg_conai . "',
+                                xPesoConaiEsente = '" . $old_dotes[0]->xPesoConaiEsente . "',
+                                xImportoConai = '" . ($old_dotes[0]->xImportoConai / $old_dotes[0]->xPesoConai) * $contributi[0]->kg_conai . "',
+                                xConfermato = '" . $old_dotes[0]->xConfermato . "',
+                                xImportoPolieco = '" . $old_dotes[0]->xValorePolieco * $contributi[0]->kg_polieco . "',
+                                xValorePolieco = '" . $old_dotes[0]->xValorePolieco . "',
+                                xPesoPolieco = '" . $contributi[0]->kg_polieco . "'
+                                where dotes.id_dotes = '$Id_DoTes'");
+                            } else
+                                DB::UPDATE("Update dotes set xPesoConai = '" . $old_dotes[0]->xPesoConai . "', xPesoConaiEsente = '" . $old_dotes[0]->xPesoConaiEsente . "', xImportoConai = '" . $old_dotes[0]->xImportoConai . "', xConfermato = '" . $old_dotes[0]->xConfermato . "', xImportoPolieco = '" . $old_dotes[0]->xImportoPolieco . "', xValorePolieco = '" . $old_dotes[0]->xValorePolieco . "', xPesoPolieco = '" . $old_dotes[0]->xPesoPolieco . "' where dotes.id_dotes = '$Id_DoTes'");
                         }
                     }
 
@@ -1194,7 +1209,23 @@ class AjaxController extends Controller
                                 unset($evasione_dorig_spesa['Evasa']);
                                 DB::table('DORigSpesa')->insertGetId($evasione_dorig_spesa);
                                 if (sizeof($old_dotes) > 0) {
-                                    DB::UPDATE("Update dotes set xPesoConai = '" . $old_dotes[0]->xPesoConai . "', xPesoConaiEsente = '" . $old_dotes[0]->xPesoConaiEsente . "', xImportoConai = '" . $old_dotes[0]->xImportoConai . "', xConfermato = '" . $old_dotes[0]->xConfermato . "', xImportoPolieco = '" . $old_dotes[0]->xImportoPolieco . "', xValorePolieco = '" . $old_dotes[0]->xValorePolieco . "', xPesoPolieco = '" . $old_dotes[0]->xPesoPolieco . "' where dotes.id_dotes = '$Id_DoTes'");
+
+                                    $contributi = DB::SELECT('SELECT CAST(sum(iif(dorig.xARPolieco = 1 , DORIG.Qta / ARARMisura.UMFatt, 0)) as Decimal(16,2)) as kg_polieco,CAST(sum(iif(dorig.xARConai = 1 , DORIG.Qta/ ARARMisura.UMFatt, 0)) as decimal (16,2))as kg_conai
+                                              FROM DORIG
+                                              LEFT JOIN ARARMisura ON DORIG.Cd_ARMisura = ARARMisura.Cd_ARMisura and DORIG.Cd_AR = ARARMisura.Cd_AR
+                                              where id_Dotes = ' . $old_dotes[0]->Id_DOTes);
+                                    if (sizeof($contributi) > 0) {
+                                        DB::UPDATE("Update dotes set
+                                xPesoConai = '" . $contributi[0]->kg_conai . "',
+                                xPesoConaiEsente = '" . $old_dotes[0]->xPesoConaiEsente . "',
+                                xImportoConai = '" . ($old_dotes[0]->xImportoConai / $old_dotes[0]->xPesoConai) * $contributi[0]->kg_conai . "',
+                                xConfermato = '" . $old_dotes[0]->xConfermato . "',
+                                xImportoPolieco = '" . $old_dotes[0]->xValorePolieco * $contributi[0]->kg_polieco . "',
+                                xValorePolieco = '" . $old_dotes[0]->xValorePolieco . "',
+                                xPesoPolieco = '" . $contributi[0]->kg_polieco . "'
+                                where dotes.id_dotes = '$Id_DoTes'");
+                                    } else
+                                        DB::UPDATE("Update dotes set xPesoConai = '" . $old_dotes[0]->xPesoConai . "', xPesoConaiEsente = '" . $old_dotes[0]->xPesoConaiEsente . "', xImportoConai = '" . $old_dotes[0]->xImportoConai . "', xConfermato = '" . $old_dotes[0]->xConfermato . "', xImportoPolieco = '" . $old_dotes[0]->xImportoPolieco . "', xValorePolieco = '" . $old_dotes[0]->xValorePolieco . "', xPesoPolieco = '" . $old_dotes[0]->xPesoPolieco . "' where dotes.id_dotes = '$Id_DoTes'");
                                 }
                             }
 
