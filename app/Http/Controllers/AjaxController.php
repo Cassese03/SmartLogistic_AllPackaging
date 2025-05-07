@@ -947,11 +947,12 @@ class AjaxController extends Controller
                                               FROM DORIG
                                               LEFT JOIN ARARMisura ON DORIG.Cd_ARMisura = ARARMisura.Cd_ARMisura and DORIG.Cd_AR = ARARMisura.Cd_AR
                                               where id_Dotes = ' . $old_dotes[0]->Id_DOTes);
+                            if ($old_dotes[0]->xPesoConai > 0) $importo_conai = (($old_dotes[0]->xImportoConai / $old_dotes[0]->xPesoConai) * $contributi[0]->kg_conai); else $importo_conai = 0;
                             if (sizeof($contributi) > 0) {
                                 DB::UPDATE("Update dotes set
                                 xPesoConai = '" . $contributi[0]->kg_conai . "',
                                 xPesoConaiEsente = '" . $old_dotes[0]->xPesoConaiEsente . "',
-                                xImportoConai = '" . ($old_dotes[0]->xPesoConai > 0) ? (($old_dotes[0]->xImportoConai / $old_dotes[0]->xPesoConai) * $contributi[0]->kg_conai) : 0. "',
+                                xImportoConai = '" . $importo_conai . "',
                                 xConfermato = '" . $old_dotes[0]->xConfermato . "',
                                 xImportoPolieco = '" . $old_dotes[0]->xValorePolieco * $contributi[0]->kg_polieco . "',
                                 xValorePolieco = '" . $old_dotes[0]->xValorePolieco . "',
@@ -1214,11 +1215,13 @@ class AjaxController extends Controller
                                               FROM DORIG
                                               LEFT JOIN ARARMisura ON DORIG.Cd_ARMisura = ARARMisura.Cd_ARMisura and DORIG.Cd_AR = ARARMisura.Cd_AR
                                               where id_Dotes = ' . $old_dotes[0]->Id_DOTes);
+                                    if ($old_dotes[0]->xPesoConai > 0) $importo_conai = (($old_dotes[0]->xImportoConai / $old_dotes[0]->xPesoConai) * $contributi[0]->kg_conai); else $importo_conai = 0;
+
                                     if (sizeof($contributi) > 0) {
                                         DB::UPDATE("Update dotes set
                                 xPesoConai = '" . $contributi[0]->kg_conai . "',
                                 xPesoConaiEsente = '" . $old_dotes[0]->xPesoConaiEsente . "',
-                                xImportoConai = '" . ($old_dotes[0]->xPesoConai > 0) ? (($old_dotes[0]->xImportoConai / $old_dotes[0]->xPesoConai) * $contributi[0]->kg_conai) : 0. "',
+                                xImportoConai = '" . $importo_conai . "',
                                 xConfermato = '" . $old_dotes[0]->xConfermato . "',
                                 xImportoPolieco = '" . $old_dotes[0]->xValorePolieco * $contributi[0]->kg_polieco . "',
                                 xValorePolieco = '" . $old_dotes[0]->xValorePolieco . "',
