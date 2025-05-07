@@ -946,7 +946,7 @@ class AjaxController extends Controller
                             $contributi = DB::SELECT('SELECT CAST(sum(iif(dorig.xARPolieco = 1 , DORIG.Qta / ARARMisura.UMFatt, 0)) as Decimal(16,2)) as kg_polieco,CAST(sum(iif(dorig.xARConai = 1 , DORIG.Qta/ ARARMisura.UMFatt, 0)) as decimal (16,2))as kg_conai
                                               FROM DORIG
                                               LEFT JOIN ARARMisura ON DORIG.Cd_ARMisura = ARARMisura.Cd_ARMisura and DORIG.Cd_AR = ARARMisura.Cd_AR
-                                              where id_Dotes = ' . $old_dotes[0]->Id_DOTes);
+                                              where id_Dotes = ' . $old_dotes[0]->Id_DoTes);
                             if ($old_dotes[0]->xPesoConai > 0) $importo_conai = (($old_dotes[0]->xImportoConai / $old_dotes[0]->xPesoConai) * $contributi[0]->kg_conai); else $importo_conai = 0;
                             if (sizeof($contributi) > 0) {
                                 DB::UPDATE("Update dotes set
@@ -1214,7 +1214,7 @@ class AjaxController extends Controller
                                     $contributi = DB::SELECT('SELECT CAST(sum(iif(dorig.xARPolieco = 1 , DORIG.Qta / ARARMisura.UMFatt, 0)) as Decimal(16,2)) as kg_polieco,CAST(sum(iif(dorig.xARConai = 1 , DORIG.Qta/ ARARMisura.UMFatt, 0)) as decimal (16,2))as kg_conai
                                               FROM DORIG
                                               LEFT JOIN ARARMisura ON DORIG.Cd_ARMisura = ARARMisura.Cd_ARMisura and DORIG.Cd_AR = ARARMisura.Cd_AR
-                                              where id_Dotes = ' . $old_dotes[0]->Id_DOTes);
+                                              where id_Dotes = ' . $old_dotes[0]->Id_DoTes);
                                     if ($old_dotes[0]->xPesoConai > 0) $importo_conai = (($old_dotes[0]->xImportoConai / $old_dotes[0]->xPesoConai) * $contributi[0]->kg_conai); else $importo_conai = 0;
 
                                     if (sizeof($contributi) > 0) {
