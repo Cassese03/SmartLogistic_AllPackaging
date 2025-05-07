@@ -951,14 +951,14 @@ class AjaxController extends Controller
                                 DB::UPDATE("Update dotes set
                                 xPesoConai = '" . $contributi[0]->kg_conai . "',
                                 xPesoConaiEsente = '" . $old_dotes[0]->xPesoConaiEsente . "',
-                                xImportoConai = '" . ($old_dotes[0]->xImportoConai / $old_dotes[0]->xPesoConai) * $contributi[0]->kg_conai . "',
+                                xImportoConai = '" . ($old_dotes[0]->xPesoConai > 0) ? (($old_dotes[0]->xImportoConai / $old_dotes[0]->xPesoConai) * $contributi[0]->kg_conai) : 0. "',
                                 xConfermato = '" . $old_dotes[0]->xConfermato . "',
                                 xImportoPolieco = '" . $old_dotes[0]->xValorePolieco * $contributi[0]->kg_polieco . "',
                                 xValorePolieco = '" . $old_dotes[0]->xValorePolieco . "',
                                 xPesoPolieco = '" . $contributi[0]->kg_polieco . "'
-                                where dotes.id_dotes = '$Id_DoTes'");
+                                where dotes.id_dotes = '" . $Id_DoTes . "'");
                             } else
-                                DB::UPDATE("Update dotes set xPesoConai = '" . $old_dotes[0]->xPesoConai . "', xPesoConaiEsente = '" . $old_dotes[0]->xPesoConaiEsente . "', xImportoConai = '" . $old_dotes[0]->xImportoConai . "', xConfermato = '" . $old_dotes[0]->xConfermato . "', xImportoPolieco = '" . $old_dotes[0]->xImportoPolieco . "', xValorePolieco = '" . $old_dotes[0]->xValorePolieco . "', xPesoPolieco = '" . $old_dotes[0]->xPesoPolieco . "' where dotes.id_dotes = '$Id_DoTes'");
+                                DB::UPDATE("Update dotes set xPesoConai = '" . $old_dotes[0]->xPesoConai . "', xPesoConaiEsente = '" . $old_dotes[0]->xPesoConaiEsente . "', xImportoConai = '" . $old_dotes[0]->xImportoConai . "', xConfermato = '" . $old_dotes[0]->xConfermato . "', xImportoPolieco = '" . $old_dotes[0]->xImportoPolieco . "', xValorePolieco = '" . $old_dotes[0]->xValorePolieco . "', xPesoPolieco = '" . $old_dotes[0]->xPesoPolieco . "' where dotes.id_dotes = '" . $Id_DoTes . "'");
                         }
                     }
 
@@ -1218,14 +1218,14 @@ class AjaxController extends Controller
                                         DB::UPDATE("Update dotes set
                                 xPesoConai = '" . $contributi[0]->kg_conai . "',
                                 xPesoConaiEsente = '" . $old_dotes[0]->xPesoConaiEsente . "',
-                                xImportoConai = '" . ($old_dotes[0]->xImportoConai / $old_dotes[0]->xPesoConai) * $contributi[0]->kg_conai . "',
+                                xImportoConai = '" . ($old_dotes[0]->xPesoConai > 0) ? (($old_dotes[0]->xImportoConai / $old_dotes[0]->xPesoConai) * $contributi[0]->kg_conai) : 0. "',
                                 xConfermato = '" . $old_dotes[0]->xConfermato . "',
                                 xImportoPolieco = '" . $old_dotes[0]->xValorePolieco * $contributi[0]->kg_polieco . "',
                                 xValorePolieco = '" . $old_dotes[0]->xValorePolieco . "',
                                 xPesoPolieco = '" . $contributi[0]->kg_polieco . "'
-                                where dotes.id_dotes = '$Id_DoTes'");
+                                where dotes.id_dotes = '" . $Id_DoTes . "'");
                                     } else
-                                        DB::UPDATE("Update dotes set xPesoConai = '" . $old_dotes[0]->xPesoConai . "', xPesoConaiEsente = '" . $old_dotes[0]->xPesoConaiEsente . "', xImportoConai = '" . $old_dotes[0]->xImportoConai . "', xConfermato = '" . $old_dotes[0]->xConfermato . "', xImportoPolieco = '" . $old_dotes[0]->xImportoPolieco . "', xValorePolieco = '" . $old_dotes[0]->xValorePolieco . "', xPesoPolieco = '" . $old_dotes[0]->xPesoPolieco . "' where dotes.id_dotes = '$Id_DoTes'");
+                                        DB::UPDATE("Update dotes set xPesoConai = '" . $old_dotes[0]->xPesoConai . "', xPesoConaiEsente = '" . $old_dotes[0]->xPesoConaiEsente . "', xImportoConai = '" . $old_dotes[0]->xImportoConai . "', xConfermato = '" . $old_dotes[0]->xConfermato . "', xImportoPolieco = '" . $old_dotes[0]->xImportoPolieco . "', xValorePolieco = '" . $old_dotes[0]->xValorePolieco . "', xPesoPolieco = '" . $old_dotes[0]->xPesoPolieco . "' where dotes.id_dotes = '" . $Id_DoTes . "'");
                                 }
                             }
 
