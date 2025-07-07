@@ -72,7 +72,7 @@ class AjaxController extends Controller
                             <div style="position:absolute;top:220px;left:25px;text-align:center;font-weight: bold;">Quantita</div>
                             <div style="position:absolute;top:240px;left:25px;text-align:center;font-weight: bold;">' . number_format($DORig->Qta, 2, ',', '') . '</div>
                             <div style="position:absolute;top:260px;left:25px;text-align:center;font-weight: bold;">Descrizione</div>
-                            <div style="position:absolute;top:220px;left:225px;text-align:center;font-weight: bold;">'.$date.'</div>
+                            <div style="position:absolute;top:205px;left:155px;text-align:center;font-weight: bold;">'.$date.'</div>
                             <div style="position:absolute;top:280px;left:25px;text-align:left;font-weight: bold;">' . $descrizione . '</div>
                             </body>
                             </html>';
@@ -114,7 +114,7 @@ class AjaxController extends Controller
                             <div style="position:absolute;top:170px;left:225px;text-align:center;font-weight: bold;">Codice Prodotto</div>
                             <div style="position:absolute;top:190px;left:225px;text-align:center;font-weight: bold;">' . $codice . '</div>
                             <div style="position:absolute;top:220px;left:25px;text-align:center;font-weight: bold;">Descrizione Prodotto</div>
-                            <div style="position:absolute;top:220px;left:225px;text-align:center;font-weight: bold;">'.$date.'</div>
+                            <div style="position:absolute;top:205px;left:155px;text-align:center;font-weight: bold;">'.$date.'</div>
                             <div style="position:absolute;top:240px;left:25px;text-align:center;font-weight: bold;">' . $descrizione . '</div>
                             ';
                 $fornitore = DB::SELECT('SELECT CF.Descrizione,CF.Cd_CF FROM DORig left join CF on CF.Cd_CF = DORig.Cd_CF WHERE DORig.Cd_DO = \'OAF\' and DORig.Cd_ARLotto = \'' . $lotto . '\'');
