@@ -1117,6 +1117,7 @@ class AjaxController extends Controller
             $righe = DB::select('SELECT * FROM DORIG WHERE ID_DORIG IN (\'' . $Id_DoRig . '\')');
             $Id_DoTes = '';
             foreach ($righe as $r) {
+                $id_dorig = $r->Id_DORig;
                 ${$id_dorig . '_count'} = 0;
                 if (isset(${$id_dorig . '_lotto_' . ${$id_dorig . '_count'}})) {
                     while (isset(${$id_dorig . '_lotto_' . ${$id_dorig . '_count'}})) {
