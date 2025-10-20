@@ -1498,7 +1498,7 @@ class AjaxController extends Controller
             if (sizeof($ol) > 0) {
                 $ol = $ol[0];
                 $quantita = number_format($ol->QtaProdotta, 2, ',', ''); ?>
-                    '<?php echo $cd_cf ?>', '<?php echo $ol->Cd_AR; ?>', '<?php echo '0'; ?>', '<?php if ($quantita != '') echo $quantita; else echo '0'; ?>'
+                    '<?php echo $cd_cf ?>','<?php echo $ol->Cd_AR; ?>','<?php echo '0'; ?>','<?php if ($quantita != '') echo $quantita; else echo '0'; ?>'
                 <?php
             }
         }
