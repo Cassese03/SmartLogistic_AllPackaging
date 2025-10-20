@@ -1493,6 +1493,16 @@ class AjaxController extends Controller
             ?>
             '<?php echo $cd_cf ?>','<?php echo $articolo->Cd_AR; ?>','<?php if ($articolo->Cd_ARLotto != '') echo $articolo->Cd_ARLotto; else echo '0'; ?>','<?php if ($qta != '') echo $qta; else echo '0'; ?>'
             <?php
+        } else {
+            $ol = DB::SELECT('SELECT * FROM xWPCollo where Id_xWPCollo = ' . $q . ' order by TimeIns');
+            if (sizeof($ol) > 0) {
+                $ol = $ol[0];
+                $quantita = number_format($ol->QtaProdotta, 2, ',', '');?>
+                    <script type="text/javascript">
+                        '<?php echo $cd_cf ?>','<?php echo $ol->Cd_AR; ?>','0','<?php if ($quantita != '') echo $quantita; else echo '0'; ?>'
+                    </script>
+                <?php
+            }
         }
     }
 
