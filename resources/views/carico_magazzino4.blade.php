@@ -420,7 +420,7 @@
 
                 <button
                     style="margin-top:10px !important;width:80%;margin:auto;display:block;background-color:blue;border:blue"
-                    id="evasione_manuale" value="<?php echo ($documento->Cd_Do == 'OVD')?1:1; ?>"
+                    id="evasione_manuale" value="<?php echo ($documento->Cd_Do == 'OVD')?1:0; ?>"
                     class="btn btn-primary" type="button"
                     onclick="manuale();">
                     Evasione <?php echo ($documento->Cd_Do == 'OVD') ? 'Collo' : 'Lotto' ?>
@@ -1472,7 +1472,7 @@
         dorig = JSON.stringify(evadi);
         controllo = document.getElementById('evasione_manuale').value;
         $.ajax({
-            <?php $ciao = ($documento->Cd_Do != 'OVD') ? 'conferma_righe_ordini' : 'conferma_righe_ordini'; ?>
+            <?php $ciao = ($documento->Cd_Do != 'OVD') ? 'conferma_righe' : 'conferma_righe_ordini'; ?>
             url: "<?php echo URL::asset('ajax/' . $ciao) ?>/" + 'old' + "/" + cd_mg_a + "/" + cd_mg_p + "/" + cd_do,
             data:
             evadi,
