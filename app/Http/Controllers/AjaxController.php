@@ -125,8 +125,10 @@ class AjaxController extends Controller
                 }
                 $html .= '         </body>
                             </html>';
-
-                $folder = 'estrusore';
+                if (substr($codice, 0, 2) == '02')
+                    $folder = 'stampa';
+                else
+                    $folder = 'estrusore';
                 $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 99], 'orentation' => 'L', 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
                 $mpdf->curlAllowUnsafeSslRequests = true;
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
@@ -1498,7 +1500,7 @@ class AjaxController extends Controller
             if (sizeof($ol) > 0) {
                 $ol = $ol[0];
                 $quantita = number_format($ol->QtaProdotta, 2, ',', ''); ?>
-                    '<?php echo $cd_cf ?>','<?php echo $ol->Cd_AR; ?>','<?php echo '0'; ?>','<?php if ($quantita != '') echo $quantita; else echo '0'; ?>'
+                '<?php echo $cd_cf ?>','<?php echo $ol->Cd_AR; ?>','<?php echo '0'; ?>','<?php if ($quantita != '') echo $quantita; else echo '0'; ?>'
                 <?php
             }
         }
