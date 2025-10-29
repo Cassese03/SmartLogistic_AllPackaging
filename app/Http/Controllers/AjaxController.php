@@ -129,7 +129,7 @@ class AjaxController extends Controller
                     $folder = 'stampa';
                 else
                     $folder = 'estrusore';
-                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [100, 99], 'orentation' => 'L', 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
+                $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [(substr($codice, 0, 2) == '02') ? 99 : 100, (substr($codice, 0, 2) == '02') ? 100 : 99], 'orentation' => 'L', 'margin_left' => 0, 'margin_right' => 0, 'margin_top' => 0, 'margin_bottom' => 0, 'margin_header' => 0, 'margin_footer' => 0]);
                 $mpdf->curlAllowUnsafeSslRequests = true;
                 $mpdf->SetTitle('Etichetta_' . $codice . '_' . $lotto . '_' . $DORig->Id_DOTes);
                 $mpdf->WriteHTML($html);
